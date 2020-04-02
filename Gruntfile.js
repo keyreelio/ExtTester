@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         run: {
             options: {
             },
-            test: {
+            tester: {
                 cmd: 'node',
                 args: [
                     './build/tester.js'
@@ -36,6 +36,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask("default", ["build"]);
 
-    grunt.registerTask("build", ["clean", "ts"]);
-    grunt.registerTask("test", ["run:test"]);
+    grunt.registerTask("build", ["ts"]);
+    grunt.registerTask("runner", ["build", "run:tester"]);
 };

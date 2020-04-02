@@ -1,0 +1,14 @@
+{
+  "name": "exttester",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://petrooluso@bitbucket.org/oluso/exttester.git",
+  "author": "Petro Ladkin <petro.ladkin@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "^1.1.0",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-ts": "^6.0.0-beta.22",
+    "typescript": "^3.8.3"
+  }
+}

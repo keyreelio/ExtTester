@@ -1,0 +1,17 @@
+[31424:28432:0402/110249.639:INFO:CONSOLE(127)] "1Password version 4.7.5 loaded @ Thu Apr 02 2020 11:02:49 GMT-0700 (Pacific Daylight Time)", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (127)
+[31424:28432:0402/110249.656:INFO:CONSOLE(88)] "Finished loading auth configuration. Processing callbacks.", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (88)
+[31424:32096:0402/110249.656:WARNING:native_process_launcher.cc(169)] Can't find manifest for native messaging host 2bua8c4s2c.com.agilebits.1password
+[31424:28432:0402/110249.659:INFO:CONSOLE(256)] "[CHROME:NM] Port <[object Object]> disconnected: Specified native messaging host not found.", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (256)
+[31424:28432:0402/110249.662:INFO:CONSOLE(105)] "[AGENT] Connection [object NativeMessagingConnection] disconnected.", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (105)
+[31424:28432:0402/110249.662:INFO:CONSOLE(105)] "[AGENT] Connection [object NativeMessagingConnection] disconnected.", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (105)
+[31424:28432:0402/110249.663:INFO:CONSOLE(88)] "Finished loading auth configuration. Processing callbacks.", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (88)
+[31424:28432:0402/110252.486:INFO:CONSOLE(249)] "WebSocket connection to 'ws://127.0.0.1:6263/4' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (249)
+[31424:28432:0402/110252.487:INFO:CONSOLE(249)] "[AGENT:WS] socket error: [object Event]; readyState=3. Perhaps Helper is not running on ws://127.0.0.1:6263/4 or is shutting down?", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (249)
+[31424:28432:0402/110252.487:INFO:CONSOLE(250)] "[AGENT:WS] default close event handler with code <1006> and reason <> received: [object CloseEvent]", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (250)
+[31424:28432:0402/110252.489:INFO:CONSOLE(88)] "Finished loading auth configuration. Processing callbacks.", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (88)
+[31424:28432:0402/110254.545:INFO:CONSOLE(249)] "WebSocket connection to 'ws://127.0.0.1:10196/4' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (249)
+[31424:28432:0402/110254.545:INFO:CONSOLE(249)] "[AGENT:WS] socket error: [object Event]; readyState=3. Perhaps Helper is not running on ws://127.0.0.1:10196/4 or is shutting down?", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (249)
+[31424:28432:0402/110254.545:INFO:CONSOLE(250)] "[AGENT:WS] default close event handler with code <1006> and reason <> received: [object CloseEvent]", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (250)
+[31424:28432:0402/110254.547:INFO:CONSOLE(88)] "Finished loading auth configuration. Processing callbacks.", source: chrome-extension://aomjjhallfgjeglblehebfpbcfeobpgk/global.min.js (88)
+[31424:28432:0402/110256.436:WARNING:pref_notifier_impl.cc(40)] Pref observer for media_router.cast_allow_all_ips found at shutdown.
+[31424:28432:0402/110256.436:WARNING:pref_notifier_impl.cc(40)] Pref observer for browser.relaunch_notification_period found at shutdown.

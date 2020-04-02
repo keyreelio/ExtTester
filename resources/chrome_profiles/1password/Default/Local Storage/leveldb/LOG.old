@@ -1,1 +1,3 @@
-2020/04/02-11:01:07.075 122c Reusing MANIFEST C:\Users\olek\dev\exttester\resources\chrome_profiles\1password\Default\Local Storage\leveldb/MANIFEST-000001
+2020/04/02-12:13:13.046 2058 Reusing MANIFEST C:\Users\olek\dev\exttester\resources\chrome_profiles\1password\Default\Local Storage\leveldb/MANIFEST-000001
+2020/04/02-12:13:13.046 2058 Recovering log #3
+2020/04/02-12:13:13.046 2058 Reusing old log C:\Users\olek\dev\exttester\resources\chrome_profiles\1password\Default\Local Storage\leveldb/000003.log 

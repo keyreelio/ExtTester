@@ -1,0 +1,14 @@
+{
+   "extBetaName": {
+      "message": "1Password X ベータ版 – パスワード保管庫"
+   },
+   "extDescription": {
+      "message": "ウェブブラウザで1Passwordを使うための最良の方法。サイトに簡単にサインインし、パスワードを生成し、情報を安全に保存できます。"
+   },
+   "extName": {
+      "message": "1Password X – パスワード保管庫"
+   },
+   "extNightlyName": {
+      "message": "1Password X Nightly – パスワード保管庫"
+   }
+}

@@ -1,0 +1,14 @@
+{
+  "extName": {
+    "message": "1Password X - 密码管理器"
+  },
+  "extBetaName": {
+    "message": "1Password X Beta - 密码管理器"
+  },
+  "extNightlyName": {
+    "message": "1Password X Nightly - 密码管理器"
+  },
+  "extDescription": {
+    "message": "在浏览器中体验 1Password 的最佳方式。轻松登录网站、生成密码和保存安全信息。"
+  }
+}

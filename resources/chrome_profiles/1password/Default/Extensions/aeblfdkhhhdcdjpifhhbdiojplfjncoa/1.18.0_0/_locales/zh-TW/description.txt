@@ -1,0 +1,21 @@
+🐞 The 1Password X beta 為喜歡享受前沿科技的人群設計。 搶先體驗最新功能。
+
+1Password X 需要 1Password 會員服務。 如果你還沒有帳戶，可以在安裝 1Password X 后註冊並獲得 30 天免費使用權。
+
+1Password 是保護您上網安全的密碼管理器。 使用 1Password X，您可以直接存取 Google Chrome 中所需的所有內容。 填寫並儲存密碼，查找和編輯項目，還有更多功能。
+
+瞭解 1Password X 的所有功能：
+
+📘 https://1pw.ca/x-start
+
+1Password X 正處於持續研發之中。 參與進來。 把您的意見告訴我們：無論是功能需求還是 bug 報告，儘管說出來：https://1pw.ca/x-help-beta
+
+💡 為什麼選擇 1Password？
+
+您希望對每個網站使用不同的密碼，但是卻很難管理好這麼多不同的密碼。 1Password 將代您管理密碼：產生、儲存、填寫一氣呵成。
+
+有了 1Password，你只需要記住……一個密碼就行。 您的所有其他密碼和重要資訊都被您的主密碼保護，而主密碼只有您知道。
+
+1Password X 不僅僅是密碼管理器。 它還與 Chrome 直接集成，使您在最需要的地方——瀏覽器中能夠快速使用 1Password。 無需安裝桌面應用程式即可獲得 1Password 的全部功能。
+
+1Password 在您所有的裝置上都可以使用，支援 Mac、iOS、Windows 和 Android。您將始終把資訊控制在手中。 您在一台裝置上所做的任何更改都將立即與其他裝置同步。 訪問 1Password.com 瞭解更多。

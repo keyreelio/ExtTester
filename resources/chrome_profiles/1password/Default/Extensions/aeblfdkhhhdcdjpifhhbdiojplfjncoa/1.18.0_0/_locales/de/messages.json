@@ -1,0 +1,14 @@
+{
+   "extBetaName": {
+      "message": "1Password X Beta - Passwort-Manager"
+   },
+   "extDescription": {
+      "message": "Die beste Art 1Password im Browser zu erleben. Ganz einfach auf Websites einloggen, Passwörter generieren, und sensible Daten speichern."
+   },
+   "extName": {
+      "message": "1Password X - Passwort-Manager"
+   },
+   "extNightlyName": {
+      "message": "1Password X Nightly – Passwort-Manager"
+   }
+}

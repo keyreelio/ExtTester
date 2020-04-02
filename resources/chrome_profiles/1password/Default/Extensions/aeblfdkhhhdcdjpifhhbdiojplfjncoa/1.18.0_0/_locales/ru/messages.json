@@ -1,0 +1,14 @@
+{
+   "extBetaName": {
+      "message": "Бета-версия 1Password X – Менеджер паролей"
+   },
+   "extDescription": {
+      "message": "Лучший способ использовать 1Password в браузере. С лёгкостью входите на сайты, создавайте пароли и храните защищённую информацию."
+   },
+   "extName": {
+      "message": "1Password X — Менеджер паролей"
+   },
+   "extNightlyName": {
+      "message": "1Password X Nightly – Менеджер паролей"
+   }
+}

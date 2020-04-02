@@ -1,0 +1,21 @@
+🐞 La versión Beta de 1Password X es para aquellos que disfrutan la aventura y viven al límite. Sé el primero en obtener todas las nuevas funcionalidades.
+
+Sé el primero en obtener todas las nuevas funcionalidades. Si aun no tienes una, puedes subscribirte cuando instales 1Password X para obtener los primeros 30 días gratis.
+
+1Password es un gestor de contraseñas que te mantiene seguro en línea. Con 1Password X, puedes tener acceso a todo lo que necesitas directamente en Google Chrome. Completa y guarda contraseñas, encuentra y edita elementos, y mucho más.
+
+Ve todo lo que 1Password X puede hacer:
+
+📘 https://1pw.ca/x-start
+
+1Password X está en desarrollo. Involúcrate. Haznos saber tu opinión- lo que te gustaría ver, los problemas que encuentres, queremos saberlo todo: https://1pw.ca/x-help-beta
+
+💡 ¿Por qué 1Password?
+
+Quieres usar contraseñas distintas para cada sitio web, pero puede ser difícil seguirle la pista a todos. 1Password gestionará tus contraseñas por ti: genera, guarda y completa tus contraseñas.
+
+Con 1Password solamente tendrás que recordar… una contraseña. Todas tus otras contraseñas e información importante están protegidas por tu Contraseña Maestra, que solamente tu conoces.
+
+1Password X es más que un gestor de contraseñas. Se integra directamente con Chrome para que puedas tener acceso a 1Password donde más lo necesitas: en tu navegador. Obtén todo el poder de 1Password sin instalar la app de escritorio.
+
+1Password está disponible en todos tus dispositivos: Mac, iOS, Windows y Android, así que siempre tendrás toda tu información contigo. Todos los cambios que realices en un dispositivo están disponibles inmediatamente en todos los demás. Aprende más en 1Password.com.

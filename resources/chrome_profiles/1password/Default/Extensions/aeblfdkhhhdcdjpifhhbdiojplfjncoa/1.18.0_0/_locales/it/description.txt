@@ -1,0 +1,21 @@
+🐞 The 1Password X beta is for adventurous folks who enjoy living on the cutting edge. Be the first to get the latest features.
+
+1Password X requires a 1Password membership. If you don't have one yet, you can sign up when you install 1Password X to get 30 days free.
+
+1Password is a password manager that keeps you safe online. With 1Password X, you can access everything you need directly in Google Chrome. Fill and save passwords, find and edit items, and more.
+
+See everything 1Password X can do:
+
+📘 https://1pw.ca/x-start
+
+1Password X is under active development. Get involved. Let us know your feedback: feature requests, bug reports, we want it all: https://1pw.ca/x-help-beta
+
+💡 Why 1Password?
+
+You want to use different passwords for every website, but it can be hard to keep track of them all. 1Password will manage your passwords for you: generate, save, and fill your passwords.
+
+With 1Password you only ever need to memorize…one password. All your other passwords and important information are protected behind your Master Password, which only you know.
+
+1Password X is more than just a password manager. It integrates directly with Chrome to give you access to 1Password where you need it the most: in your web browser. Get the full power of 1Password without installing a desktop app.
+
+1Password is available on all your devices: Mac, iOS, Windows, and Android, so you'll always have all your information with you. Any changes you make on one device are immediately available everywhere else. Find out more at 1Password.com.

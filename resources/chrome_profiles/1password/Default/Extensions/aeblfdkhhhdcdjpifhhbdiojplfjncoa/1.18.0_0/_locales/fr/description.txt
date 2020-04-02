@@ -1,0 +1,21 @@
+🐞 La beta de 1Password X est pour les personnes curieuses et aventureuses. Soyez le premier à obtenir les dernières fonctionnalités.
+
+1Password X requiert un abonnement à 1Password. Si vous n’en possédez pas encore un, vous pouvez vous inscrire lors de l’installation de 1Password X afin d’obtenir 30 jours gratuits.
+
+1Password est un gestionnaire de mots de passe qui vous protège dans vos activités en ligne. Avec 1Password X, vous pouvez accéder à tout ce dont vous avez besoin directement depuis votre navigateur. Remplissez et sauvegardez vos mots de passe, localisez et éditez vos données, et bien plus encore.
+
+Voyez tout ce dont 1Password X est capable :
+
+📘 https://support.1password.com/fr/getting-started-1password-x/
+
+1Password X est en développement actif. Vous pouvez participer ! Partagez vos impressions : ajouts de fonctionnalités, rapport de bugs, on veut tout savoir : https://1pw.ca/x-help
+
+💡 Pourquoi 1Password ?
+
+Il est recommandé d’utiliser un mot de passe différent pour chaque site internet, mais il peut être compliqué de se souvenir de chacun d’entre-eux. 1Password s’occupera de gérer vos mots de passe pour vous : de les générer, de les sauvegarder et de les remplir dans les formulaires.
+
+Avec 1Password, comme son nom l’indique, vous n’aurez plus qu’à vous souvenir d’un seul mot de passe ! Tous vos autres mots de passe et informations sensibles seront protégés grâce à votre mot de passe principal, que vous seul connaissez.
+
+1Password X est plus qu’un simple gestionnaire de mots de passe. En effet, il s'intègre directement avec votre navigateur afin de vous donner accès à 1Password là où vous le nécessitez le plus. Bénéficiez de tous les pouvoirs de 1Password sans installer l’application de bureau (desktop).
+
+1Password est disponible sur tous vos dispositifs : Mac, iOS, Windows et Android, de façon à ce que vous ayez en permanence accès à toutes vos informations. Tout changement effectué sur un dispositif est immédiatement disponible sur les autres. Plus d’informations sur 1Password.com.

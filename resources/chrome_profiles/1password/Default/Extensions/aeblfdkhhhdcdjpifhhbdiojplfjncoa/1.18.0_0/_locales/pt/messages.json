@@ -1,0 +1,14 @@
+{
+   "extBetaName": {
+      "message": "1Password X Beta – Gerenciador de senhas"
+   },
+   "extDescription": {
+      "message": "A melhor maneira de experimentar o 1Password no seu navegador. Acesse sites, gere senhas e armazene informações com segurança e facilidade."
+   },
+   "extName": {
+      "message": "1Password X – Gerenciador de senhas"
+   },
+   "extNightlyName": {
+      "message": "1Password X Nightly – Gerenciador de senhas"
+   }
+}

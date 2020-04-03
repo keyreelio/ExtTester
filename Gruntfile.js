@@ -7,7 +7,7 @@ module.exports = function(grunt) {
                 tsconfig: './tsconfig.json'
             }
         },
-        clean: ['./build'],
+        clean: ['./build', './resources/chrome_profiles'],
         run: {
             options: {
             },
@@ -37,5 +37,5 @@ module.exports = function(grunt) {
     grunt.registerTask("default", ["build"]);
 
     grunt.registerTask("build", ["ts"]);
-    grunt.registerTask("runner", ["build", "run:tester"]);
+    grunt.registerTask("runner", ["clean", "build", "run:tester"]);
 };

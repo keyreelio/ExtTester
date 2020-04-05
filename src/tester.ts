@@ -1,84 +1,204 @@
+import {Engine, KeyReelEngine, LastPassEngine, OnePasswordXEngine, DashlaneEngine} from './engine'
 import {Builder, By, Key, until, WebDriver} from 'selenium-webdriver';
 import * as chrome from "selenium-webdriver/chrome";
 import fs from "fs";
 
-async function delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
+
+class Credential {
+    public url: string = "";
+    public login: string = "";
+    public password: string = "";
 }
 
-class Engine {
-    public async startup(): Promise<WebDriver> {
-        let options = new chrome.Options();
+class TwitterCredential extends Credential{
+    public url: string = "https://twitter.com/explore";
+    public login: string = "hdayfg6wq5sq@gmail.com";
+    public password: string = "5lKZfBc@L^PG";
+}
 
-        let driver = await new Builder()
-            .forBrowser('chrome')
-            .setChromeOptions(options)
-            .build();
 
-        return Promise.resolve(driver);
+class Parser {
+    public async parse(driver: WebDriver): Promise<boolean> {
+
+        let url = await driver.getCurrentUrl();
+
+        //if (url.includes("twitter")) {
+            return await this.parseForTwitter(driver);
+        //}
+
+        return Promise.resolve(false);
+    }
+
+    protected async parseForTwitter(driver: WebDriver): Promise<boolean> {
+
+        let singinQuery = "ebss = document.querySelectorAll(\"a[href='/login']\"); if (ebss.length > 0) { ebss[0].setAttribute('axt-button-type', 'singin'); }";
+        await driver.executeScript(singinQuery);
+
+        let usernameQuery = "eils = document.querySelectorAll(\"input[name='session[username_or_email]']\"); if (eils.length > 0) { eils[0].setAttribute('axt-input-type', 'login'); }";
+        await driver.executeScript(usernameQuery);
+
+        let passwordQuery = "eips = document.querySelectorAll(\"input[name='session[password]']\"); if (eips.length > 0) { eips[0].setAttribute('axt-input-type', 'password'); }";
+        await driver.executeScript(passwordQuery);
+
+        let loginQuery = "ebls = document.querySelectorAll(\"div[data-testid='LoginForm_Login_Button']\"); if (ebls.length > 0) { ebls[0].setAttribute('axt-button-type', 'login'); }";
+        await driver.executeScript(loginQuery);
+
+        return Promise.resolve(true);
     }
 }
 
-class LastPassEngine extends Engine {
-    public async startup(): Promise<WebDriver> {
-        let options = new chrome.Options();
-        let crx = fs.readFileSync('./resources/crxs/lastpass.crx', {encoding: "base64"});
-        options.addExtensions(crx);
 
-        let driver = await new Builder()
-            .forBrowser('chrome')
-            .setChromeOptions(options)
-            .build();
+class Test {
 
-        await driver.get('chrome-extension://hdokiejnpimakedhajhdlcegeplioahd/extensionLogin.html')
-        await driver.findElement(By.id("loginDialogEmail")).sendKeys("hdayfg6wq5sq@gmail.com");
-        await driver.findElement(By.id("loginDialogPassword")).sendKeys("QL=25LXd%NT2ca5");
-        await driver.findElement(By.id("logInButton")).click();
+    driver: WebDriver;
+    engine: Engine;
+    credential: Credential;
 
-        return Promise.resolve(driver);
+    constructor(driver: WebDriver, engine: Engine, credential: Credential) {
+        this.driver = driver;
+        this.engine = engine;
+        this.credential = credential;
+    }
+
+    public async checkWriteCredential(): Promise<boolean> {
+
+        if (!await this.open(this.credential.url)) return Promise.resolve(false);
+        if (!await this.parse()) return Promise.resolve(false);
+
+        if (await this.hasSigninButton()) {
+            if (!await this.clickSignInButton()) return Promise.resolve(false);
+        }
+
+        return true;
+    }
+
+    public async checkReadCredential(): Promise<boolean> {
+
+
+
+        return true;
+    }
+
+    protected async open(url: string): Promise<boolean> {
+
+        try {
+            let driver = this.driver;
+
+            await this.driver.executeScript("window.open()");
+            let tabs = await this.driver.getAllWindowHandles();
+            await this.driver.switchTo().window(tabs[tabs.length - 1]);
+            await this.driver.get(url);
+
+            let result = await this.driver.wait(function() {
+                return driver.executeScript('return document.readyState').then(readyState => readyState === 'complete');
+            }, 5000);
+        } catch (UnhandledPromiseRejectionWarning) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected async parse(): Promise<boolean> {
+        let parser = new Parser();
+
+        return await parser.parse(this.driver);
+    }
+
+    protected async hasSigninButton(): Promise<boolean> {
+        return true;
+    }
+
+    protected async clickSignInButton(): Promise<boolean> {
+        return true;
     }
 }
 
-class OnePasswordXEngine extends Engine {
-    public async startup(): Promise<WebDriver> {
-        let options = new chrome.Options();
-        let crx = fs.readFileSync('./resources/crxs/1passwordx.crx', {encoding: "base64"});
-        options.addExtensions(crx);
+/*
+hasLoginForm()
+hasLogin()
+enterLogin()
+hasPassword()
+enterPassword()
+hasLoginButton()
+clickLoginButton()
+hasNextButton()
+clickNextButton()
+hasSigninButton()
+clickSignInButton()
+isLoggedIn()
 
-        let driver = await new Builder()
-            .forBrowser('chrome')
-            .setChromeOptions(options)
-            .build();
+ */
 
-        await driver.get('chrome-extension://aeblfdkhhhdcdjpifhhbdiojplfjncoa/app/app.html#/page/welcome')
+let credentials = [new TwitterCredential()];
 
-        //TODO: change to waiter loaded page
-        await delay(2000);
+async function testExecute(engine: Engine): Promise<void> {
 
-        await driver.findElement(By.id("signInButton")).click();
-
-        //TODO: change to waiter loaded page
-        await delay(2000);
-
-        await driver.findElement(By.id("email")).sendKeys("hdayfg6wq5sq@gmail.com");
-        await driver.findElement(By.id("account-key")).sendKeys("A3-4J9LQG-APXJD3-KYXNL-ARBGG-TLKV3-YVMYQ");
-        await driver.findElement(By.id("master-password")).sendKeys("hrfW-Y1q3_4%");
-        await driver.findElement(By.className("signin-actions")).findElement(By.xpath("button")).click();
-
-        return Promise.resolve(driver);
-    }
-}
-
-async function test(engine: Engine): Promise<Boolean> {
-
+    // create WebDriver with extension
     let driver = await engine.startup();
 
-    return true;
+    // for (let credential of credentials) {
+    //     let api = new Test(driver, engine, credential);
+    //
+    //     console.log(`testing...  '${credential.url}'`);
+    //     if (await api.checkWriteCredential()) {
+    //         console.log("  did write credential");
+    //         if (await api.checkReadCredential()) {
+    //             console.log("  did read credential");
+    //         } else {
+    //             console.log("  did fail read credential");
+    //         }
+    //     } else {
+    //         console.log("  did fail write credential");
+    //     }
+    // }
+
+    // run twitter test
+    //  write credential
+    await driver.executeScript("window.open()");
+    let tabs = await driver.getAllWindowHandles();
+    await driver.switchTo().window(tabs[tabs.length - 1]);
+    await driver.get('https://twitter.com/login');
+    await driver.wait(until.elementLocated(By.name("session[username_or_email]")), 1000).sendKeys("hdayfg6wq5sq@gmail.com");
+    await driver.findElement(By.name("session[password]")).sendKeys("5lKZfBc@L^PG");
+
+    //await engine.prevSave();
+
+    await driver.findElement(By.xpath("//div[@data-testid='LoginForm_Login_Button']")).click();
+
+    //await engine.postSave();
+
+    //await engine.hasSaved();
+
+    // read credential
+    await driver.manage().deleteAllCookies();
+
+    await driver.executeScript("window.open()");
+    let tabs2 = await driver.getAllWindowHandles();
+    await driver.switchTo().window(tabs2[tabs2.length - 1]);
+    await driver.get('https://twitter.com/login');
+
+    //await engine.load();
+
+    //await engine.hasInserted();
+
+    //driver.close();
 }
 
-(async function example() {
+async function test() : Promise<void> {
 
-    await Promise.all([test(new LastPassEngine()), test(new OnePasswordXEngine())]);
-    // await Promise.all([test(new OnePasswordXEngine())]);
+    console.log('...start');
 
-})();
+    // await Promise.all([
+    //     testExecute(new KeyReelEngine()),
+    //     testExecute(new LastPassEngine()),
+    //     testExecute(new DashlaneEngine()),
+    //     testExecute(new OnePasswordXEngine())]);
+
+    await Promise.all([testExecute(new LastPassEngine())]);
+
+    console.log('...stop');
+};
+
+
+test();

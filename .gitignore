@@ -1,4 +1,4 @@
 /node_modules/
 /build/
 /.tscache
-/resources/chrome_profiles/
+/chrome_profiles

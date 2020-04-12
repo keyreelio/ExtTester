@@ -45,9 +45,15 @@ class Tester {
 
                 L.debug(`testing: '${credential.url}'`);
 
-                L.debug("write credential");
-                await api.checkWriteCredential();
-                L.debug("did write credential");
+                try {
+                    L.debug("write credential");
+                    await api.checkWriteCredential();
+                    L.debug("did write credential");
+                } catch (e) {
+                    L.debug("write credential with use only enter button");
+                    await api.checkWriteCredential({useOnlyEnterButton: true});
+                    L.debug("did write credential");
+                }
 
                 await driver.sleep(1000);
 

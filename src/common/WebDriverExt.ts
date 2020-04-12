@@ -9,26 +9,32 @@ export class WebDriverExt {
         this.webDriver = webDriver;
     }
 
-    public async OpenUrlOnCurrentTab(url: string) {
+    public async openUrlOnCurrentTab(url: string) {
         var tabs = await this.webDriver.getAllWindowHandles();
-        if (tabs.length === 0) return this.OpenUrlOnNewTab(url);
+        if (tabs.length === 0) return this.openUrlOnNewTab(url);
 
         await this.webDriver.get(url);
         await this.webDriver.sleep(200);
-        await this.WaitUrlOpened();
+        await this.waitUrlOpened();
     }
 
-    public async OpenUrlOnNewTab(url: string) {
+    public async openUrlOnNewTab(url: string) {
         await this.webDriver.executeScript("window.open();");
         var tabs = await this.webDriver.getAllWindowHandles();
         await this.webDriver.switchTo().window(tabs[tabs.length - 1]);
 
         await this.webDriver.get(url);
         await this.webDriver.sleep(200);
-        await this.WaitUrlOpened();
+        await this.waitUrlOpened();
     }
 
-    protected async WaitUrlOpened(timeout: number = 10000) {
+    public async swithToRootFrame(): Promise<void> {
+        for (let i = 0; i < 10; ++i) {
+            await this.webDriver.switchTo().parentFrame();
+        }
+    }
+
+    protected async waitUrlOpened(timeout: number = 10000) {
         let webDriver = this.webDriver;
         await this.webDriver.wait(function() {
             return webDriver.executeScript('return document.readyState').then(readyState => readyState === 'complete');

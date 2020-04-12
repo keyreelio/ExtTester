@@ -26,6 +26,25 @@ export class DashlaneEngine extends Engine {
         }
     ];
 
+    public async getEngineName(): Promise<string> {
+        return this.profileName();
+    }
+
+    public async processAfterLogin(): Promise<void> {
+        let driver = await this.getDriver();
+        let extDriver = await this.getExtDriver();
+
+        try {
+            await extDriver.swithToRootFrame();
+            let iframe = await driver.wait(until.elementLocated(By.id("kw-iframe-popup")), 2000);
+            await driver.switchTo().frame(iframe);
+            await driver.wait(until.elementLocated(By.className("save")), 500).click();
+            return Promise.resolve();
+        } catch (e) {
+            return Promise.reject(e);
+        }
+    }
+
     protected async profileName(): Promise<string> {
         return Promise.resolve("dashlane");
     }
@@ -45,7 +64,7 @@ export class DashlaneEngine extends Engine {
         let driver = await this.getDriver();
         let extDriver = await this.getExtDriver();
 
-        await extDriver.OpenUrlOnCurrentTab(this.startupUrl);
+        await extDriver.openUrlOnCurrentTab(this.startupUrl);
         try {
             L.debug("check opened page 'login' or 'signup'");
             await Promise.race([
@@ -126,20 +145,6 @@ export class DashlaneEngine extends Engine {
         }
 
         return Promise.resolve();
-    }
-
-    public async processAfterLogin(): Promise<void> {
-        let driver = await this.getDriver();
-
-        try {
-            let iframe = await driver.wait(until.elementLocated(By.id("kw-iframe-popup")), 2000);
-            await driver.switchTo().frame(iframe);
-            await driver.wait(until.elementLocated(By.className("save")), 500).click();
-            return Promise.resolve();
-        } catch (UnhandledPromiseRejectionWarning) {
-        }
-
-        return Promise.reject();
     }
 
     protected currentAccount() : IDashlineAccount {

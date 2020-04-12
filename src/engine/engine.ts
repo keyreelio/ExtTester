@@ -14,6 +14,7 @@ async function sendKeys(driver: WebDriver, elm: WebElement, value: string) {
 }
 
 export interface IEngine {
+    getEngineName(): Promise<string>;
     getOptions(): Promise<chrome.Options>;
     getDriver(): Promise<WebDriver>;
     getExtDriver(): Promise<WebDriverExt>;
@@ -29,6 +30,10 @@ export class Engine implements IEngine {
     protected driver: WebDriver | undefined;
     protected extDriver: WebDriverExt | undefined;
 
+
+    public async getEngineName(): Promise<string> {
+        return Promise.resolve("unknown");
+    }
 
     public async getOptions(): Promise<chrome.Options> {
         if (this.options !== undefined) {

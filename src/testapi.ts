@@ -1,22 +1,41 @@
 import {IEngine} from "./engine/engine";
-import {Actions, By, Key, until, WebElement} from "selenium-webdriver";
+import {By, error, Key, until, WebElement} from "selenium-webdriver";
 import {ICredential} from "./credentials";
 
 import {testapiLogger as L} from "./common/log.config";
 import {WebElementExt} from "./common/WebDriverExt";
-import {inspect, log} from "util";
+import UnsupportedOperationError = error.UnsupportedOperationError;
 
+
+class Button {
+    iframe: WebElement | undefined = undefined;
+    button: WebElement;
+
+    public constructor(button: WebElement, iframe: WebElement | undefined) {
+        this.button = button;
+        this.iframe = iframe;
+    }
+}
+
+class Input {
+    iframe: WebElement | undefined = undefined;
+    input: WebElement;
+
+    public constructor(input: WebElement, iframe: WebElement | undefined) {
+        this.input = input;
+        this.iframe = iframe;
+    }
+}
 
 class LoginForm {
-    iframe: WebElement | undefined = undefined;
-    login: WebElement | undefined = undefined;
-    password: WebElement | undefined = undefined;
-    nextButton: WebElement | undefined = undefined;
-    loginButton: WebElement | undefined = undefined;
+    loginInput: Input | undefined = undefined;
+    passwordInput: Input | undefined = undefined;
+    nextButton: Button | undefined = undefined;
+    loginButton: Button | undefined = undefined;
 }
 
 class Page {
-    singin: WebElement | undefined = undefined;
+    singinButton: Button | undefined = undefined;
     loginForm: LoginForm | undefined = undefined;
     isLoggedIn: boolean = false;
 }
@@ -31,8 +50,15 @@ export class TestAPI {
         this.credential = credential;
     }
 
-    public async checkWriteCredential(): Promise<void> {
+    public async checkWriteCredential(options: {useOnlyEnterButton: boolean} | undefined = undefined): Promise<void> {
         L.info("checkWriteCredential");
+
+        var useOnlyEnterButton = false;
+        if (options !== undefined) {
+            if (options as {useOnlyEnterButton: boolean}) {
+                useOnlyEnterButton = (<{useOnlyEnterButton: boolean}>options).useOnlyEnterButton;
+            }
+        }
 
         let driver = await this.engine.getDriver();
         let extDriver = await this.engine.getExtDriver();
@@ -41,82 +67,106 @@ export class TestAPI {
         await driver.manage().deleteAllCookies();
 
         L.debug(`open new tab with: ${this.credential.url}`);
-        await extDriver.OpenUrlOnNewTab(this.credential.url);
+        await extDriver.openUrlOnNewTab(this.credential.url);
 
         while (true) {
-            // try {
-            //     L.debug("parse page");
-            //     let page = await this.parse();
-            //
-            // } catch (e) {
-            // }
-            //
-            // break;
-
             L.debug("parse page");
-            await this.parse();
+            let page = await this.parsePage();
 
             L.debug("check page structure");
-            if (await this.hasLoginForm()) {
+            if (page.singinButton !== undefined && page.loginForm === undefined) {
+                L.debug("page has singin button and hasn't login form");
+
+                await page.singinButton.button.click();
+
+                await driver.sleep(500);
+                continue;
+            } else if (page.loginForm !== undefined) {
                 L.debug("page has login form");
-                if (await this.hasLogin() && await this.hasPassword()) {
+
+                if (page.loginForm.loginInput !== undefined && page.loginForm.passwordInput !== undefined) {
                     L.debug("login form has login and password inputs");
 
-                    await this.enterLogin(this.credential.login);
-                    await this.enterPassword(this.credential.password);
-                } else if (await this.hasLogin()) {
+                    await this.enterToInput(this.credential.login, page.loginForm.loginInput);
+                    await this.enterToInput(this.credential.password, page.loginForm.passwordInput);
+                } else if (page.loginForm.loginInput !== undefined) {
                     L.debug("login form has only login input");
 
-                    await this.enterLogin(this.credential.login);
+                    await this.enterToInput(this.credential.login, page.loginForm.loginInput);
 
-                    if (await this.hasLoginButton()) {
-                        await this.clickLoginButton();
-                    } else if (await this.hasNextButton()) {
-                        await this.clickNextButton();
+                    if (page.loginForm.loginButton !== undefined && !useOnlyEnterButton) {
+                        await page.loginForm.loginButton.button.click();
+                    } else if (page.loginForm.nextButton !== undefined && !useOnlyEnterButton) {
+                        await page.loginForm.nextButton.button.click();
                     } else {
-                        await this.pressEnterOnLogin();
+                        await this.enterToInput(Key.RETURN, page.loginForm.loginInput, {attach: true});
                     }
 
                     await driver.sleep(500);
                     continue;
-                } else if (await this.hasPassword()) {
+                } else if (page.loginForm.passwordInput !== undefined) {
                     L.debug("login form has only password input");
 
-                    await this.enterPassword(this.credential.login);
+                    await this.enterToInput(this.credential.password, page.loginForm.passwordInput);
                 }
 
                 try {
                     L.debug("try engine process before login");
+
                     await this.engine.processBeforeLogin();
                     //TODO: add report: manual saved before logged in
-                } catch (UnsupportedOperationError) {
-                    L.debug("engine process before login not supported");
+                    L.warn(`!!! '${await this.engine.getEngineName()}': credential SAVED as manual before logged in !!!`);
+                } catch (e) {
+                    if (e as UnsupportedOperationError) {
+                        L.debug("engine process before login not supported");
 
-                    if (await this.hasLoginButton()) {
-                        await this.clickLoginButton();
+                        if (page.loginForm.loginButton !== undefined && !useOnlyEnterButton) {
+                            await page.loginForm.loginButton.button.click();
+                        } else if (page.loginForm.nextButton !== undefined && !useOnlyEnterButton) {
+                            await page.loginForm.nextButton.button.click();
+                        } else if (page.loginForm.passwordInput !== undefined) {
+                            await this.enterToInput(Key.RETURN, page.loginForm.passwordInput, {attach: true});
+                        }
+
+                        await driver.sleep(500);
+                        continue;
                     } else {
-                        await this.pressEnterOnPassword();
-                    }
+                        L.debug("engine process before login is failed");
 
-                    await driver.sleep(500);
-                    continue;
+                        //TODO: add report: failed save after logged in
+                        L.warn(`!!! '${await this.engine.getEngineName()}': credential FAILED SAVE before logged in !!!`);
+
+                        return Promise.reject(new Error());
+                    }
                 }
-            } else if (await this.isLoggedIn()) {
+            } else if (page.isLoggedIn) {
 
                 try {
                     L.debug("try engine process after login");
 
                     await this.engine.processAfterLogin();
+
                     //TODO: add report: manual saved after logged in
-                } catch (UnsupportedOperationError) {
-                    L.debug("engine process after login not supported");
+                    L.warn(`!!! '${await this.engine.getEngineName()}': credential SAVED as manual after logged in !!!`);
+                } catch (e) {
+                    if (e instanceof UnsupportedOperationError) {
+                        L.debug("engine process after login not supported");
 
-                    //TODO: check auto save after logged in
-                    //TODO: add report: auto saved after logged in
+                        //TODO: check auto save after logged in
+                        //TODO: add report: auto saved after logged in
+                        L.warn(`!!! '${await this.engine.getEngineName()}': credential MAYBE SAVED as auto after logged in !!!`);
+                    } else {
+                        L.debug("engine process after login is failed");
+
+                        //TODO: add report: failed save after logged in
+                        L.warn(`!!! '${await this.engine.getEngineName()}': credential FAILED SAVE after logged in !!!`);
+
+                        return Promise.reject(new Error());
+                    }
                 }
-
-                break;
             }
+
+            break;
         }
 
         return Promise.resolve();
@@ -149,350 +199,168 @@ export class TestAPI {
 
 
     //body[@axt-parser-timing]
-    //*[@axt-form-type="login"]
-    //*[@axt-input-type="login"]
-    //*[@axt-input-type="password"]
-    //*[@axt-button-type="login"]
-    //*[@axt-button-type="next"]
-    //*[@axt-button-type="singin"]
+    //  *[@axt-form-type="login"]
+    //      input[@axt-input-type="login"]
+    //      input[@axt-input-type="password"]
+    //      *[@axt-button-type="login"]
+    //      *[@axt-button-type="next"]
+    //  *[@axt-button-type="singin"]
     protected async parsePage(): Promise<Page> {
-        L.debug("parse");
+        L.debug("parsePage");
+
+        let driver = await this.engine.getDriver();
+
+        let page = new Page();
+
+        var delay = 0;
+        while (true) {
+            var loginForm = await this.findLoginForm();
+            if (loginForm === undefined) {
+                loginForm = await this.findLoginFormInFrames();
+            }
+            page.loginForm = loginForm;
+
+            if (page.loginForm === undefined && page.singinButton === undefined) {
+                if (this.credential.timeout > 0 && delay < this.credential.timeout) {
+                    await driver.sleep(500);
+                    delay += 500;
+                    continue;
+                }
+                page.isLoggedIn = true;
+                break;
+            }
+            break;
+        }
+
+        return Promise.resolve(page);
+    }
+
+    protected async findLoginFormInFrames(): Promise<LoginForm | undefined> {
+        L.debug("findLoginFormInFrames");
+
+        let driver = await this.engine.getDriver();
+
+        var loginForm: LoginForm | undefined = undefined;
 
         try {
-            let driver = await this.engine.getDriver();
-
-            let page = new Page();
-
-            let iframes = await driver.findElements(By.xpath("//iframe"));
-            for (let iframe of iframes) {
-                let loginForm = new LoginForm();
+            for (let iframe of await driver.findElements(By.xpath("//iframe"))) {
                 try {
                     await driver.switchTo().frame(iframe);
-                    await driver.wait(until.elementLocated(By.xpath("//body[@axt-parser-timing]")), 5000);
-                    loginForm.iframe = iframe;
-                    let loginFormElm = await driver.wait(until.elementLocated(By.xpath("//*[@axt-form-type='login']")), 1000);
-                    loginForm.login = await loginFormElm.findElement(By.xpath("//input[@axt-input-type='login']"));
-                    loginForm.password = await loginFormElm.findElement(By.xpath("//input[@axt-input-type='password']"));
-                    loginForm.loginButton = await loginFormElm.findElement(By.xpath("//*[@axt-button-type='login']"));
-                    loginForm.nextButton = await loginFormElm.findElement(By.xpath("//*[@axt-button-type='next']"));
+
+                    loginForm = await this.findLoginForm(iframe);
+                    if (loginForm === undefined) {
+                        loginForm = await this.findLoginFormInFrames();
+                    }
+
+                    if (loginForm !== undefined) {
+                        await driver.switchTo().parentFrame();
+                        break;
+                    }
                 } catch (e) {
                 }
-                if (loginForm.iframe != undefined) {
-                    return Promise.resolve(page);
+            }
+        } catch (e) {
+        }
+
+        return Promise.resolve(loginForm);
+    }
+
+    protected async findLoginForm(iframe: WebElement | undefined = undefined): Promise<LoginForm | undefined> {
+        L.debug("findLoginForm");
+
+        let driver = await this.engine.getDriver();
+
+        let loginForm: LoginForm | undefined = undefined;
+        try {
+            let bodyElm = await driver.wait(until.elementLocated(By.xpath("//body[@axt-parser-timing]")), 500);
+            let loginFormElm = await this.findElement(bodyElm, "//*[@axt-form-type='login']");
+            if (loginFormElm !== undefined) {
+                loginForm = new LoginForm();
+                let loginElm = await this.findElement(loginFormElm, "//input[@axt-input-type='login']");
+                if (loginElm !== undefined) {
+                    loginForm.loginInput = new Input(loginElm, iframe);
+                }
+                let passwordElm = await this.findElement(loginFormElm, "//input[@axt-input-type='password']");
+                if (passwordElm !== undefined) {
+                    loginForm.passwordInput = new Input(passwordElm, iframe);
+                }
+                let loginButtonElm = await this.findElement(loginFormElm, "//*[@axt-button-type='login']");
+                if (loginButtonElm !== undefined) {
+                    loginForm.loginButton = new Button(loginButtonElm, iframe);
+                }
+                let nextButtonElm = await this.findElement(loginFormElm, "//*[@axt-button-type='next']");
+                if (nextButtonElm !== undefined) {
+                    loginForm.nextButton = new Button(nextButtonElm, iframe);
                 }
             }
-            //
-            // await driver.switchTo().parentFrame();
-            //
-            // L.info(`parrent handle: ${await driver.getWindowHandle()}`);
-
-            //let elm =
-
-            return Promise.resolve(page);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("parse did not run");
-            return Promise.reject();
+        } catch (e) {
         }
+
+        return Promise.resolve(loginForm);
     }
 
-    protected async parseCurrentFrame(): Promise<Page> {
-        L.debug("parseCurrentFrame");
-
+    protected async findElement(rootElement: WebElement, xpath: string): Promise<WebElement | undefined> {
         try {
-            let driver = await this.engine.getDriver();
-
-            let page = new Page();
-
-            let loginForm = new LoginForm();
-            try {
-                await driver.wait(until.elementLocated(By.xpath("//body[@axt-parser-timing]")), 5000);
-                let loginFormElm = await driver.wait(until.elementLocated(By.xpath("//*[@axt-form-type='login']")), 1000);
-                loginForm.login = await loginFormElm.findElement(By.xpath("//input[@axt-input-type='login']"));
-                loginForm.password = await loginFormElm.findElement(By.xpath("//input[@axt-input-type='password']"));
-                loginForm.loginButton = await loginFormElm.findElement(By.xpath("//*[@axt-button-type='login']"));
-                loginForm.nextButton = await loginFormElm.findElement(By.xpath("//*[@axt-button-type='next']"));
-            } catch (e) {
-            }
-            if (loginForm.iframe != undefined) {
-                page.loginForm = loginForm;
-                return Promise.resolve(page);
-            }
-            //
-            // await driver.switchTo().parentFrame();
-            //
-            // L.info(`parrent handle: ${await driver.getWindowHandle()}`);
-
-            //let elm =
-
-            return Promise.resolve(page);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("parse did not run");
-            return Promise.reject();
+            return Promise.resolve(await rootElement.findElement(By.xpath(xpath)));
+        } catch (e) {
+            return Promise.resolve(undefined);
         }
     }
 
+    protected async enterToInput(
+        text: string,
+        input: Input,
+        options: {
+            attach: boolean,
+            replace: boolean
+        } | {
+            attach: boolean,
+        } | {
+            replace: boolean,
+        } | undefined = undefined): Promise<void> {
 
-    //body[@axt-parser-timing]
-    protected async parse(): Promise<void> {
-        L.debug("parse");
-
-        try {
-            let driver = await this.engine.getDriver();
-            await driver.wait(until.elementLocated(By.xpath("//body[@axt-parser-timing]")), 5000);
-            return Promise.resolve();
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("parse did not run");
-            return Promise.reject();
-        }
-    }
-
-    //axt-form-type="login"
-    protected async hasLoginForm(): Promise<boolean> {
-        L.debug("hasLoginForm");
-
-        try {
-            let driver = await this.engine.getDriver();
-            await driver.wait(until.elementLocated(By.xpath("//*[@axt-form-type='login']")), 1000);
-            return Promise.resolve(true);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("login form not found");
-            return Promise.resolve(false);
-        }
-    }
-
-    //axt-input-type="login"
-    protected async hasLogin(): Promise<boolean> {
-        L.debug("hasLogin");
-
-        try {
-            let driver = await this.engine.getDriver();
-            await driver.wait(until.elementLocated(By.xpath("//input[@axt-input-type='login']")), 1000);
-            return Promise.resolve(true);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("login input not found");
-            return Promise.resolve(false);
-        }
-    }
-
-    protected async enterLogin(login: string, replace = false): Promise<void> {
         L.debug("enterLogin");
 
-        try {
-            let driver = await this.engine.getDriver();
-            let empty = await this.isLoginEmpty();
-            let loginElm = new WebElementExt(await driver.findElement(By.xpath("//input[@axt-input-type='login']")));
-            if (!empty) {
-                if (!replace) return Promise.resolve();
-                await loginElm.webElement.sendKeys("");
+        var attach = false;
+        var replace = false;
+        if (options !== undefined) {
+            if (options as {attach: boolean}) {
+                attach = (<{attach: boolean}>options).attach;
+            } else if (options as {replace: boolean}) {
+                replace = (<{replace: boolean}>options).replace;
+            } else if (options as {attach: boolean, replace: boolean}) {
+                attach = (<{attach: boolean, replace: boolean}>options).attach;
+                replace = (<{force: boolean, replace: boolean}>options).replace;
             }
-            await loginElm.sendKeys(login);
-            return Promise.resolve();
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("login input not found");
-            return Promise.reject();
         }
-    }
-
-    protected async pressEnterOnLogin(): Promise<void> {
-        L.debug("pressEnterOnLogin");
 
         try {
             let driver = await this.engine.getDriver();
-            let loginElm = new WebElementExt(await driver.findElement(By.xpath("//input[@axt-input-type='login']")));
-            await loginElm.sendKeys(Key.RETURN);
-            return Promise.resolve();
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("login input not found");
-            return Promise.reject();
-        }
-    }
+            let extDriver = await this.engine.getExtDriver();
 
-    protected async isLoginEmpty(): Promise<boolean> {
-        L.debug("isLoginEmpty");
+            let inputElm = new WebElementExt(input.input);
 
-        try {
-            let driver = await this.engine.getDriver();
-            let text = await driver.findElement(By.xpath("//input[@axt-input-type='login']")).getAttribute("value");
-            return Promise.resolve(text.length === 0);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("login input not found");
-            return Promise.resolve(false);
-        }
-    }
-
-    protected async checkLogin(login: string): Promise<boolean> {
-        L.debug("checkLogin");
-
-        try {
-            let driver = await this.engine.getDriver();
-            let text = await driver.findElement(By.xpath("//input[@axt-input-type='login']")).getAttribute("value");
-            return Promise.resolve(text === login);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("login input not found");
-            return Promise.resolve(false);
-        }
-    }
-
-    //axt-input-type="password"
-    protected async hasPassword(): Promise<boolean> {
-        L.debug("hasPassword");
-
-        try {
-            let driver = await this.engine.getDriver();
-            await driver.wait(until.elementLocated(By.xpath("//input[@axt-input-type='password']")), 1000);
-            return Promise.resolve(true);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("password input not found");
-            return Promise.resolve(false);
-        }
-    }
-
-    protected async enterPassword(password: string, replace = false): Promise<void> {
-        L.debug("enterPassword");
-
-        try {
-            let driver = await this.engine.getDriver();
-            let empty = await this.isPasswordEmpty();
-            let passwordElm = new WebElementExt(await driver.findElement(By.xpath("//input[@axt-input-type='password']")));
-            if (!empty) {
-                if (!replace) return Promise.resolve();
-                await passwordElm.webElement.sendKeys("");
+            if (input.iframe === undefined) {
+                await extDriver.swithToRootFrame();
+            } else {
+                await driver.switchTo().frame(input.iframe);
             }
-            await passwordElm.sendKeys(password);
+
+            if (replace) {
+                await inputElm.webElement.clear();
+            } else {
+                let currentValue = await inputElm.webElement.getAttribute("value");
+                if (currentValue.length != 0) {
+                    if (!attach) return Promise.resolve();
+                }
+            }
+
+            await inputElm.sendKeys(text);
+
             return Promise.resolve();
         } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("password input not found");
+            L.debug("fail enter to input");
             return Promise.reject();
         }
-    }
-
-    protected async pressEnterOnPassword(): Promise<void> {
-        L.debug("pressEnterOnPassword");
-
-        try {
-            let driver = await this.engine.getDriver();
-            let passwordElm = new WebElementExt(await driver.findElement(By.xpath("//input[@axt-input-type='password']")));
-            await passwordElm.sendKeys(Key.RETURN);
-            return Promise.resolve();
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("password input not found");
-            return Promise.reject();
-        }
-    }
-
-    protected async isPasswordEmpty(): Promise<boolean> {
-        L.debug("isPasswordEmpty");
-
-        try {
-            let driver = await this.engine.getDriver();
-            let text = await driver.findElement(By.xpath("//input[@axt-input-type='password']")).getAttribute("value");
-            return Promise.resolve(text.length === 0);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("password input not found");
-            return Promise.resolve(false);
-        }
-    }
-
-    protected async checkPassword(password: string): Promise<boolean> {
-        L.debug("  checkPassword");
-
-        try {
-            let driver = await this.engine.getDriver();
-            let text = await driver.findElement(By.xpath("//input[@axt-input-type='password']")).getAttribute("value");
-            return Promise.resolve(text === password);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("password input not found");
-            return Promise.resolve(false);
-        }
-    }
-
-    //axt-button-type="login"
-    protected async hasLoginButton(): Promise<boolean> {
-        L.debug("hasLoginButton");
-
-        try {
-            let driver = await this.engine.getDriver();
-            await driver.wait(until.elementLocated(By.xpath("//*[@axt-button-type='login']")), 1000);
-            return Promise.resolve(true);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("login button not found");
-            return Promise.resolve(false);
-        }
-    }
-
-    protected async clickLoginButton(): Promise<void> {
-        L.debug("clickLoginButton");
-
-        try {
-            let driver = await this.engine.getDriver();
-            await driver.findElement(By.xpath("//*[@axt-button-type='login']")).click();
-            // let button = await driver.findElement(By.xpath("//*[@axt-button-type='login']"));
-            // await driver.actions().mouseDown(button);
-            // await driver.sleep(100);
-            // await driver.actions().mouseUp(button);
-            return Promise.resolve();
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("login button not found");
-            return Promise.reject();
-        }
-    }
-
-    //axt-button-type="next"
-    protected async hasNextButton(): Promise<boolean> {
-        L.debug("hasNextButton");
-
-        try {
-            let driver = await this.engine.getDriver();
-            await driver.wait(until.elementLocated(By.xpath("//*[@axt-button-type='next']")), 1000);
-            return Promise.resolve(true);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("next button not found");
-            return Promise.resolve(false);
-        }
-    }
-
-    protected async clickNextButton(): Promise<void> {
-        L.debug("clickLoginButton");
-
-        try {
-            let driver = await this.engine.getDriver();
-            await driver.findElement(By.xpath("//*[@axt-button-type='next']")).click();
-            return Promise.resolve();
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("login button not found");
-            return Promise.reject();
-        }
-    }
-
-    //axt-button-type="singin"
-    protected async hasSigninButton(): Promise<boolean> {
-        L.debug("hasSigninButton");
-
-        try {
-            let driver = await this.engine.getDriver();
-            await driver.wait(until.elementLocated(By.xpath("//*[@axt-button-type='singin']")), 1000);
-            return Promise.resolve(true);
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("singin button not found");
-            return Promise.resolve(false);
-        }
-    }
-
-    protected async clickSignInButton(): Promise<void> {
-        L.debug("clickSignInButton");
-
-        try {
-            let driver = await this.engine.getDriver();
-            await driver.findElement(By.xpath("//*[@axt-button-type='singin']")).click();
-            return Promise.resolve();
-        } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("singin button not found");
-            return Promise.reject();
-        }
-    }
-
-    protected async isLoggedIn(): Promise<boolean> {
-        L.debug("isLoggedIn");
-        return Promise.resolve(true);
     }
 }

@@ -28,6 +28,12 @@ export class WebDriverExt {
         await this.waitUrlOpened();
     }
 
+    public async closeCurrentTab() {
+        await this.webDriver.executeScript("window.close();");
+        var tabs = await this.webDriver.getAllWindowHandles();
+        await this.webDriver.switchTo().window(tabs[tabs.length - 1]);
+    }
+
     public async swithToRootFrame(): Promise<void> {
         for (let i = 0; i < 10; ++i) {
             await this.webDriver.switchTo().parentFrame();

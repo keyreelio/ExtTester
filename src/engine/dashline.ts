@@ -36,11 +36,15 @@ export class DashlaneEngine extends Engine {
 
         try {
             await extDriver.swithToRootFrame();
-            let iframe = await driver.wait(until.elementLocated(By.id("kw-iframe-popup")), 2000);
+            L.trace("find iframe[@id='kw-iframe-popup']");
+            let iframe = await driver.wait(until.elementLocated(By.xpath("//iframe[@id='kw-iframe-popup']")), 10000);
+            L.trace(`switch to '${await iframe.getId()}'`);
             await driver.switchTo().frame(iframe);
-            await driver.wait(until.elementLocated(By.className("save")), 500).click();
+            L.trace("send RETURN to input");
+            await driver.wait(until.elementLocated(By.xpath("//input[@type='text']")), 5000).sendKeys(Key.RETURN);
             return Promise.resolve();
         } catch (e) {
+            L.trace(`filed process after login with ${e}`);
             return Promise.reject(e);
         }
     }

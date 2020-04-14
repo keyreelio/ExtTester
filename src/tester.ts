@@ -9,6 +9,7 @@ import {testerLogger as L} from "./common/log.config";
 import {Builder, By, Key, until, WebDriver} from 'selenium-webdriver';
 import {Credentials} from "./credentials";
 import {TestAPI} from "./testapi";
+import {ReportLogger} from "./report/report";
 
 
 class Tester {
@@ -36,12 +37,18 @@ class Tester {
         L.debug("startup engine");
         await engine.startup();
 
+        let report = new ReportLogger(await engine.getEngineName());
+        await report.startup();
+
         let driver = await engine.getDriver();
 
         for (let credential of Credentials.all()) {
+
+            await report.start(credential.url);
+
             try {
                 L.debug("create test API");
-                let api = new TestAPI(engine, credential);
+                let api = new TestAPI(engine, credential, report);
 
                 L.debug(`testing: '${credential.url}'`);
 
@@ -66,7 +73,10 @@ class Tester {
                 L.debug("did drop credential");
             }
             catch (e) {
+                L.debug(`test filed with: '${e}'`);
             }
+
+            await report.finish();
 
             await driver.sleep(1000);
         }

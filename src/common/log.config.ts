@@ -1,4 +1,5 @@
 import {Category, CategoryConfiguration, CategoryServiceFactory, LogLevel} from "typescript-logging";
+import exp from "constants";
 
 
 CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Trace));
@@ -14,3 +15,4 @@ export let lastpassEngineLogger = new Category("pastpass", engineLogger);
 export let onePasswordEngineLogger = new Category("1password", engineLogger);
 export let keyreelEngineLogger = new Category("keyreel", engineLogger);
 
+export let reportLogger = new Category("report");

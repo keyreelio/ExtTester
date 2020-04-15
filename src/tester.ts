@@ -34,6 +34,8 @@ class Tester {
         L.debug("startup engine");
         await engine.startup();
 
+        await engine.dropAllCredentials();
+
         let report = new ReportLogger(await engine.getEngineName());
         await report.startup();
 
@@ -66,32 +68,32 @@ class Tester {
                 L.debug(`test 'use login button' filed with: '${e}'`);
             }
 
-            try {
-                L.debug("write credential with use only enter button");
-                await api.checkWriteCredential({useOnlyEnterButton: true});
-                L.debug("did write credential");
-
-                await driver.sleep(500);
-
-                L.debug("read credential");
-                await api.checkReadCredential();
-                L.debug("did read credential");
-
-                await driver.sleep(500);
-
-                L.debug("drop credential");
-                await engine.dropAllCredentials();
-                L.debug("did drop credential");
-            } catch (e) {
-                L.debug(`test 'use enter key' filed with: '${e}'`);
-            }
+            // try {
+            //     L.debug("write credential with use only enter button");
+            //     await api.checkWriteCredential({useOnlyEnterButton: true});
+            //     L.debug("did write credential");
+            //
+            //     await driver.sleep(500);
+            //
+            //     L.debug("read credential");
+            //     await api.checkReadCredential();
+            //     L.debug("did read credential");
+            //
+            //     await driver.sleep(500);
+            //
+            //     L.debug("drop credential");
+            //     await engine.dropAllCredentials();
+            //     L.debug("did drop credential");
+            // } catch (e) {
+            //     L.debug(`test 'use enter key' filed with: '${e}'`);
+            // }
 
             await report.finish();
         }
 
-        await driver.sleep(5000);
-
         await report.shutdown();
+
+        await engine.dropAllCredentials();
 
         L.debug("shutdown engine");
         await engine.shutdown();

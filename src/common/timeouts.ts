@@ -8,6 +8,7 @@ export class Timeouts {
     static BeforeEnter = 200;
     static BeforeSendKeys = 200;
     static BetweenKey = 30;
+    static WaitExistValue = 2000;
 
     // WebDriverExt
     static AfterOpenUrl = 200;

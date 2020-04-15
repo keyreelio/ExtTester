@@ -211,24 +211,135 @@ export class TestAPI {
     }
 
     public async checkReadCredential(): Promise<void> {
+        L.info("checkReadCredential");
+
+        let error: Error | undefined = undefined;
 
         let driver = await this.engine.getDriver();
+        let extDriver = await this.engine.getExtDriver();
 
+        L.debug("clear all cookies");
         await driver.manage().deleteAllCookies();
 
-        // await this.open(this.credential.url)
-        // if (!await this.hasOpened()) return Promise.reject();
-        //
-        // if (!await this.parse()) return Promise.reject();
-        // if (await this.hasLoginForm()) {
-        //     if (await this.hasLogin() && await this.hasPassword()) {
-        //         await driver.sleep(1000);
-        //         await this.checkLogin(this.credential.login) && await this.checkPassword(this.credential.password);
-        //     }
-        //     //TODO: add support login forms with two and etc steps
-        // }
+        L.debug(`open new tab with: ${this.credential.url}`);
+        await extDriver.openUrlOnNewTab(this.credential.url);
 
-        return Promise.resolve();
+        try {
+            var state: State = State.init;
+
+            while (true) {
+                L.debug("parse page");
+                let page = await this.parsePage(ParseSearchMap[state]);
+
+                L.debug("check page structure");
+                if (page.singinButton !== undefined && page.loginForm === undefined) {
+                    L.debug("page has singin button and hasn't login form");
+
+                    await this.pressOnButton(page.singinButton);
+
+                    state = State.waitLoginForm;
+                    continue;
+                } else if (page.loginForm !== undefined) {
+                    L.debug("page has login form");
+
+                    if (page.loginForm.loginInput !== undefined && page.loginForm.passwordInput !== undefined) {
+                        L.debug("login form has login and password inputs");
+
+                        L.debug("check auto fill login and password inputs")
+                        if (!await this.isEmptyInputValue(page.loginForm.loginInput) &&
+                            !await this.isEmptyInputValue(page.loginForm.passwordInput)) {
+
+                            if (await this.checkInputValue(this.credential.login, page.loginForm.loginInput) &&
+                                await this.checkInputValue(this.credential.password, page.loginForm.passwordInput)) {
+
+                                L.debug("credential AUTO LOAD");
+                                await this.report.setResult(EReportResult.success, EReportTest.loadAuto);
+                            } else {
+                                L.debug("credential AUTO LOAD failed");
+                                error = new Error();
+                            }
+                            break;
+                        } else {
+                            //TODO: try manual fill login and password inputs
+                            // try {
+                            //     L.debug("try engine process after login");
+                            //
+                            //     await this.engine.processAfterLogin();
+                            //
+                            //     L.info("credential SAVED as manual after logged in");
+                            //     await this.report.setResult(
+                            //         EReportResult.success,
+                            //         useOnlyEnterButton ? EReportTest.saveManualAfterLoggedInWithoutButtons : EReportTest.saveManualAfterLoggedInWithButtons);
+                            // } catch (e) {
+                            //     if (e instanceof UnsupportedOperationError) {
+                            //         L.debug("engine process after login is failed");
+                            //         L.info("credential FAILED SAVE after logged in");
+                            //         error = new Error();
+                            //     }
+                            // }
+
+                            break;
+                        }
+                    } else if (page.loginForm.passwordInput !== undefined) {
+                        L.debug("login form has only password input");
+
+                        L.debug("check auto fill password input")
+                        if (!await this.isEmptyInputValue(page.loginForm.passwordInput)) {
+                            if (await this.checkInputValue(this.credential.password, page.loginForm.passwordInput)) {
+                                L.debug("credential AUTO LOAD");
+                                await this.report.setResult(EReportResult.success, EReportTest.loadAuto);
+                            } else {
+                                L.debug("credential AUTO LOAD failed");
+                                error = new Error();
+                            }
+                            break;
+                        } else {
+                            //TODO: try manual fill password input
+                            error = new Error();
+                            break;
+                        }
+                    } else if (page.loginForm.loginInput !== undefined) {
+                        L.debug("login form has only login input");
+
+                        L.debug("check auto fill login input")
+                        if (!await this.isEmptyInputValue(page.loginForm.loginInput)) {
+                            if (!await this.checkInputValue(this.credential.login, page.loginForm.loginInput)) {
+                                error = new Error();
+                                break;
+                            }
+                        } else {
+                            //TODO: try manual fill password input
+                            error = new Error();
+                            break;
+                        }
+
+                        if (page.loginForm.loginButton !== undefined) {
+                            await this.pressOnButton(page.loginForm.loginButton);
+                        } else if (page.loginForm.nextButton !== undefined) {
+                            await this.pressOnButton(page.loginForm.nextButton);
+                        } else {
+                            await this.pressEnterOnInput(page.loginForm.loginInput);
+                        }
+
+                        state = State.waitSecondLoginForm;
+                        continue;
+                    }
+                }
+
+                break;
+            }
+        } catch (e) {
+            error = e;
+        }
+
+        L.debug("close current tab");
+        await extDriver.closeCurrentTab();
+
+        if (error !== undefined) {
+            return Promise.reject(error);
+        } else {
+            return Promise.resolve();
+        }
     }
 
     //body[@axt-parser-timing]
@@ -457,6 +568,52 @@ export class TestAPI {
             await extButton.click();
 
             return Promise.resolve();
+        } catch (UnhandledPromiseRejectionWarning) {
+            L.debug("fail enter to input");
+            return Promise.reject();
+        }
+    }
+
+    protected async isEmptyInputValue(input: Input): Promise<boolean> {
+
+        L.debug("isEmptyInputValue");
+
+        try {
+            let driver = await this.engine.getDriver();
+            let extDriver = await this.engine.getExtDriver();
+
+            await extDriver.switchToRootFrame();
+            if (input.iframe !== undefined) {
+                await driver.switchTo().frame(input.iframe);
+            }
+
+            let extInput = new WebElementExt(input.input);
+            let currentValue = await extInput.getValue(Timeouts.WaitExistValue);
+
+            return Promise.resolve(currentValue.length === 0);
+        } catch (UnhandledPromiseRejectionWarning) {
+            L.debug("fail enter to input");
+            return Promise.reject();
+        }
+    }
+
+    protected async checkInputValue(text: string, input: Input): Promise<boolean> {
+
+        L.debug("checkInputValue");
+
+        try {
+            let driver = await this.engine.getDriver();
+            let extDriver = await this.engine.getExtDriver();
+
+            await extDriver.switchToRootFrame();
+            if (input.iframe !== undefined) {
+                await driver.switchTo().frame(input.iframe);
+            }
+
+            let extInput = new WebElementExt(input.input);
+            let currentValue = await extInput.getValue(Timeouts.WaitExistValue);
+
+            return Promise.resolve(currentValue === text);
         } catch (UnhandledPromiseRejectionWarning) {
             L.debug("fail enter to input");
             return Promise.reject();

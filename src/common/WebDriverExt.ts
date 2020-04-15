@@ -1,5 +1,6 @@
 import {By, Key, until, WebDriver, WebElement, WebElementPromise} from "selenium-webdriver";
 import {Timeouts} from "./timeouts";
+import {testapiLogger as L} from "./log.config";
 
 
 export class WebDriverExt {
@@ -11,16 +12,17 @@ export class WebDriverExt {
     }
 
     public async openUrlOnCurrentTab(url: string) {
-        let tabs = await this.webDriver.getAllWindowHandles();
-        if (tabs.length === 0) return this.openUrlOnNewTab(url);
-
         await this.webDriver.get(url);
         await this.waitUrlOpened();
     }
 
     public async openUrlOnNewTab(url: string) {
-        await this.webDriver.executeScript("window.open();");
         let tabs = await this.webDriver.getAllWindowHandles();
+        await this.webDriver.switchTo().window(tabs[tabs.length - 1]);
+
+        await this.webDriver.executeScript("window.open();");
+
+        tabs = await this.webDriver.getAllWindowHandles();
         await this.webDriver.switchTo().window(tabs[tabs.length - 1]);
 
         await this.webDriver.get(url);
@@ -28,10 +30,9 @@ export class WebDriverExt {
     }
 
     public async closeCurrentTab() {
-        //TODO: fixed because did not work
-        // await this.webDriver.executeScript("window.close();");
-        // let tabs = await this.webDriver.getAllWindowHandles();
-        // await this.webDriver.switchTo().window(tabs[tabs.length - 1]);
+        let tabs = await this.webDriver.getAllWindowHandles();
+        await this.webDriver.close();
+        await this.webDriver.switchTo().window(tabs[0]);
     }
 
     public async switchToRootFrame(): Promise<void> {
@@ -71,6 +72,27 @@ export class WebElementExt {
 
     public async sendKeysWithDelay(delay: number, ...var_args: Array<string|number|Promise<string|number>>): Promise<void> {
         return await this.send(delay, var_args);
+    }
+
+    public async getValue(timeout = Timeouts.WaitExistValue): Promise<string> {
+        let delay = 0;
+        while (true) {
+            let value = await this.webElement.getAttribute("value");
+            if (value !== undefined && value.length > 0) {
+                return Promise.resolve(value);
+            }
+
+            if (timeout > 0 && delay < timeout) {
+                await this.webElement.getDriver().sleep(500);
+                delay += 500;
+                continue;
+            }
+
+            if (value !== undefined) {
+                return Promise.resolve(value);
+            }
+            return Promise.reject();
+        }
     }
 
     public async pressEnter(): Promise<void> {

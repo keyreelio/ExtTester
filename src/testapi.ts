@@ -228,10 +228,6 @@ export class TestAPI {
         return Promise.resolve();
     }
 
-    public async dropCredential(): Promise<void> {
-        return Promise.resolve();
-    }
-
     //body[@axt-parser-timing]
     //  *[@axt-form-type="login"]
     //      input[@axt-input-type="login"]

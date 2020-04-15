@@ -52,25 +52,42 @@ class Tester {
 
                 L.debug(`testing: '${credential.url}'`);
 
+                let checkedRead = false;
                 try {
                     L.debug("write credential");
                     await api.checkWriteCredential();
                     L.debug("did write credential");
+
+                    L.debug("read credential");
+                    await api.checkReadCredential();
+                    L.debug("did read credential");
+
+                    checkedRead = true;
+
+                    L.debug("drop credential");
+                    await engine.dropAllCredentials();
+                    L.debug("did drop credential");
                 } catch (e) {
+                }
+
+                try {
                     L.debug("write credential with use only enter button");
                     await api.checkWriteCredential({useOnlyEnterButton: true});
                     L.debug("did write credential");
+
+                    if (!checkedRead) {
+                        L.debug("read credential");
+                        await api.checkReadCredential();
+                        L.debug("did read credential");
+                    }
+
+                    L.debug("drop credential");
+                    await engine.dropAllCredentials();
+                    L.debug("did drop credential");
+                } catch (e) {
                 }
 
                 await driver.sleep(1000);
-
-                L.debug("read credential");
-                await api.checkReadCredential();
-                L.debug("did read credential");
-
-                L.debug("drop credential");
-                await api.dropCredential();
-                L.debug("did drop credential");
             }
             catch (e) {
                 L.debug(`test filed with: '${e}'`);

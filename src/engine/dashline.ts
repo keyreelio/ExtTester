@@ -2,7 +2,7 @@ import {Engine, IEngine} from './engine'
 import {dashlaneEngineLogger as L} from "../common/log.config";
 
 import {WebDriverExt, WebElementExt} from "../common/WebDriverExt";
-import {By, Key, until, WebDriver} from "selenium-webdriver";
+import {By, Key, until, WebDriver, WebElement} from "selenium-webdriver";
 import * as chrome from "selenium-webdriver/chrome";
 import fs from "fs";
 
@@ -48,6 +48,26 @@ export class DashlaneEngine extends Engine {
             return Promise.reject(e);
         }
     }
+
+    public async dropAllCredentials(): Promise<void> {
+
+        let driver = await this.getDriver();
+
+        await this.openCredentials();
+        while (true) {
+            try {
+                await this.dropTopCredential();
+                await driver.sleep(500);
+            } catch (e) {
+                break;
+            }
+        }
+
+        return Promise.resolve();
+    }
+
+
+    //REGION: Engine overided protected methods
 
     protected async profileName(): Promise<string> {
         return Promise.resolve("dashlane");
@@ -151,9 +171,71 @@ export class DashlaneEngine extends Engine {
         return Promise.resolve();
     }
 
+
+    //REGION: protected methods
+
     protected currentAccount() : IDashlineAccount {
         let index = Math.max(0, Math.min(this.currentAccountIndex, this.accounts.length - 1));
         return this.accounts[index];
+    }
+
+    protected async dropTopCredential(): Promise<void> {
+        let items = await this.findCredentialList();
+        await this.dropCredential(items[0]);
+
+        return Promise.resolve();
+    }
+
+    protected async dropCredential(item: WebElement): Promise<void> {
+        let driver = await this.getDriver();
+
+        let linkA = await item.findElement(By.xpath("//a[contains(@class,'cellsWrapper')]"));
+        await driver.sleep(200);
+        await linkA.click();
+
+        let form = await driver.wait(until.elementLocated(By.xpath("//form")), 2000);
+        let deleteButton = await form.findElement(By.xpath("//button[contains(@class,'deleteButton')]"));
+        await driver.sleep(200);
+        await deleteButton.click();
+
+        let confirmButton = await driver.wait(until.elementLocated(By.xpath("//button[contains(@class,'danger')]")), 2000);
+        await driver.sleep(200);
+        await confirmButton.click();
+
+        return Promise.resolve();
+
+    }
+
+    protected async openCredentials(): Promise<void> {
+        let driver = await this.getDriver();
+        let extDriver = await this.getExtDriver();
+
+        var tabs = await driver.getAllWindowHandles();
+
+        let finded = false;
+        for (let tab of tabs) {
+            await driver.switchTo().window(tab);
+            if ((await driver.getCurrentUrl()).includes("fdjamakpfbbddfjaooikfcpapjohcfmg/credentials")) {
+                finded = true;
+                break;
+            }
+        }
+        if (!finded) {
+            await extDriver.openUrlOnNewTab("chrome-extension://fdjamakpfbbddfjaooikfcpapjohcfmg/credentials");
+        }
+
+        await extDriver.swithToRootFrame();
+        await driver.sleep(1000);
+    }
+
+    protected async findCredentialList(): Promise<WebElement[]> {
+        let driver = await this.getDriver();
+
+        let contentDiv = await driver.wait(until.elementLocated(By.xpath("//div[contains(@class,'contentWrapper')]")), 5000);
+        let listUl = await contentDiv.findElement(By.xpath("//ul[contains(@class,'wrapper')]"));
+        let items = await listUl.findElements(By.xpath("//li[contains(@class,'row')]"));
+
+        return Promise.resolve(items);
     }
 }
 

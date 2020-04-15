@@ -22,6 +22,7 @@ export interface IEngine {
     shutdown(): Promise<void>;
     processBeforeLogin(): Promise<void>;
     processAfterLogin(): Promise<void>;
+    dropAllCredentials(): Promise<void>;
 }
 
 export class Engine implements IEngine {
@@ -84,7 +85,7 @@ export class Engine implements IEngine {
         await this.driver.manage().window().maximize();
 
         L.debug("sleep for init extension");
-        await this.driver.sleep(1000);
+        await this.driver.sleep(2000);
 
         await this.startupDriver();
 
@@ -103,6 +104,11 @@ export class Engine implements IEngine {
     public async processAfterLogin(): Promise<void> {
         L.info("unsupported processAfterLogin");
         return Promise.reject(new UnsupportedOperationError("processAfterLogin"));
+    }
+
+    public async dropAllCredentials(): Promise<void> {
+        L.info("unsupported dropAllCredentials");
+        return Promise.reject(new UnsupportedOperationError("dropAllCredentials"));
     }
 
 

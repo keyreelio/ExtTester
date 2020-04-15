@@ -1,9 +1,7 @@
 import {Category, CategoryConfiguration, CategoryServiceFactory, LogLevel} from "typescript-logging";
-import exp from "constants";
 
 
-CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Trace));
-
+CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Warn));
 
 
 export let testerLogger = new Category("tester");

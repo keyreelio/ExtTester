@@ -1,17 +1,10 @@
-import {Builder, By, error, Key, until, WebDriver, WebElement} from "selenium-webdriver";
+import {Builder, error, WebDriver} from "selenium-webdriver";
 import * as chrome from "selenium-webdriver/chrome";
 import fs from "fs";
 import UnsupportedOperationError = error.UnsupportedOperationError;
 import {engineLogger as L} from "../common/log.config";
 import {WebDriverExt} from "../common/WebDriverExt";
 
-
-async function sendKeys(driver: WebDriver, elm: WebElement, value: string) {
-    for (var i = 0; i < value.length; i++) {
-        await elm.sendKeys(value[i]);
-        await driver.sleep(100);
-    }
-}
 
 export interface IEngine {
     getEngineName(): Promise<string>;
@@ -26,6 +19,9 @@ export interface IEngine {
 }
 
 export class Engine implements IEngine {
+
+    static WaitInitExtension = 2000;
+
 
     protected options: chrome.Options | undefined;
     protected driver: WebDriver | undefined;
@@ -58,7 +54,7 @@ export class Engine implements IEngine {
     }
 
     public async startup(): Promise<void> {
-        L.info("startup");
+        L.debug("startup");
 
         let profileName = await this.profileName();
 
@@ -85,7 +81,7 @@ export class Engine implements IEngine {
         await this.driver.manage().window().maximize();
 
         L.debug("sleep for init extension");
-        await this.driver.sleep(2000);
+        await this.driver.sleep(Engine.WaitInitExtension);
 
         await this.startupDriver();
 
@@ -97,33 +93,33 @@ export class Engine implements IEngine {
     }
 
     public async processBeforeLogin(): Promise<void> {
-        L.info("unsupported processBeforeLogin");
+        L.debug("unsupported processBeforeLogin");
         return Promise.reject(new UnsupportedOperationError("processBeforeLogin"));
     }
 
     public async processAfterLogin(): Promise<void> {
-        L.info("unsupported processAfterLogin");
+        L.debug("unsupported processAfterLogin");
         return Promise.reject(new UnsupportedOperationError("processAfterLogin"));
     }
 
     public async dropAllCredentials(): Promise<void> {
-        L.info("unsupported dropAllCredentials");
+        L.debug("unsupported dropAllCredentials");
         return Promise.reject(new UnsupportedOperationError("dropAllCredentials"));
     }
 
 
     protected async profileName(): Promise<string> {
-        L.info("unsupported setupOptions");
+        L.debug("unsupported setupOptions");
         return Promise.reject(new UnsupportedOperationError("profileName"));
     }
 
     protected async setupOptions(): Promise<void> {
-        L.info("unsupported setupOptions");
+        L.debug("unsupported setupOptions");
         return Promise.reject(new UnsupportedOperationError("setupOptions"));
     }
 
     protected async startupDriver(): Promise<void> {
-        L.info("unsupported startupDriver");
+        L.debug("unsupported startupDriver");
         return Promise.reject(new UnsupportedOperationError("startupDriver"));
     }
 }

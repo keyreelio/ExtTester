@@ -1,20 +1,17 @@
 import {IEngine} from './engine/engine'
 import {DashlaneEngine} from './engine/dashline'
+import {testerLogger as L} from "./common/log.config";
+import {Credentials} from "./credentials";
+import {TestAPI} from "./testapi";
+import {ReportLogger} from "./report/report";
 // import {KeyReelEngine} from './engine/keyreel'
 // import {OnePasswordXEngine} from './engine/onepassword'
 // import {LastPassEngine} from './engine/lastpass'
 
-import {testerLogger as L} from "./common/log.config";
-
-import {Builder, By, Key, until, WebDriver} from 'selenium-webdriver';
-import {Credentials} from "./credentials";
-import {TestAPI} from "./testapi";
-import {ReportLogger} from "./report/report";
-
 
 class Tester {
     public static async run() {
-        L.info("start testing...");
+        L.info("start testing");
         try {
             // await Promise.all([
             //     testExecute(new KeyReelEngine()),
@@ -22,14 +19,14 @@ class Tester {
             //     testExecute(new DashlaneEngine()),
             //     testExecute(new OnePasswordXEngine())]);
 
-            await Promise.all([this.testExecute(new DashlaneEngine())]);
-
-            L.info("finish testing");
+            await this.testExecute(new DashlaneEngine());
         }
         catch (e) {
-            Promise.reject(e);
-            // L.error(e.toString);
+            L.info(`testing fail with: ${e}`);
+            return Promise.reject(e);
         }
+
+        L.info("finish testing");
     }
 
     protected static async testExecute(engine: IEngine): Promise<void> {
@@ -43,65 +40,63 @@ class Tester {
         let driver = await engine.getDriver();
 
         for (let credential of Credentials.all()) {
-
             await report.start(credential.url);
 
+            L.debug("create test API");
+            let api = new TestAPI(engine, credential, report);
+
+            L.debug(`testing: '${credential.url}'`);
             try {
-                L.debug("create test API");
-                let api = new TestAPI(engine, credential, report);
+                L.debug("write credential");
+                await api.checkWriteCredential();
+                L.debug("did write credential");
 
-                L.debug(`testing: '${credential.url}'`);
+                await driver.sleep(500);
 
-                let checkedRead = false;
-                try {
-                    L.debug("write credential");
-                    await api.checkWriteCredential();
-                    L.debug("did write credential");
+                L.debug("read credential");
+                await api.checkReadCredential();
+                L.debug("did read credential");
 
-                    L.debug("read credential");
-                    await api.checkReadCredential();
-                    L.debug("did read credential");
+                await driver.sleep(500);
 
-                    checkedRead = true;
-
-                    L.debug("drop credential");
-                    await engine.dropAllCredentials();
-                    L.debug("did drop credential");
-                } catch (e) {
-                }
-
-                try {
-                    L.debug("write credential with use only enter button");
-                    await api.checkWriteCredential({useOnlyEnterButton: true});
-                    L.debug("did write credential");
-
-                    if (!checkedRead) {
-                        L.debug("read credential");
-                        await api.checkReadCredential();
-                        L.debug("did read credential");
-                    }
-
-                    L.debug("drop credential");
-                    await engine.dropAllCredentials();
-                    L.debug("did drop credential");
-                } catch (e) {
-                }
-
-                await driver.sleep(1000);
+                L.debug("drop credential");
+                await engine.dropAllCredentials();
+                L.debug("did drop credential");
+            } catch (e) {
+                L.debug(`test 'use login button' filed with: '${e}'`);
             }
-            catch (e) {
-                L.debug(`test filed with: '${e}'`);
+
+            try {
+                L.debug("write credential with use only enter button");
+                await api.checkWriteCredential({useOnlyEnterButton: true});
+                L.debug("did write credential");
+
+                await driver.sleep(500);
+
+                L.debug("read credential");
+                await api.checkReadCredential();
+                L.debug("did read credential");
+
+                await driver.sleep(500);
+
+                L.debug("drop credential");
+                await engine.dropAllCredentials();
+                L.debug("did drop credential");
+            } catch (e) {
+                L.debug(`test 'use enter key' filed with: '${e}'`);
             }
 
             await report.finish();
-
-            await driver.sleep(1000);
         }
 
-        await driver.sleep(100000);
+        await driver.sleep(5000);
+
+        await report.shutdown();
 
         L.debug("shutdown engine");
         await engine.shutdown();
+
+        await driver.quit();
     }
 }
 

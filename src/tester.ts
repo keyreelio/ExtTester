@@ -68,25 +68,25 @@ class Tester {
                 L.debug(`test 'use login button' filed with: '${e}'`);
             }
 
-            // try {
-            //     L.debug("write credential with use only enter button");
-            //     await api.checkWriteCredential({useOnlyEnterButton: true});
-            //     L.debug("did write credential");
-            //
-            //     await driver.sleep(500);
-            //
-            //     L.debug("read credential");
-            //     await api.checkReadCredential();
-            //     L.debug("did read credential");
-            //
-            //     await driver.sleep(500);
-            //
-            //     L.debug("drop credential");
-            //     await engine.dropAllCredentials();
-            //     L.debug("did drop credential");
-            // } catch (e) {
-            //     L.debug(`test 'use enter key' filed with: '${e}'`);
-            // }
+            try {
+                L.debug("write credential with use only enter button");
+                await api.checkWriteCredential({useOnlyEnterButton: true});
+                L.debug("did write credential");
+
+                await driver.sleep(500);
+
+                L.debug("read credential");
+                await api.checkReadCredential();
+                L.debug("did read credential");
+
+                await driver.sleep(500);
+
+                L.debug("drop credential");
+                await engine.dropAllCredentials();
+                L.debug("did drop credential");
+            } catch (e) {
+                L.debug(`test 'use enter key' filed with: '${e}'`);
+            }
 
             await report.finish();
         }

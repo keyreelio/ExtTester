@@ -89,8 +89,8 @@ export class TestAPI {
         let driver = await this.engine.getDriver();
         let extDriver = await this.engine.getExtDriver();
 
-        L.debug("clear all cookies");
-        await driver.manage().deleteAllCookies();
+        L.debug("clear browser data");
+        await extDriver.clearBrowserData();
 
         L.debug(`open new tab with: ${this.credential.url}`);
         await extDriver.openUrlOnNewTab(this.credential.url);
@@ -218,8 +218,8 @@ export class TestAPI {
         let driver = await this.engine.getDriver();
         let extDriver = await this.engine.getExtDriver();
 
-        L.debug("clear all cookies");
-        await driver.manage().deleteAllCookies();
+        L.debug("clear browser data");
+        await extDriver.clearBrowserData();
 
         L.debug(`open new tab with: ${this.credential.url}`);
         await extDriver.openUrlOnNewTab(this.credential.url);

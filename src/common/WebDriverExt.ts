@@ -1,4 +1,4 @@
-import {By, Key, until, WebDriver, WebElement, WebElementPromise} from "selenium-webdriver";
+import {By, Key, until, WebDriver, WebElement} from "selenium-webdriver";
 import {Timeouts} from "./timeouts";
 import {testapiLogger as L} from "./log.config";
 
@@ -47,6 +47,18 @@ export class WebDriverExt {
 
     public async waitLocatedExt(xpath: string, timeout: number): Promise<WebElementExt> {
         return Promise.resolve(new WebElementExt(await this.webDriver.wait(until.elementLocated(By.xpath(xpath)), timeout)));
+    }
+
+    public async clearBrowserData(): Promise<void> {
+        try {
+            await this.webDriver.manage().deleteAllCookies();
+            await this.openUrlOnNewTab("chrome://settings/clearBrowserData");
+            let element = new WebElementExt(this.webDriver.wait(until.elementLocated(By.xpath("//settings-ui")), Timeouts.WaitOpenedUrl));
+            await element.pressEnter();
+            await this.closeCurrentTab();
+        } catch (e) {
+            L.warn(e);
+        }
     }
 
     protected async waitUrlOpened(timeout: number = Timeouts.WaitOpenedUrl) {

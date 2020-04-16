@@ -10,6 +10,12 @@ import {ReportLogger} from "./report/report";
 
 
 class Tester {
+
+    static testWriteCredentialWithLoginButton = true;
+    static testWriteCredentialWithoutLoginButton = true;
+    static testReadCredentialWithLoginButton = true;
+    static testReadCredentialWithoutLoginButton = true;
+
     public static async run() {
         L.info("start testing");
         try {
@@ -49,44 +55,48 @@ class Tester {
 
             L.debug(`testing: '${credential.url}'`);
             try {
-                L.debug("write credential");
-                await api.checkWriteCredential();
-                L.debug("did write credential");
+                if (Tester.testWriteCredentialWithLoginButton) {
+                    L.debug("write credential");
+                    await api.checkWriteCredential();
+                    L.debug("did write credential");
+                }
 
-                await driver.sleep(500);
+                // await driver.sleep(500);
 
-                L.debug("read credential");
-                await api.checkReadCredential();
-                L.debug("did read credential");
-
-                await driver.sleep(500);
-
-                L.debug("drop credential");
-                await engine.dropAllCredentials();
-                L.debug("did drop credential");
+                if (Tester.testReadCredentialWithLoginButton) {
+                    L.debug("read credential");
+                    await api.checkReadCredential();
+                    L.debug("did read credential");
+                }
             } catch (e) {
                 L.debug(`test 'use login button' filed with: '${e}'`);
             }
 
+            L.debug("drop credential");
+            await engine.dropAllCredentials();
+            L.debug("did drop credential");
+
             try {
-                L.debug("write credential with use only enter button");
-                await api.checkWriteCredential({useOnlyEnterButton: true});
-                L.debug("did write credential");
+                if (Tester.testWriteCredentialWithoutLoginButton) {
+                    L.debug("write credential with use only enter button");
+                    await api.checkWriteCredential({useOnlyEnterButton: true});
+                    L.debug("did write credential");
+                }
 
-                await driver.sleep(500);
+                // await driver.sleep(500);
 
-                L.debug("read credential");
-                await api.checkReadCredential();
-                L.debug("did read credential");
-
-                await driver.sleep(500);
-
-                L.debug("drop credential");
-                await engine.dropAllCredentials();
-                L.debug("did drop credential");
+                if (Tester.testReadCredentialWithoutLoginButton) {
+                    L.debug("read credential");
+                    await api.checkReadCredential();
+                    L.debug("did read credential");
+                }
             } catch (e) {
                 L.debug(`test 'use enter key' filed with: '${e}'`);
             }
+
+            L.debug("drop credential");
+            await engine.dropAllCredentials();
+            L.debug("did drop credential");
 
             await report.finish();
         }
@@ -94,6 +104,8 @@ class Tester {
         await report.shutdown();
 
         await engine.dropAllCredentials();
+
+        await driver.sleep(100000);
 
         L.debug("shutdown engine");
         await engine.shutdown();

@@ -16,6 +16,19 @@ module.exports = function(grunt) {
                 args: [
                     './build/tester.js'
                 ]
+            },
+            thrift: {
+                cmd: 'thrift-typescript',
+                args: [
+                    '--target',
+                    'thrift-server',
+                    '--sourceDir',
+                    './src/thrift',
+                    '--outDir',
+                    './src/service/gencode',
+                    'structures.thrift',
+                    'protocols.thrift'
+                ]
             }
         },
         webpack: {
@@ -36,6 +49,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask("default", ["build"]);
 
-    grunt.registerTask("build", ["ts"]);
+    grunt.registerTask("thrift", ["run:thrift"]);
+
+    grunt.registerTask("build", ["thrift", "ts"]);
     grunt.registerTask("runner", ["clean", "build", "run:tester"]);
 };

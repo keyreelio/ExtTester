@@ -15,8 +15,14 @@
     "webpack": "^4.42.1"
   },
   "dependencies": {
+    "@creditkarma/thrift-server-core": "^0.16.0",
+    "@creditkarma/thrift-server-express": "^0.16.0",
+    "@types/express": "^4.17.6",
     "@types/node": "^13.11.0",
+    "@types/request": "^2.48.4",
     "@types/selenium-webdriver": "^4.0.9",
+    "express": "^4.17.1",
+    "request": "^2.88.2",
     "selenium-webdriver": "^4.0.0-alpha.7",
     "typescript-logging": "^0.6.4"
   }

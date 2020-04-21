@@ -87,6 +87,10 @@ export class DashlaneEngine extends Engine {
 
         let options = await this.getOptions();
 
+        L.debug("add 'keyreel' extension");
+        let krcrx = fs.readFileSync('./resources/crxs/keyreel.crx', {encoding: "base64"});
+        options.addExtensions(krcrx);
+
         L.debug("add 'dashlane' extension")
         let crx = fs.readFileSync('./resources/crxs/dashlane.crx', {encoding: "base64"});
         options.addExtensions(crx);
@@ -192,7 +196,6 @@ export class DashlaneEngine extends Engine {
 
         return Promise.resolve();
     }
-
 
     //REGION: protected methods
 

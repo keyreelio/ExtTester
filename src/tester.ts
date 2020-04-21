@@ -4,7 +4,7 @@ import {testerLogger as L} from "./common/log.config";
 import {Credentials} from "./credentials";
 import {TestAPI} from "./testapi";
 import {ReportLogger} from "./report/report";
-// import {KeyReelEngine} from './engine/keyreel'
+import {KeyReelEngine} from './engine/keyreel';
 // import {OnePasswordXEngine} from './engine/onepassword'
 // import {LastPassEngine} from './engine/lastpass'
 
@@ -25,7 +25,7 @@ class Tester {
             //     testExecute(new DashlaneEngine()),
             //     testExecute(new OnePasswordXEngine())]);
 
-            await this.testExecute(new DashlaneEngine());
+            await this.testExecute(new KeyReelEngine());
         }
         catch (e) {
             L.info(`testing fail with: ${e}`);

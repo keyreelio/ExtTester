@@ -1,0 +1,53 @@
+{
+  "name": "KeyReel - Smart Security Assistant",
+  "short_name": "KeyReel Dev",
+  "author": "Auxoft LLC",
+  "description": "KeyReel - the most convenient and secure password manager, saves passwords on your phone and automatically fills them on your computer.",
+  "version": "1.23.48.2",
+  "version_name": "1.23.48.2",
+  "manifest_version": 2,
+
+  "icons": {
+    "16": "img/icon_16.png",
+    "48": "img/icon_48.png",
+    "128": "img/icon_128.png"
+  },
+
+  "background": {
+    "scripts": ["js/background.min.js"],
+    "persistent": true
+  },
+
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["js/content.min.js"],
+    "run_at": "document_start",
+    "all_frames": true,
+    "match_about_blank": true
+  }],
+
+  "permissions": [
+    "storage",
+    "background",
+    "webNavigation",
+    "privacy",
+    "activeTab",
+    "http://*/*",
+    "https://*/*",
+    "file://*",
+    "<all_urls>"
+  ],
+
+  "browser_action": {
+    "default_icon": "img/browser_action_icon_inactive_38x38.png",
+    "default_title": "KeyReel Service is not running",
+    "default_popup": "popup.html"
+  },
+
+  "web_accessible_resources": [
+    "img/*.png",
+    "js/*.map",
+    "js/*.js",
+    "css/*.css"
+  ]
+}

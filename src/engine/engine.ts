@@ -63,10 +63,6 @@ export class Engine implements IEngine {
         L.debug(`use profile: user-data-dir=./chrome_profiles/${profileName}`);
         this.options.addArguments(`user-data-dir=./chrome_profiles/${profileName}`);
 
-        L.debug("add 'keyreel' extension");
-        let krcrx = fs.readFileSync('./resources/crxs/keyreel.crx', {encoding: "base64"});
-        this.options.addExtensions(krcrx);
-
         L.debug(`setup options`);
         await this.setupOptions();
 
@@ -90,6 +86,7 @@ export class Engine implements IEngine {
 
     public async shutdown(): Promise<void> {
         //this.driver?.close();
+        await this.shutdownDriver();
     }
 
     public async processBeforeLogin(): Promise<void> {
@@ -110,16 +107,21 @@ export class Engine implements IEngine {
 
     protected async profileName(): Promise<string> {
         L.debug("unsupported setupOptions");
-        return Promise.reject(new UnsupportedOperationError("profileName"));
+        return Promise.resolve("unknown");
     }
 
     protected async setupOptions(): Promise<void> {
         L.debug("unsupported setupOptions");
-        return Promise.reject(new UnsupportedOperationError("setupOptions"));
+        return Promise.resolve();
     }
 
     protected async startupDriver(): Promise<void> {
         L.debug("unsupported startupDriver");
-        return Promise.reject(new UnsupportedOperationError("startupDriver"));
+        return Promise.resolve();
+    }
+
+    protected async shutdownDriver(): Promise<void> {
+        L.debug("unsupported shutdownDriver");
+        return Promise.resolve();
     }
 }

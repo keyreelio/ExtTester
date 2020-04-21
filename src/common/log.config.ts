@@ -14,3 +14,8 @@ export let onePasswordEngineLogger = new Category("1password", engineLogger);
 export let keyreelEngineLogger = new Category("keyreel", engineLogger);
 
 export let reportLogger = new Category("report");
+
+export let serviceJSLogger = new Category("servicejs");
+
+export let loggingServiceJSLogger = new Category("logservice");
+export let hostServiceJSLogger = new Category("hostservice");

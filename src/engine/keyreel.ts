@@ -5,11 +5,12 @@ import {By, until, WebElement} from "selenium-webdriver";
 import {Timeouts} from "../common/timeouts";
 import {WebElementExt} from "../common/WebDriverExt";
 import {ThriftServer} from "../service/thriftServer";
+import {DatabaseMemmory} from "../service/database";
 
 
 export class KeyReelEngine extends Engine {
 
-    protected mockServer = new ThriftServer();
+    protected mockServer = new ThriftServer(new DatabaseMemmory());
 
     public async getEngineName(): Promise<string> {
         return this.profileName();
@@ -33,10 +34,6 @@ export class KeyReelEngine extends Engine {
 
         L.debug("add 'keyreel' extension");
         options.addArguments("load-extension=./resources/raws/KeyReel");
-
-        // let krcrx = fs.readFileSync('./resources/crxs/keyreel.crx', {encoding: "base64"});
-        // options.addExtensions(krcrx);
-        // options.addExtensions()
     }
 
     protected async startupDriver(): Promise<void> {

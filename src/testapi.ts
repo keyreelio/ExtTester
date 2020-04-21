@@ -74,10 +74,14 @@ export class TestAPI {
         this.report = report;
     }
 
-    public async checkWriteCredential(options: { useOnlyEnterButton: boolean } | undefined = undefined): Promise<void> {
+    public async checkWriteCredential(
+        options:
+            { useOnlyEnterButton: boolean } |
+            undefined = undefined): Promise<void> {
+
         L.info("checkWriteCredential");
 
-        var useOnlyEnterButton = false;
+        let useOnlyEnterButton = false;
         if (options !== undefined) {
             if (options as { useOnlyEnterButton: boolean }) {
                 useOnlyEnterButton = (<{ useOnlyEnterButton: boolean }>options).useOnlyEnterButton;
@@ -476,27 +480,22 @@ export class TestAPI {
     protected async enterToInput(
         text: string,
         input: Input,
-        options: {
-            attach: boolean,
-            replace: boolean
-        } | {
-            attach: boolean,
-        } | {
-            replace: boolean,
-        } | undefined = undefined): Promise<void> {
+        options:
+            { attach: boolean } |
+            { replace: boolean} |
+            { attach: boolean, replace: boolean } |
+            undefined = undefined): Promise<void> {
 
         L.debug("enterToInput");
 
-        var attach = false;
-        var replace = false;
+        let attach = false;
+        let replace = false;
         if (options !== undefined) {
             if (options as { attach: boolean }) {
                 attach = (<{ attach: boolean }>options).attach;
-            } else if (options as { replace: boolean }) {
+            }
+            if (options as { replace: boolean }) {
                 replace = (<{ replace: boolean }>options).replace;
-            } else if (options as { attach: boolean, replace: boolean }) {
-                attach = (<{ attach: boolean, replace: boolean }>options).attach;
-                replace = (<{ force: boolean, replace: boolean }>options).replace;
             }
         }
 

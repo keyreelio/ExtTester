@@ -23,11 +23,37 @@ export class ThriftServer {
     protected hostStorageServer: Express | undefined = undefined;
 
 
-    public constructor() {
-        this.database = new DatabaseMemmory();
+    public constructor(
+        database: IDatabase,
+        options:
+            { paused: boolean } |
+            { unauthorized: boolean } |
+            { deviceOfflined: boolean } |
+            { paused: boolean, unauthorized: boolean } |
+            { paused: boolean, deviceOfflined: boolean } |
+            { unauthorized: boolean, deviceOfflined: boolean } |
+            { paused: boolean, unauthorized: boolean, deviceOfflined: boolean }
+            | undefined = undefined) {
+
+        let paused = false;
+        let unauthorized = false;
+        let deviceOfflined = false;
+        if (options !== undefined) {
+            if (options as { paused: boolean }) {
+                paused = (<{ paused: boolean }>options).paused;
+            }
+            if (options as { unauthorized: boolean }) {
+                unauthorized = (<{ unauthorized: boolean }>options).unauthorized;
+            }
+            if (options as { deviceOfflined: boolean }) {
+                deviceOfflined = (<{ deviceOfflined: boolean }>options).deviceOfflined;
+            }
+        }
+
+        this.database = database;
 
         this.loggingService = new LoggingServiceImpl();
-        this.hostStorageService = new HostStorageServiceImpl(this.database);
+        this.hostStorageService = new HostStorageServiceImpl(this.database, paused, unauthorized, deviceOfflined);
     }
 
     public async start(): Promise<void> {

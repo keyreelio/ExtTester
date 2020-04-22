@@ -17,4 +17,22 @@ export class Timeouts {
     static WaitLocatedAnimationElement = 2000;
 
     static WaitParsedPage = 500;
+
+
+    /**
+     * For time measuring
+     *
+     * Example:
+     *  let time = Timeouts.begin();
+     *   ... long operations...
+     *  l.info( "executed for ${Timeouts.end(time)}ms" );
+     */
+    static begin(): [number, number] {
+        return process.hrtime();
+    }
+
+    static end(begin: [number, number]): number {
+      let endTime = process.hrtime(begin);
+      return Math.round(endTime[0] * 1000 + endTime[1] / 1000000);
+    }
 }

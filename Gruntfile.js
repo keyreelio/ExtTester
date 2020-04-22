@@ -17,6 +17,11 @@ module.exports = function(grunt) {
                     './build/tester.js'
                 ]
             },
+            scanner: {
+                args: [
+                    './build/scanner.js'
+                ]
+            },
             thrift: {
                 cmd: 'thrift-typescript',
                 args: [
@@ -53,4 +58,5 @@ module.exports = function(grunt) {
 
     grunt.registerTask("build", ["thrift", "ts"]);
     grunt.registerTask("runner", ["clean", "build", "run:tester"]);
+    grunt.registerTask("scanner", ["clean", "build", "run:scanner"]);
 };

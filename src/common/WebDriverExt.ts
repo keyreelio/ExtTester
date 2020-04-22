@@ -11,9 +11,12 @@ export class WebDriverExt {
         this.webDriver = webDriver;
     }
 
-    public async openUrlOnCurrentTab(url: string) {
+    public async openUrlOnCurrentTab(
+        url: string,
+        waitingTimeout: number = Timeouts.WaitOpenedUrl
+    ) {
         await this.webDriver.get(url);
-        await this.waitUrlOpened();
+        await this.waitUrlOpened(waitingTimeout);
     }
 
     public async openUrlOnNewTab(url: string) {
@@ -47,6 +50,26 @@ export class WebDriverExt {
 
     public async waitLocatedExt(xpath: string, timeout: number): Promise<WebElementExt> {
         return Promise.resolve(new WebElementExt(await this.webDriver.wait(until.elementLocated(By.xpath(xpath)), timeout)));
+    }
+
+    public async waitVisibleElementsLocated(xpath: string, timeout: number): Promise<Array<WebElement>> {
+        try {
+            let elements = (await this.webDriver.wait(
+                until.elementsLocated(By.xpath(xpath)),
+                timeout
+            ));
+
+            let visibleElements = Array<WebElement>();
+            for (let element of elements) {
+                if (await element.isDisplayed()) {
+                    visibleElements.push(element);
+                }
+            }
+
+            return Promise.resolve(visibleElements);
+        } catch (e) {
+            return Promise.resolve(Array());
+        }
     }
 
     public async clearBrowserData(): Promise<void> {

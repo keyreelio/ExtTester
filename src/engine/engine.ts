@@ -29,7 +29,7 @@ export class Engine implements IEngine {
 
 
     public async getEngineName(): Promise<string> {
-        return Promise.resolve("unknown");
+        return Promise.resolve("default");
     }
 
     public async getOptions(): Promise<chrome.Options> {
@@ -106,22 +106,18 @@ export class Engine implements IEngine {
 
 
     protected async profileName(): Promise<string> {
-        L.debug("unsupported setupOptions");
-        return Promise.resolve("unknown");
+        return Promise.resolve("default");
     }
 
     protected async setupOptions(): Promise<void> {
-        L.debug("unsupported setupOptions");
         return Promise.resolve();
     }
 
     protected async startupDriver(): Promise<void> {
-        L.debug("unsupported startupDriver");
         return Promise.resolve();
     }
 
     protected async shutdownDriver(): Promise<void> {
-        L.debug("unsupported shutdownDriver");
         return Promise.resolve();
     }
 }

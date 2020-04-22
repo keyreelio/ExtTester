@@ -1,4 +1,4 @@
-import {IDatabase, DatabaseMemmory} from "./database";
+import {IDatabase} from "./database";
 
 import express, {Express} from 'express';
 import * as bodyParser from 'body-parser'

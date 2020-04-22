@@ -1,16 +1,12 @@
 import {Engine} from './engine'
 import {keyreelEngineLogger as L} from "../common/log.config";
-import fs from "fs";
-import {By, until, WebElement} from "selenium-webdriver";
-import {Timeouts} from "../common/timeouts";
-import {WebElementExt} from "../common/WebDriverExt";
 import {ThriftServer} from "../service/thriftServer";
-import {DatabaseMemmory} from "../service/database";
+import {DatabaseMemory} from "../service/database";
 
 
 export class KeyReelEngine extends Engine {
 
-    protected mockServer = new ThriftServer(new DatabaseMemmory());
+    protected mockServer = new ThriftServer(new DatabaseMemory());
 
     public async getEngineName(): Promise<string> {
         return this.profileName();

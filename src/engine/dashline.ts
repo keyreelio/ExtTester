@@ -5,6 +5,8 @@ import {WebElementExt} from "../common/WebDriverExt";
 import {By, Key, until, WebElement} from "selenium-webdriver";
 import fs from "fs";
 import {Timeouts} from "../common/timeouts";
+import {IDatabase} from "../database/database";
+import {Server} from "../service/server";
 
 
 interface IDashlaneAccount {
@@ -31,6 +33,15 @@ export class DashlaneEngine extends Engine {
             password: "qCywf6K5CWczGSt"
         }
     ];
+
+    public constructor(
+        database: IDatabase,
+        options:
+            { withoutProfile: boolean } |
+            undefined = undefined) {
+
+        super(options);
+    }
 
     public async getEngineName(): Promise<string> {
         return this.profileName();

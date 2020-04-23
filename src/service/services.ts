@@ -1,6 +1,6 @@
 import * as express from 'express'
-import * as kr from "./gencode/AuxoftKeyReel";
-import {Account, IDatabase} from "./database";
+import * as kr from "../thrift/gencode/AuxoftKeyReel";
+import {Account, IDatabase} from "../database/database";
 
 import {loggingServiceJSLogger as Ll, hostServiceJSLogger as Lh} from "../common/log.config";
 

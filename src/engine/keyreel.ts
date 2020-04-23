@@ -1,12 +1,23 @@
 import {Engine} from './engine'
 import {keyreelEngineLogger as L} from "../common/log.config";
-import {ThriftServer} from "../service/thriftServer";
-import {DatabaseMemory} from "../service/database";
+import {Server} from "../service/server";
+import {IDatabase} from "../database/database";
 
 
 export class KeyReelEngine extends Engine {
 
-    protected mockServer = new ThriftServer(new DatabaseMemory());
+    protected mockServer: Server;
+
+
+    public constructor(
+        database: IDatabase,
+        options:
+            { withoutProfile: boolean } |
+            undefined = undefined) {
+
+        super(options);
+        this.mockServer = new Server(database);
+    }
 
     public async getEngineName(): Promise<string> {
         return this.profileName();

@@ -2,4 +2,4 @@
 /build/
 /.tscache
 /chrome_profiles
-/src/service/gencode/
+/src/thrift/gencode/

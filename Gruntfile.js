@@ -58,5 +58,5 @@ module.exports = function(grunt) {
 
     grunt.registerTask("build", ["thrift", "ts"]);
     grunt.registerTask("runner", ["clean", "build", "run:tester"]);
-    grunt.registerTask("scanner", ["clean", "build", "run:scanner"]);
+    grunt.registerTask("scanner", ["clean", "ts", "run:scanner"]);
 };

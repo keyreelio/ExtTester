@@ -3,3 +3,10 @@
 /.tscache
 /chrome_profiles
 /src/service/gencode/
+.tmp
+*.tmp
+*.old
+*.new
+*.orig
+.idea
+

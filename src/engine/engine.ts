@@ -11,7 +11,7 @@ export interface IEngine {
     getOptions(): Promise<chrome.Options>;
     getDriver(): Promise<WebDriver>;
     getExtDriver(): Promise<WebDriverExt>;
-    startup(): Promise<void>;
+    startup(maximize: Boolean): Promise<void>;
     shutdown(): Promise<void>;
     processBeforeLogin(): Promise<void>;
     processAfterLogin(): Promise<void>;
@@ -53,7 +53,7 @@ export class Engine implements IEngine {
         return Promise.reject();
     }
 
-    public async startup(): Promise<void> {
+    public async startup(maximize: Boolean = true): Promise<void> {
         L.debug("startup");
 
         let profileName = await this.profileName();
@@ -73,9 +73,10 @@ export class Engine implements IEngine {
             .build();
         this.extDriver = new WebDriverExt(this.driver);
 
-        L.debug("maximize window");
-        await this.driver.manage().window().maximize();
-
+        if (maximize) {
+            L.debug("maximize window");
+            await this.driver.manage().window().maximize();
+        }
         L.debug("sleep for init extension");
         await this.driver.sleep(Engine.WaitInitExtension);
 

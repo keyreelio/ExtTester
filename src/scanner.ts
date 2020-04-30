@@ -38,7 +38,7 @@ class Scanner {
         L.debug("startup engine");
         await engine.startup(false);
 
-        let domains100 = Scanner.domains.slice(0, 10);
+        let domains100 = Scanner.domains; //.slice(0, 10);
         let driver = await engine.getDriver();
         let extDriver = await engine.getExtDriver();
 

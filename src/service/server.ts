@@ -1,20 +1,17 @@
-import {IDatabase, DatabaseMemmory} from "./database";
+import {IDatabase} from "../database/database";
 
 import express, {Express} from 'express';
 import * as bodyParser from 'body-parser'
-import * as kr from "./gencode/AuxoftKeyReel";
+import * as kr from "../thrift/gencode/AuxoftKeyReel";
 
 import { ThriftServerExpress } from '@creditkarma/thrift-server-express'
-import {LoggingServiceImpl, HostStorageServiceImpl} from "./thriftServices";
+import {LoggingServiceImpl, HostStorageServiceImpl} from "./services";
 
 
-export class ThriftServer {
+export class Server {
 
     protected HostStoragePort = 19525;  // mock host port
     protected LoggingPort = 19526;      // mock logging port
-
-
-    protected database: IDatabase;
 
     protected loggingService: LoggingServiceImpl;
     protected hostStorageService: HostStorageServiceImpl;
@@ -22,6 +19,8 @@ export class ThriftServer {
     protected loggingServer: Express | undefined = undefined;
     protected hostStorageServer: Express | undefined = undefined;
 
+
+    public database: IDatabase;
 
     public constructor(
         database: IDatabase,
@@ -32,8 +31,8 @@ export class ThriftServer {
             { paused: boolean, unauthorized: boolean } |
             { paused: boolean, deviceOfflined: boolean } |
             { unauthorized: boolean, deviceOfflined: boolean } |
-            { paused: boolean, unauthorized: boolean, deviceOfflined: boolean }
-            | undefined = undefined) {
+            { paused: boolean, unauthorized: boolean, deviceOfflined: boolean } |
+            undefined = undefined) {
 
         let paused = false;
         let unauthorized = false;

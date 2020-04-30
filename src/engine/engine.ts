@@ -1,6 +1,5 @@
 import {Builder, error, WebDriver} from "selenium-webdriver";
 import * as chrome from "selenium-webdriver/chrome";
-import fs from "fs";
 import UnsupportedOperationError = error.UnsupportedOperationError;
 import {engineLogger as L} from "../common/log.config";
 import {WebDriverExt} from "../common/WebDriverExt";
@@ -26,6 +25,21 @@ export class Engine implements IEngine {
     protected options: chrome.Options | undefined;
     protected driver: WebDriver | undefined;
     protected extDriver: WebDriverExt | undefined;
+
+    protected withoutProfile = false;
+
+
+    public constructor(
+        options:
+           { withoutProfile: boolean } |
+           undefined = undefined) {
+
+        if (options !== undefined) {
+            if (options as { withoutProfile: boolean }) {
+                this.withoutProfile = (<{ withoutProfile: boolean }>options).withoutProfile;
+            }
+        }
+    }
 
 
     public async getEngineName(): Promise<string> {
@@ -56,12 +70,13 @@ export class Engine implements IEngine {
     public async startup(maximize: Boolean = true): Promise<void> {
         L.debug("startup");
 
-        let profileName = await this.profileName();
-
         this.options = new chrome.Options();
 
-        L.debug(`use profile: user-data-dir=./chrome_profiles/${profileName}`);
-        this.options.addArguments(`user-data-dir=./chrome_profiles/${profileName}`);
+        if (!this.withoutProfile) {
+            let profileName = await this.profileName();
+            L.debug(`use profile: user-data-dir=./chrome_profiles/${profileName}`);
+            this.options.addArguments(`user-data-dir=./chrome_profiles/${profileName}`);
+        }
 
         L.debug(`setup options`);
         await this.setupOptions();

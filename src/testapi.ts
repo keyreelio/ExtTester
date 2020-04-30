@@ -204,6 +204,8 @@ export class TestAPI {
             error = e;
         }
 
+        await driver.sleep(5000);
+
         L.debug("close current tab");
         await extDriver.closeCurrentTab();
 

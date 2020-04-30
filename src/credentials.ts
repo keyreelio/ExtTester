@@ -9,18 +9,24 @@ export interface ICredential {
 
 export class Credentials {
     static credentials: Array<ICredential> = Array(
-        {// need create account
-            url: "https://www.facebook.com/",
-            login: "donna.simple.oluso@gmail.com",
-            password: "0dWX6iaRuRz9377PW45d",
+        {
+            url: "https://dashboard.devmate.com/",
+            login: "petro@auxoft.com",
+            password: "K8yb1g6iw5f7GK238lHk",
             timeout: 2000
-        },
-        {// need fix url after parser update and create account
-            url: "https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&ru=https%3A%2F%2Fwww.ebay.com%2F",
-            login: "donna.simple.oluso@gmail.com",
-            password: "harJvjwNpMU2CRDPC8bx",
-            timeout: 2000
-        },
+        }
+        // {// need create account
+        //     url: "https://www.facebook.com/",
+        //     login: "donna.simple.oluso@gmail.com",
+        //     password: "0dWX6iaRuRz9377PW45d",
+        //     timeout: 2000
+        // },
+        // {// need fix url after parser update and create account
+        //     url: "https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&ru=https%3A%2F%2Fwww.ebay.com%2F",
+        //     login: "donna.simple.oluso@gmail.com",
+        //     password: "harJvjwNpMU2CRDPC8bx",
+        //     timeout: 2000
+        // },
         // {// need fix url after parser update and create account
         //     url: "https://accounts.craigslist.org/login?rt=L&rp=%2Flogin%2Fhome",
         //     login: "donna.simple.oluso@gmail.com",

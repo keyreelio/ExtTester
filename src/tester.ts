@@ -5,11 +5,15 @@ import {Credentials} from "./credentials";
 import {TestAPI} from "./testapi";
 import {ReportLogger} from "./report/report";
 import {KeyReelEngine} from './engine/keyreel';
+import {DatabaseFile} from "./database/databaseFile";
 // import {OnePasswordXEngine} from './engine/onepassword'
 // import {LastPassEngine} from './engine/lastpass'
 
 
 class Tester {
+
+    static DBFolderPath = "./chrome_profiles/";
+
 
     static testWriteCredentialWithLoginButton = true;
     static testWriteCredentialWithoutLoginButton = true;
@@ -19,13 +23,7 @@ class Tester {
     public static async run() {
         L.info("start testing");
         try {
-            // await Promise.all([
-            //     testExecute(new KeyReelEngine()),
-            //     testExecute(new LastPassEngine()),
-            //     testExecute(new DashlaneEngine()),
-            //     testExecute(new OnePasswordXEngine())]);
-
-            await this.testExecute(new KeyReelEngine());
+            await this.testKeyreel();
         }
         catch (e) {
             L.info(`testing fail with: ${e}`);
@@ -35,12 +33,21 @@ class Tester {
         L.info("finish testing");
     }
 
-    protected static async testExecute(engine: IEngine): Promise<void> {
+
+    protected static async testKeyreel(): Promise<void> {
+        let db = new DatabaseFile(`${Tester.DBFolderPath}keyreel.${Date.now()}.db.json`);
+
+        L.debug("testing write");
+        await this.testWrite(new KeyReelEngine(db, { withoutProfile: true }));
+
+        L.debug("testing read");
+        await this.testRead(new KeyReelEngine(db, { withoutProfile: true }));
+    }
+
+    protected static async testWrite(engine: IEngine): Promise<void> {
 
         L.debug("startup engine");
         await engine.startup();
-
-        await engine.dropAllCredentials();
 
         let report = new ReportLogger(await engine.getEngineName());
         await report.startup();
@@ -63,40 +70,40 @@ class Tester {
 
                 // await driver.sleep(500);
 
-                if (Tester.testReadCredentialWithLoginButton) {
-                    L.debug("read credential");
-                    await api.checkReadCredential();
-                    L.debug("did read credential");
-                }
+                // if (Tester.testReadCredentialWithLoginButton) {
+                //     L.debug("read credential");
+                //     await api.checkReadCredential();
+                //     L.debug("did read credential");
+                // }
             } catch (e) {
                 L.debug(`test 'use login button' filed with: '${e}'`);
             }
 
-            L.debug("drop credential");
-            await engine.dropAllCredentials();
-            L.debug("did drop credential");
+            // L.debug("drop credential");
+            // await engine.dropAllCredentials();
+            // L.debug("did drop credential");
 
-            try {
-                if (Tester.testWriteCredentialWithoutLoginButton) {
-                    L.debug("write credential with use only enter button");
-                    await api.checkWriteCredential({useOnlyEnterButton: true});
-                    L.debug("did write credential");
-                }
-
-                // await driver.sleep(500);
-
-                if (Tester.testReadCredentialWithoutLoginButton) {
-                    L.debug("read credential");
-                    await api.checkReadCredential();
-                    L.debug("did read credential");
-                }
-            } catch (e) {
-                L.debug(`test 'use enter key' filed with: '${e}'`);
-            }
-
-            L.debug("drop credential");
-            await engine.dropAllCredentials();
-            L.debug("did drop credential");
+            // try {
+            //     if (Tester.testWriteCredentialWithoutLoginButton) {
+            //         L.debug("write credential with use only enter button");
+            //         await api.checkWriteCredential({useOnlyEnterButton: true});
+            //         L.debug("did write credential");
+            //     }
+            //
+            //     // await driver.sleep(500);
+            //
+            //     if (Tester.testReadCredentialWithoutLoginButton) {
+            //         L.debug("read credential");
+            //         await api.checkReadCredential();
+            //         L.debug("did read credential");
+            //     }
+            // } catch (e) {
+            //     L.debug(`test 'use enter key' filed with: '${e}'`);
+            // }
+            //
+            // L.debug("drop credential");
+            // await engine.dropAllCredentials();
+            // L.debug("did drop credential");
 
             await report.finish();
         }
@@ -111,6 +118,10 @@ class Tester {
         await engine.shutdown();
 
         await driver.quit();
+    }
+
+    protected static async testRead(engine: IEngine): Promise<void> {
+        // await Task.all([this.testWrite(...), ]);
     }
 }
 

@@ -30,7 +30,7 @@ module.exports = function(grunt) {
                     '--sourceDir',
                     './src/thrift',
                     '--outDir',
-                    './src/service/gencode',
+                    './src/thrift/gencode',
                     'structures.thrift',
                     'protocols.thrift'
                 ]

@@ -36,21 +36,12 @@ module.exports = function(grunt) {
                 ]
             }
         },
-        webpack: {
-            myconfig: () => ({
-                entry: path.join(__dirname, "entry"),
-                output: {
-                    path: __dirname,
-                    filename: "output.js",
-                },
-            }),
-        },
     });
 
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-run');
-    grunt.loadNpmTasks('grunt-webpack');
+    // grunt.loadNpmTasks('grunt-webpack');
 
     grunt.registerTask("default", ["build"]);
 

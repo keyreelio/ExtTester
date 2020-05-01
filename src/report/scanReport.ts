@@ -30,7 +30,7 @@ export class ScanReportLogger implements IScanReport {
         if (this.reports !== undefined) return;
         this.reports = new Map<string, Map<EResultType, boolean>>();
         this.date = new Date();
-        let fName = `report-${this.date.toISOString()}.txt`;
+        let fName = `reports/report-${this.date.toISOString()}.txt`;
         this.fLog = fs.createWriteStream(fName, { flags: 'a' });
         return
     }

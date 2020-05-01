@@ -1,0 +1,886 @@
+2020-04-30 09:34:43,964 WARN [report] Thu Apr 30 2020 09:34:43 GMT+0300 (Eastern European Summer Time)
+2020-04-30 09:34:43,964 WARN [report] --------------------------------------------------------------------------------------------------------------
+2020-04-30 09:34:43,964 WARN [report]  No : domain                                                  : login :registr:account:
+2020-04-30 09:34:43,964 WARN [report] --------------------------------------------------------------------------------------------------------------
+2020-04-30 09:34:43,964 WARN [report]    1: 247sports.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,964 WARN [report]    2: 2Checkout.com                                           :       :   X   :   X   :
+2020-04-30 09:34:43,964 WARN [report]    3: 360.cn                                                  :   X   :   X   :       :
+2020-04-30 09:34:43,964 WARN [report]    4: 53.com                                                  :   X   :       :       :
+2020-04-30 09:34:43,964 WARN [report]    5: TechSpot.com                                            :   X   :       :       :
+2020-04-30 09:34:43,964 WARN [report]    6: aa.com                                                  :   X   :       :       :
+2020-04-30 09:34:43,965 WARN [report]    7: aaawa.com                                               :       :   X   :       :
+2020-04-30 09:34:43,965 WARN [report]    8: abcmouse.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,965 WARN [report]    9: abcnews.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,965 WARN [report]   10: abukai.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,965 WARN [report]   11: academicearth.org                                       :       :       :       :
+2020-04-30 09:34:43,965 WARN [report]   12: academicsarecool.com                                    :   X   :   X   :       :
+2020-04-30 09:34:43,965 WARN [report]   13: accessgenealogy.com                                     :       :       :       :
+2020-04-30 09:34:43,965 WARN [report]   14: accucut.com                                             :       :   X   :       :
+2020-04-30 09:34:43,965 WARN [report]   15: accuweather.com                                         :       :       :       :
+2020-04-30 09:34:43,965 WARN [report]   16: adidas.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,965 WARN [report]   17: adobe.com                                               :   X   :   X   :   X   :
+2020-04-30 09:34:43,965 WARN [report]   18: adoptapet.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,965 WARN [report]   19: adp.com                                                 :   X   :       :   X   :
+2020-04-30 09:34:43,965 WARN [report]   20: adt.com                                                 :       :       :       :
+2020-04-30 09:34:43,965 WARN [report]   21: aeroflot.ru                                             :       :       :       :
+2020-04-30 09:34:43,967 WARN [report]   22: agilecrm.com                                            :   X   :       :       :
+2020-04-30 09:34:43,967 WARN [report]   23: agoda.com                                               :       :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   24: aig.com                                                 :   X   :       :       :
+2020-04-30 09:34:43,967 WARN [report]   25: airasia.com                                             :       :       :       :
+2020-04-30 09:34:43,967 WARN [report]   26: airbnb.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   27: aircanada.com                                           :       :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   28: airfrance.fr                                            :       :       :       :
+2020-04-30 09:34:43,967 WARN [report]   29: airnewzealand.com                                       :       :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   30: akismet.com                                             :       :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   31: alaskaair.com                                           :       :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   32: albertsons.com                                          :       :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   33: alexa.com                                               :   X   :       :       :
+2020-04-30 09:34:43,967 WARN [report]   34: aliexpress.com                                          :       :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   35: alipay.com                                              :   X   :       :       :
+2020-04-30 09:34:43,967 WARN [report]   36: alison.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   37: allianz.com                                             :       :       :       :
+2020-04-30 09:34:43,967 WARN [report]   38: allrecipes.com                                          :       :       :       :
+2020-04-30 09:34:43,967 WARN [report]   39: allstate.com                                            :   X   :       :       :
+2020-04-30 09:34:43,967 WARN [report]   40: ally.com                                                :   X   :       :       :
+2020-04-30 09:34:43,967 WARN [report]   41: alteryx.com                                             :       :       :       :
+2020-04-30 09:34:43,967 WARN [report]   42: amazon.com                                              :       :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   43: amazonaws.com                                           :       :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   44: americanexpress.com                                     :   X   :       :       :
+2020-04-30 09:34:43,967 WARN [report]   45: americascardroom.eu                                     :       :       :       :
+2020-04-30 09:34:43,967 WARN [report]   46: amfam.com                                               :       :       :       :
+2020-04-30 09:34:43,967 WARN [report]   47: ana.co.jp                                               :   X   :       :       :
+2020-04-30 09:34:43,967 WARN [report]   48: anandtech.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,967 WARN [report]   49: ancestry.com                                            :       :       :       :
+2020-04-30 09:34:43,967 WARN [report]   50: angel.co                                                :   X   :       :       :
+2020-04-30 09:34:43,967 WARN [report]   51: angieslist.com                                          :       :       :       :
+2020-04-30 09:34:43,967 WARN [report]   52: anthem.com                                              :   X   :       :       :
+2020-04-30 09:34:43,967 WARN [report]   53: aol.com                                                 :   X   :       :       :
+2020-04-30 09:34:43,968 WARN [report]   54: apple.com                                               :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   55: appleInsider.com                                        :       :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   56: archiveofourown.org                                     :   X   :       :       :
+2020-04-30 09:34:43,968 WARN [report]   57: archives.com                                            :       :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   58: armstrongflooring.com                                   :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   59: arnebrachhold.de                                        :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   60: asana.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   61: asos.com                                                :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   62: astat.co.uk                                             :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   63: att.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   64: austrian.com                                            :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   65: authorize.net                                           :       :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   66: autonews.com                                            :   X   :       :       :
+2020-04-30 09:34:43,968 WARN [report]   67: autotrader.com                                          :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   68: autozone.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   69: babytree.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   70: babytv.com                                              :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   71: badoo.com                                               :       :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   72: baidu.com                                               :   X   :       :       :
+2020-04-30 09:34:43,968 WARN [report]   73: bamboohr.com                                            :   X   :       :       :
+2020-04-30 09:34:43,968 WARN [report]   74: bandcamp.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   75: bangkokair.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   76: bankofamerica.com                                       :       :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   77: barclays.co.uk                                          :   X   :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   78: basecamp.com                                            :       :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   79: battle.net                                              :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   80: bbc.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   81: bc.ca                                                   :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   82: bcbs.com                                                :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   83: berkeley.edu                                            :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   84: bestbuy.com                                             :       :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   85: bet365.com                                              :       :       :       :
+2020-04-30 09:34:43,968 WARN [report]   86: biblegateway.com                                        :   X   :   X   :   X   :
+2020-04-30 09:34:43,968 WARN [report]   87: bilibili.com                                            :       :   X   :       :
+2020-04-30 09:34:43,968 WARN [report]   88: biomedcentral.com                                       :   X   :       :       :
+2020-04-30 09:34:43,969 WARN [report]   89: bitbucket.com                                           :   X   :       :       :
+2020-04-30 09:34:43,969 WARN [report]   90: bitesquad.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,969 WARN [report]   91: bitly.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,969 WARN [report]   92: blablacar.com                                           :       :       :       :
+2020-04-30 09:34:43,970 WARN [report]   93: blackboard.com                                          :       :       :       :
+2020-04-30 09:34:43,970 WARN [report]   94: blackplanet.com                                         :   X   :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]   95: blogspot.com                                            :       :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]   96: bloomberg.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]   97: bmj.com                                                 :   X   :       :       :
+2020-04-30 09:34:43,970 WARN [report]   98: bmo.com                                                 :   X   :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]   99: bmoharris.com                                           :   X   :       :       :
+2020-04-30 09:34:43,970 WARN [report]  100: bnymellon.com                                           :       :       :       :
+2020-04-30 09:34:43,970 WARN [report]  101: bodybuilding.com                                        :       :       :       :
+2020-04-30 09:34:43,970 WARN [report]  102: bongacams.com                                           :       :       :       :
+2020-04-30 09:34:43,970 WARN [report]  103: boohoo.com                                              :       :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]  104: booking.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]  105: boomr.com                                               :       :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]  106: boston.com                                              :       :       :       :
+2020-04-30 09:34:43,970 WARN [report]  107: bovada.lv                                               :   X   :       :       :
+2020-04-30 09:34:43,970 WARN [report]  108: box.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]  109: breitbart.com                                           :       :       :       :
+2020-04-30 09:34:43,970 WARN [report]  110: britishairways.com                                      :   X   :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]  111: broadcom.com                                            :   X   :       :       :
+2020-04-30 09:34:43,970 WARN [report]  112: busuu.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]  113: buzznet.com                                             :       :       :       :
+2020-04-30 09:34:43,970 WARN [report]  114: cafemom.com                                             :       :       :       :
+2020-04-30 09:34:43,970 WARN [report]  115: caliberbox.com                                          :       :       :       :
+2020-04-30 09:34:43,970 WARN [report]  116: campaignmonitor.com                                     :   X   :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]  117: canva.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,970 WARN [report]  118: capitalone.com                                          :       :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  119: care2.com                                               :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  120: careerbuilder.com                                       :       :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  121: carfax.com                                              :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  122: cargurus.com                                            :       :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  123: caringbridge.org                                        :   X   :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  124: caris.com                                               :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  125: cars.com                                                :       :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  126: cathaypacific.com                                       :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  127: causes.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  128: cbslocal.com                                            :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  129: cbsnews.com                                             :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  130: cbssports.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  131: cctv.com                                                :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  132: cellufun.com                                            :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  133: centurylink.com                                         :       :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  134: change.org                                              :   X   :       :       :
+2020-04-30 09:34:43,971 WARN [report]  135: chase.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  136: chaturbate.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  137: cheapoair.com                                           :       :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  138: cheatsheet.com                                          :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  139: chegg.com                                               :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  140: chewy.com                                               :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  141: chicago.suntimes.com                                    :   X   :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  142: chicagotribune.com                                      :   X   :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  143: christcenteredgamer.com                                 :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  144: cicis.com                                               :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  145: circleup.com                                            :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  146: cisco.com                                               :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  147: cit.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  148: citi.com                                                :       :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  149: citizensbankonline.com                                  :   X   :       :       :
+2020-04-30 09:34:43,971 WARN [report]  150: class-central.com                                       :       :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  151: classmates.com                                          :       :   X   :       :
+2020-04-30 09:34:43,971 WARN [report]  152: cloudfront.net                                          :       :       :       :
+2020-04-30 09:34:43,971 WARN [report]  153: cmu.edu                                                 :       :       :       :
+2020-04-30 09:34:43,972 WARN [report]  154: cnbc.com                                                :       :   X   :   X   :
+2020-04-30 09:34:43,972 WARN [report]  155: cnet.com                                                :       :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  156: cnn.com                                                 :       :       :       :
+2020-04-30 09:34:43,972 WARN [report]  157: cntv.cn                                                 :       :       :       :
+2020-04-30 09:34:43,972 WARN [report]  158: code.org                                                :       :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  159: codecademy.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  160: codeguru.com                                            :       :       :       :
+2020-04-30 09:34:43,972 WARN [report]  161: codeplex.com                                            :       :       :       :
+2020-04-30 09:34:43,972 WARN [report]  162: codeproject.com                                         :       :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  163: coggles.com                                             :       :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  164: concur.com                                              :   X   :       :       :
+2020-04-30 09:34:43,972 WARN [report]  165: cosstores.com                                           :       :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  166: costco.com                                              :       :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  167: costcophotocenter.com                                   :       :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  168: couchsurfing.com                                        :   X   :       :       :
+2020-04-30 09:34:43,972 WARN [report]  169: coursera.org                                            :   X   :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  170: cox.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  171: cpanel.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  172: cpanel.net                                              :   X   :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  173: cpk.com                                                 :       :       :       :
+2020-04-30 09:34:43,972 WARN [report]  174: craigslist.com                                          :       :       :       :
+2020-04-30 09:34:43,972 WARN [report]  175: credit-suisse.com                                       :   X   :       :       :
+2020-04-30 09:34:43,972 WARN [report]  176: cricketwireless.com                                     :   X   :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  177: crowdfunder.com                                         :   X   :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  178: crunchbase.com                                          :   X   :       :       :
+2020-04-30 09:34:43,972 WARN [report]  179: csair.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  180: csdn.net                                                :   X   :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  181: curiousworld.com                                        :       :       :       :
+2020-04-30 09:34:43,972 WARN [report]  182: cvs.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,972 WARN [report]  183: cygwin.com                                              :       :       :       :
+2020-04-30 09:34:43,973 WARN [report]  184: cyworld.com                                             :       :       :       :
+2020-04-30 09:34:43,973 WARN [report]  185: dailyburn.com                                           :       :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  186: dailymail.co.uk                                         :   X   :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  187: dailymotion.com                                         :       :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  188: darkreading.com                                         :   X   :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  189: datadoghq.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  190: db.com                                                  :   X   :       :       :
+2020-04-30 09:34:43,973 WARN [report]  191: del.icio.us                                             :       :       :       :
+2020-04-30 09:34:43,973 WARN [report]  192: delish.com                                              :       :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  193: delivery.com                                            :   X   :       :       :
+2020-04-30 09:34:43,973 WARN [report]  194: dell.com                                                :       :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  195: delta.com                                               :       :       :       :
+2020-04-30 09:34:43,973 WARN [report]  196: denverpost.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  197: deputy.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  198: destructoid.com                                         :   X   :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  199: deviantart.com                                          :   X   :       :       :
+2020-04-30 09:34:43,973 WARN [report]  200: dhl-usa.com                                             :   X   :       :       :
+2020-04-30 09:34:43,973 WARN [report]  201: dhl.com                                                 :       :       :       :
+2020-04-30 09:34:43,973 WARN [report]  202: digitaltrends.com                                       :       :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  203: discordapp.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  204: discover.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,973 WARN [report]  205: disneyplus.com                                          :   X   :       :       :
+2020-04-30 09:34:43,974 WARN [report]  206: diynetwork.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  207: docusign.com                                            :   X   :       :       :
+2020-04-30 09:34:43,974 WARN [report]  208: doi.org                                                 :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  209: domainmarket.com                                        :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  210: dominos.com                                             :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  211: domo.com                                                :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  212: doordash.com                                            :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  213: douban.com                                              :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  214: draugiem.lv                                             :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  215: drivewithvia.com                                        :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  216: dropbox.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  217: dropcatch.com                                           :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  218: drugs.com                                               :       :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  219: duke-energy.com                                         :       :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  220: duolingo.com                                            :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  221: dwolla.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  222: dxy.cn                                                  :   X   :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  223: dzone.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  224: ea.com                                                  :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  225: earthlink.net                                           :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  226: easyjet.com                                             :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  227: ebay.com                                                :       :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  228: economist.com                                           :   X   :       :       :
+2020-04-30 09:34:43,974 WARN [report]  229: edmodo.com                                              :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  230: edmunds.com                                             :       :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  231: edx.org                                                 :       :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  232: eepurl.com                                              :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  233: egencia.com                                             :   X   :       :       :
+2020-04-30 09:34:43,974 WARN [report]  234: emirates.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  235: englishbaby.com                                         :   X   :       :       :
+2020-04-30 09:34:43,974 WARN [report]  236: epicgames.com                                           :       :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  237: espn.com                                                :   X   :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  238: etoro.com                                               :   X   :       :       :
+2020-04-30 09:34:43,974 WARN [report]  239: etrade.com                                              :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  240: etsy.com                                                :       :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  241: europa.eu                                               :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  242: evaair.com                                              :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  243: evernote.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,974 WARN [report]  244: expedia.com                                             :       :       :       :
+2020-04-30 09:34:43,974 WARN [report]  245: expensify.com                                           :       :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  246: extracar.com                                            :       :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  247: extremetech.com                                         :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  248: f5.com                                                  :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  249: facebook.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  250: familysearch.org                                        :       :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  251: fandom.com                                              :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  252: faqs.org                                                :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  253: farfetch.com                                            :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  254: farmers.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  255: fc2.com                                                 :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  256: fedex.com                                               :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  257: fetlife.com                                             :   X   :       :       :
+2020-04-30 09:34:43,975 WARN [report]  258: fidelity.com                                            :   X   :       :       :
+2020-04-30 09:34:43,975 WARN [report]  259: findmypast.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  260: finnair.com                                             :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  261: fishbrain.com                                           :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  262: fitbit.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  263: fitocracy.com                                           :   X   :       :       :
+2020-04-30 09:34:43,975 WARN [report]  264: fiverr.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  265: flalottery.com                                          :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  266: flickr.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  267: flightnetwork.com                                       :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  268: flyasiana.com                                           :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  269: flyfrontier.com                                         :       :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  270: foodnetwork.com                                         :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  271: forever21.com                                           :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  272: fortune.com                                             :       :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  273: fossbytes.com                                           :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  274: fotki.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  275: foursquare.com                                          :       :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  276: foxnews.com                                             :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  277: freelancer.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,975 WARN [report]  278: freepeople.com                                          :       :       :       :
+2020-04-30 09:34:43,975 WARN [report]  279: freshbooks.com                                          :   X   :       :       :
+2020-04-30 09:34:43,976 WARN [report]  280: freshdesk.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,976 WARN [report]  281: frontier.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,976 WARN [report]  282: funbrain.com                                            :       :       :       :
+2020-04-30 09:34:43,976 WARN [report]  283: fundly.com                                              :       :   X   :       :
+2020-04-30 09:34:43,976 WARN [report]  284: funnyordie.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,976 WARN [report]  285: fuze.com                                                :       :       :       :
+2020-04-30 09:34:43,976 WARN [report]  286: g2a.com                                                 :   X   :       :       :
+2020-04-30 09:34:43,976 WARN [report]  287: gaiaonline.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,976 WARN [report]  288: gamefaqs.com                                            :       :       :       :
+2020-04-30 09:34:43,976 WARN [report]  289: gameinformer.com                                        :   X   :       :       :
+2020-04-30 09:34:43,976 WARN [report]  290: gamerankings.com                                        :       :   X   :       :
+2020-04-30 09:34:43,976 WARN [report]  291: gamespot.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,976 WARN [report]  292: gamesradar.com                                          :       :   X   :       :
+2020-04-30 09:34:43,976 WARN [report]  293: gamestop.com                                            :       :       :       :
+2020-04-30 09:34:43,976 WARN [report]  294: gap.com                                                 :       :       :       :
+2020-04-30 09:34:43,976 WARN [report]  295: garmin.com                                              :       :   X   :       :
+2020-04-30 09:34:43,976 WARN [report]  296: garuda-indonesia.com                                    :   X   :   X   :       :
+2020-04-30 09:34:43,976 WARN [report]  297: gc.ca                                                   :       :       :       :
+2020-04-30 09:34:43,976 WARN [report]  298: geekwire.com                                            :       :       :       :
+2020-04-30 09:34:43,977 WARN [report]  299: geico.com                                               :   X   :       :       :
+2020-04-30 09:34:43,977 WARN [report]  300: gematsu.com                                             :       :       :       :
+2020-04-30 09:34:43,977 WARN [report]  301: geni.com                                                :   X   :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  302: genius.com                                              :       :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  303: getpocket.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  304: gett.com                                                :   X   :       :       :
+2020-04-30 09:34:43,977 WARN [report]  305: gettransfer.com                                         :   X   :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  306: getyourguide.com                                        :   X   :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  307: github.com                                              :       :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  308: github.io                                               :       :       :       :
+2020-04-30 09:34:43,977 WARN [report]  309: gitlab.com                                              :       :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  310: glassdoor.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  311: globo.com                                               :       :       :       :
+2020-04-30 09:34:43,977 WARN [report]  312: gmu.edu                                                 :       :       :       :
+2020-04-30 09:34:43,977 WARN [report]  313: gnu.org                                                 :       :       :       :
+2020-04-30 09:34:43,977 WARN [report]  314: gob.mx                                                  :       :       :       :
+2020-04-30 09:34:43,977 WARN [report]  315: gocurb.com                                              :       :       :       :
+2020-04-30 09:34:43,977 WARN [report]  316: gofundme.com                                            :       :       :       :
+2020-04-30 09:34:43,977 WARN [report]  317: gog.com                                                 :       :       :       :
+2020-04-30 09:34:43,977 WARN [report]  318: goibibo.com                                             :       :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  319: goldmansachs.com                                        :   X   :   X   :   X   :
+2020-04-30 09:34:43,977 WARN [report]  320: goodhousekeeping.com                                    :       :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  321: goodreads.com                                           :   X   :       :       :
+2020-04-30 09:34:43,977 WARN [report]  322: goodrx.com                                              :       :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  323: google.com                                              :       :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  324: gopuff.com                                              :       :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  325: gothamist.com                                           :       :       :       :
+2020-04-30 09:34:43,977 WARN [report]  326: gotomeeting.com                                         :       :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  327: grainger.com                                            :       :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  328: grubhub.com                                             :       :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  329: guru.com                                                :   X   :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  330: habbo.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  331: hackerrank.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,977 WARN [report]  332: hainanairlines.com                                      :       :       :       :
+2020-04-30 09:34:43,978 WARN [report]  333: happyfox.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  334: harvard.edu                                             :       :       :       :
+2020-04-30 09:34:43,978 WARN [report]  335: hawaiianairlines.com                                    :       :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  336: haxx.se                                                 :       :       :       :
+2020-04-30 09:34:43,978 WARN [report]  337: health.com                                              :   X   :       :       :
+2020-04-30 09:34:43,978 WARN [report]  338: healthline.com                                          :       :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  339: hellofresh.com                                          :       :       :       :
+2020-04-30 09:34:43,978 WARN [report]  340: herokuapp.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  341: hexnode.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  342: hgtv.com                                                :       :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  343: hi5.com                                                 :   X   :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  344: hipchat.com                                             :   X   :       :       :
+2020-04-30 09:34:43,978 WARN [report]  345: hired.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  346: hm.com                                                  :       :       :       :
+2020-04-30 09:34:43,978 WARN [report]  347: hobbylobby.com                                          :       :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  348: homeadvisor.com                                         :   X   :       :       :
+2020-04-30 09:34:43,978 WARN [report]  349: homeaway.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  350: homedepot.com                                           :       :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  351: hondapartsnow.com                                       :   X   :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  352: hongkongairlines.com                                    :       :       :       :
+2020-04-30 09:34:43,978 WARN [report]  353: hootsuite.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  354: hotels.com                                              :       :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  355: hotwire.com                                             :       :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  356: houzz.com                                               :       :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  357: howstuffworks.com                                       :       :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  358: hp.com                                                  :       :   X   :       :
+2020-04-30 09:34:43,978 WARN [report]  359: hsbc.com                                                :       :       :       :
+2020-04-30 09:34:43,978 WARN [report]  360: hubspot.com                                             :   X   :       :       :
+2020-04-30 09:34:43,978 WARN [report]  361: huffpost.com                                            :   X   :   X   :   X   :
+2020-04-30 09:34:43,979 WARN [report]  362: hugedomains.com                                         :   X   :       :       :
+2020-04-30 09:34:43,979 WARN [report]  363: hughesnet.com                                           :       :       :       :
+2020-04-30 09:34:43,979 WARN [report]  364: hulu.com                                                :   X   :       :       :
+2020-04-30 09:34:43,979 WARN [report]  365: hyves.nl                                                :       :       :       :
+2020-04-30 09:34:43,979 WARN [report]  366: iagora.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  367: iana.org                                                :       :       :       :
+2020-04-30 09:34:43,979 WARN [report]  368: ibodyfit.com                                            :       :       :       :
+2020-04-30 09:34:43,979 WARN [report]  369: icelandair.com                                          :       :       :       :
+2020-04-30 09:34:43,979 WARN [report]  370: icloud.com                                              :       :       :       :
+2020-04-30 09:34:43,979 WARN [report]  371: ign.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  372: imageshack.us                                           :   X   :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  373: imdb.com                                                :       :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  374: imgur.com                                               :       :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  375: indeed.com                                              :       :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  376: indiegogo.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  377: indinero.com                                            :   X   :       :       :
+2020-04-30 09:34:43,979 WARN [report]  378: inigoapp.com                                            :       :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  379: insightly.com                                           :   X   :       :       :
+2020-04-30 09:34:43,979 WARN [report]  380: instacart.com                                           :   X   :       :       :
+2020-04-30 09:34:43,979 WARN [report]  381: instagram.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  382: intuit.com                                              :       :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  383: irc-galleria.net                                        :       :       :       :
+2020-04-30 09:34:43,979 WARN [report]  384: isc.org                                                 :       :       :       :
+2020-04-30 09:34:43,979 WARN [report]  385: itch.io                                                 :   X   :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  386: itsmy.com                                               :       :       :       :
+2020-04-30 09:34:43,979 WARN [report]  387: iwiw.hu                                                 :       :       :       :
+2020-04-30 09:34:43,979 WARN [report]  388: jal.co.jp                                               :   X   :       :       :
+2020-04-30 09:34:43,979 WARN [report]  389: jcpenney.com                                            :       :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  390: jd.com                                                  :       :       :       :
+2020-04-30 09:34:43,979 WARN [report]  391: jetblue.com                                             :       :   X   :       :
+2020-04-30 09:34:43,979 WARN [report]  392: jetstar.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,980 WARN [report]  393: jewishgen.org                                           :   X   :   X   :       :
+2020-04-30 09:34:43,980 WARN [report]  394: jhu.edu                                                 :       :       :       :
+2020-04-30 09:34:43,980 WARN [report]  395: jiepang.com                                             :       :   X   :       :
+2020-04-30 09:34:43,980 WARN [report]  396: join.me                                                 :   X   :       :       :
+2020-04-30 09:34:43,980 WARN [report]  397: jw.org                                                  :   X   :       :       :
+2020-04-30 09:34:43,980 WARN [report]  398: kaiserpermanente.org                                    :       :   X   :       :
+2020-04-30 09:34:43,980 WARN [report]  399: kaixin001.com                                           :       :       :       :
+2020-04-30 09:34:43,980 WARN [report]  400: kashoo.com                                              :   X   :       :       :
+2020-04-30 09:34:43,980 WARN [report]  401: kayak.com                                               :       :   X   :       :
+2020-04-30 09:34:43,980 WARN [report]  402: kbb.com                                                 :       :       :       :
+2020-04-30 09:34:43,980 WARN [report]  403: key.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,980 WARN [report]  404: khanacademy.org                                         :   X   :   X   :       :
+2020-04-30 09:34:43,980 WARN [report]  405: kickstarter.com                                         :   X   :       :       :
+2020-04-30 09:34:43,980 WARN [report]  406: kiwibox.com                                             :       :       :       :
+2020-04-30 09:34:43,980 WARN [report]  407: klm.com                                                 :       :       :       :
+2020-04-30 09:34:43,980 WARN [report]  408: kobo.com                                                :       :   X   :       :
+2020-04-30 09:34:43,980 WARN [report]  409: kohls.com                                               :       :   X   :       :
+2020-04-30 09:34:43,980 WARN [report]  410: koofers.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,980 WARN [report]  411: koolspan.com                                            :       :       :       :
+2020-04-30 09:34:43,980 WARN [report]  412: kotaku.com                                              :       :       :       :
+2020-04-30 09:34:43,980 WARN [report]  413: kroger.com                                              :       :   X   :       :
+2020-04-30 09:34:43,980 WARN [report]  414: ktla.com                                                :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  415: kuaishou.com                                            :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  416: last.fm                                                 :   X   :       :       :
+2020-04-30 09:34:43,981 WARN [report]  417: latimes.com                                             :   X   :       :       :
+2020-04-30 09:34:43,981 WARN [report]  418: legacy.com                                              :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  419: lendingclub.com                                         :       :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  420: lenovo.com                                              :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  421: lessonpaths.com                                         :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  422: lfg.com                                                 :   X   :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  423: librarything.com                                        :       :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  424: line.me                                                 :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  425: lingualeo.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  426: linkedin.com                                            :       :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  427: littlecaesars.com                                       :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  428: live.com                                                :       :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  429: livedoor.com                                            :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  430: livejasmin.com                                          :   X   :       :       :
+2020-04-30 09:34:43,981 WARN [report]  431: livejournal.com                                         :   X   :       :       :
+2020-04-30 09:34:43,981 WARN [report]  432: logistics.dhl                                           :   X   :       :       :
+2020-04-30 09:34:43,981 WARN [report]  433: logmein.com                                             :   X   :       :       :
+2020-04-30 09:34:43,981 WARN [report]  434: london.ac.uk                                            :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  435: lowes.com                                               :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  436: lufthansa.com                                           :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  437: luisaviaroma.com                                        :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  438: lyft.com                                                :   X   :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  439: macworld.com                                            :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  440: macys.com                                               :       :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  441: mail.ru                                                 :   X   :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  442: mailchimp.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  443: mangago.met                                             :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  444: manulife.com                                            :       :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  445: marcos.com                                              :       :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  446: marketwatch.com                                         :   X   :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  447: marksandspencer.com                                     :   X   :       :       :
+2020-04-30 09:34:43,981 WARN [report]  448: marriott.com                                            :       :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  449: match.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  450: matchesfashion.com                                      :       :   X   :       :
+2020-04-30 09:34:43,981 WARN [report]  451: meetme.com                                              :       :       :       :
+2020-04-30 09:34:43,981 WARN [report]  452: meetup.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  453: mellowmushroom.com                                      :       :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  454: memrise.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  455: menshealth.com                                          :       :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  456: merchante-solutions.com                                 :   X   :       :       :
+2020-04-30 09:34:43,982 WARN [report]  457: mercurynews.com                                         :       :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  458: merrilledge.com                                         :   X   :       :       :
+2020-04-30 09:34:43,982 WARN [report]  459: metacritic.com                                          :       :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  460: metlife.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  461: miamiherald.com                                         :       :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  462: miit.gov.cn                                             :   X   :       :       :
+2020-04-30 09:34:43,982 WARN [report]  463: millionairclub.org                                      :       :       :       :
+2020-04-30 09:34:43,982 WARN [report]  464: missguided.co.uk                                        :       :       :       :
+2020-04-30 09:34:43,982 WARN [report]  465: missguided.com                                          :       :       :       :
+2020-04-30 09:34:43,982 WARN [report]  466: missguidedus.com                                        :       :       :       :
+2020-04-30 09:34:43,982 WARN [report]  467: missselfridge.co.uk                                     :       :       :       :
+2020-04-30 09:34:43,982 WARN [report]  468: mit.edu                                                 :       :       :       :
+2020-04-30 09:34:43,982 WARN [report]  469: mixi.jp                                                 :   X   :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  470: ml.com                                                  :   X   :       :       :
+2020-04-30 09:34:43,982 WARN [report]  471: mobileiron.com                                          :       :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  472: mocospace.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  473: modcloth.com                                            :       :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  474: momondo.com                                             :       :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  475: morganstanley.com                                       :   X   :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  476: mozilla.com                                             :       :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  477: msn.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  478: myadt.com                                               :       :       :       :
+2020-04-30 09:34:43,982 WARN [report]  479: mybuildingpermit.com                                    :   X   :       :       :
+2020-04-30 09:34:43,982 WARN [report]  480: myfitnesspal.com                                        :   X   :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  481: mygoodtogo.com                                          :       :       :       :
+2020-04-30 09:34:43,982 WARN [report]  482: myharmony.com                                           :       :       :       :
+2020-04-30 09:34:43,982 WARN [report]  483: myheritage.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,982 WARN [report]  484: mylife.com                                              :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  485: mymerrill.com                                           :   X   :       :       :
+2020-04-30 09:34:43,983 WARN [report]  486: mymfb.com                                               :       :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  487: myseattletimes.com                                      :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  488: myspace.com                                             :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  489: mytrees.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  490: myworkday.com                                           :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  491: myyearbook.com                                          :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  492: narod.ru                                                :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  493: narvar.com                                              :       :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  494: nastygal.com                                            :   X   :       :       :
+2020-04-30 09:34:43,983 WARN [report]  495: nationalgeographic.com                                  :       :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  496: nationwide.com                                          :   X   :       :       :
+2020-04-30 09:34:43,983 WARN [report]  497: naver.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  498: nbcnews.com                                             :       :   X   :   X   :
+2020-04-30 09:34:43,983 WARN [report]  499: nbcsports.com                                           :       :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  500: neimanmarcus.com                                        :       :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  501: neofera.com                                             :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  502: nerdwallet.com                                          :   X   :       :       :
+2020-04-30 09:34:43,983 WARN [report]  503: nest.com                                                :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  504: net-a-porter.com                                        :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  505: netflix.com                                             :       :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  506: newegg.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  507: newrelic.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  508: newsday.com                                             :       :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  509: newsweek.com                                            :       :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  510: newyorklife.com                                         :   X   :       :       :
+2020-04-30 09:34:43,983 WARN [report]  511: nexopia.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  512: nextdoor.com                                            :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  513: nexx.com                                                :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  514: nichegamer.com                                          :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  515: nighthawk                                               :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  516: nike.com                                                :       :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  517: nimble.com                                              :   X   :       :       :
+2020-04-30 09:34:43,983 WARN [report]  518: ning.com                                                :   X   :       :       :
+2020-04-30 09:34:43,983 WARN [report]  519: nintendo.com                                            :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  520: nintendolife.com                                        :   X   :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  521: nk.pl                                                   :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  522: nordstrom.com                                           :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  523: northerntrust.com                                       :   X   :       :       :
+2020-04-30 09:34:43,983 WARN [report]  524: northwesternmutual.com                                  :   X   :       :       :
+2020-04-30 09:34:43,983 WARN [report]  525: norwegian.com                                           :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  526: npr.org                                                 :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  527: nud.net                                                 :       :       :       :
+2020-04-30 09:34:43,983 WARN [report]  528: number1direct.com                                       :       :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  529: nydailynews.com                                         :   X   :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  530: nypost.com                                              :       :   X   :       :
+2020-04-30 09:34:43,983 WARN [report]  531: nytimes.com                                             :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  532: observer.com                                            :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  533: oceanofgames.com                                        :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  534: odnoklassniki.ua                                        :   X   :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  535: officemaxperks.com                                      :   X   :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  536: ok.ru                                                   :   X   :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  537: okezone.com                                             :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  538: okta.com                                                :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  539: olivetreegenealogy.com                                  :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  540: omnigroup.com                                           :   X   :       :       :
+2020-04-30 09:34:43,984 WARN [report]  541: omron.com                                               :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  542: on.ca                                                   :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  543: ontrac.com                                              :   X   :       :       :
+2020-04-30 09:34:43,984 WARN [report]  544: openculture.com                                         :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  545: opendiary.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  546: openoffice.org                                          :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  547: opensource.org                                          :   X   :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  548: openssl.org                                             :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  549: openstreetmap.org                                       :   X   :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  550: oracle.com                                              :   X   :       :       :
+2020-04-30 09:34:43,984 WARN [report]  551: orbitz.com                                              :       :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  552: orcacard.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  553: origin.com                                              :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  554: osronline.com                                           :       :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  555: outbrain.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  556: overstock.com                                           :       :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  557: ownit.com                                               :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  558: ox.ac.uk                                                :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  559: oxfordjournals.org                                      :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  560: papajohns.com                                           :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  561: papamurphys.com                                         :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  562: patreon.com                                             :   X   :       :       :
+2020-04-30 09:34:43,984 WARN [report]  563: paymentus.com                                           :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  564: paypal.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  565: pbs.org                                                 :       :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  566: pbskids.org                                             :       :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  567: pcgamer.com                                             :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  568: pch.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  569: pcmag.com                                               :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  570: pcworld.com                                             :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  571: pennmutual.com                                          :   X   :       :       :
+2020-04-30 09:34:43,984 WARN [report]  572: perl.org                                                :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  573: personalcapital.com                                     :       :   X   :   X   :
+2020-04-30 09:34:43,984 WARN [report]  574: petco.com                                               :       :       :       :
+2020-04-30 09:34:43,984 WARN [report]  575: petfinder.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  576: petsmart.com                                            :       :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  577: pge.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,984 WARN [report]  578: pinterest.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  579: pixiv.net                                               :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  580: pizzahut.com                                            :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  581: planetware.com                                          :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  582: pnc.com                                                 :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  583: podium.com                                              :   X   :       :       :
+2020-04-30 09:34:43,985 WARN [report]  584: pof.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  585: polarisoffice.com                                       :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  586: politico.com                                            :       :       :   X   :
+2020-04-30 09:34:43,985 WARN [report]  587: porch.com                                               :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  588: pornhub.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  589: postmates.com                                           :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  590: priceline.com                                           :       :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  591: privacyshield.gov                                       :   X   :       :       :
+2020-04-30 09:34:43,985 WARN [report]  592: procore.com                                             :   X   :       :       :
+2020-04-30 09:34:43,985 WARN [report]  593: progressive.com                                         :   X   :       :       :
+2020-04-30 09:34:43,985 WARN [report]  594: prudential.com                                          :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  595: purolator.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  596: qantas.com                                              :   X   :       :       :
+2020-04-30 09:34:43,985 WARN [report]  597: qatarairways.com                                        :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  598: qc.ca                                                   :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  599: qlik.com                                                :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  600: qq.com                                                  :   X   :       :       :
+2020-04-30 09:34:43,985 WARN [report]  601: quicktaxonline.ca                                       :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  602: quizlet.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  603: quora.com                                               :       :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  604: rakuten.com                                             :       :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  605: ravelry.com                                             :   X   :       :       :
+2020-04-30 09:34:43,985 WARN [report]  606: rbcbank.com                                             :       :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  607: rbcroyalbank.com                                        :       :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  608: realtor.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  609: reddit.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  610: redtube.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  611: reference.com                                           :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  612: regions.com                                             :   X   :       :       :
+2020-04-30 09:34:43,985 WARN [report]  613: relaycars.com                                           :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  614: renren.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  615: reuters.com                                             :       :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  616: reverbnation.com                                        :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  617: rfc-editor.org                                          :       :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  618: ricksteves.com                                          :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  619: ridehive.com                                            :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  620: ring.com                                                :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  621: ringcentral.com                                         :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  622: riteaid.com                                             :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  623: riverisland.com                                         :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  624: roblox.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  625: rosettastone.com                                        :       :   X   :       :
+2020-04-30 09:34:43,985 WARN [report]  626: roundtablepizza.com                                     :       :       :       :
+2020-04-30 09:34:43,985 WARN [report]  627: rpnw.com                                                :   X   :       :       :
+2020-04-30 09:34:43,985 WARN [report]  628: runkeeper.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,986 WARN [report]  629: ryanair.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,986 WARN [report]  630: salesforce.com                                          :   X   :       :       :
+2020-04-30 09:34:43,986 WARN [report]  631: samsung.com                                             :       :   X   :       :
+2020-04-30 09:34:43,986 WARN [report]  632: santanderbank.com                                       :       :       :       :
+2020-04-30 09:34:43,986 WARN [report]  633: sas.com                                                 :       :       :       :
+2020-04-30 09:34:43,986 WARN [report]  634: schwab.com                                              :   X   :       :       :
+2020-04-30 09:34:43,986 WARN [report]  635: scuolafilottrano.edu.it                                 :       :       :       :
+2020-04-30 09:34:43,986 WARN [report]  636: seamless.com                                            :       :   X   :       :
+2020-04-30 09:34:43,986 WARN [report]  637: seattlepi.com                                           :       :   X   :       :
+2020-04-30 09:34:43,987 WARN [report]  638: seattletimes.com                                        :   X   :       :       :
+2020-04-30 09:34:43,987 WARN [report]  639: shareworks.com                                          :       :   X   :       :
+2020-04-30 09:34:43,987 WARN [report]  640: shareworks.solium.com                                   :       :       :       :
+2020-04-30 09:34:43,987 WARN [report]  641: sherwin-williams.com                                    :       :       :       :
+2020-04-30 09:34:43,987 WARN [report]  642: shipstation.com                                         :   X   :       :       :
+2020-04-30 09:34:43,987 WARN [report]  643: showarecenter.com                                       :       :   X   :       :
+2020-04-30 09:34:43,987 WARN [report]  644: shuterstock.com                                         :   X   :   X   :       :
+2020-04-30 09:34:43,987 WARN [report]  645: similarweb.com                                          :       :       :       :
+2020-04-30 09:34:43,987 WARN [report]  646: simplify.com                                            :   X   :       :       :
+2020-04-30 09:34:43,987 WARN [report]  647: singaporeair.com                                        :   X   :   X   :       :
+2020-04-30 09:34:43,987 WARN [report]  648: sitemaps.org                                            :       :       :       :
+2020-04-30 09:34:43,987 WARN [report]  649: skidrowreloaded.com                                     :       :       :       :
+2020-04-30 09:34:43,987 WARN [report]  650: skiplagged.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  651: skyrock.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  652: skyscanner.com                                          :   X   :       :       :
+2020-04-30 09:34:43,988 WARN [report]  653: slack.com                                               :       :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  654: slashdot.org                                            :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  655: slashgear.com                                           :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  656: slate.com                                               :       :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  657: slickdeals.net                                          :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  658: sm.cn                                                   :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  659: smartsheet.com                                          :   X   :       :       :
+2020-04-30 09:34:43,988 WARN [report]  660: snapchat.com                                            :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  661: snapfish.com                                            :       :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  662: softpedia.com                                           :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  663: sogou.com                                               :   X   :       :       :
+2020-04-30 09:34:43,988 WARN [report]  664: sohu.com                                                :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  665: sony.com                                                :       :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  666: soso.com                                                :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  667: sosonlinebackup.com                                     :   X   :       :       :
+2020-04-30 09:34:43,988 WARN [report]  668: soundcloud.com                                          :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  669: sourceforge.net                                         :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  670: southwest.com                                           :       :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  671: sparkpeople.com                                         :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  672: spectrum.com                                            :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  673: splunk.com                                              :   X   :       :       :
+2020-04-30 09:34:43,988 WARN [report]  674: spotify.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  675: spreely.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  676: sprint.com                                              :       :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  677: squareup.com                                            :       :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  678: ssense.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  679: ssl.com                                                 :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  680: stackexchange.com                                       :   X   :       :       :
+2020-04-30 09:34:43,988 WARN [report]  681: stackify.com                                            :   X   :       :       :
+2020-04-30 09:34:43,988 WARN [report]  682: stackoverflow.com                                       :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  683: stanford.edu                                            :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  684: starbucks.com                                           :       :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  685: statefarm.com                                           :   X   :       :       :
+2020-04-30 09:34:43,988 WARN [report]  686: statestreet.com                                         :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  687: statista.com                                            :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  688: steam.com                                               :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  689: steemit.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  690: stltoday.com                                            :   X   :       :   X   :
+2020-04-30 09:34:43,988 WARN [report]  691: streak.com                                              :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  692: stride.com                                              :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  693: stripe.com                                              :       :   X   :       :
+2020-04-30 09:34:43,988 WARN [report]  694: studivz.net                                             :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  695: stumbleupon.com                                         :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  696: stvladimirparishcenter.com                              :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  697: successfactors.com                                      :   X   :       :       :
+2020-04-30 09:34:43,988 WARN [report]  698: sunrise.am                                              :       :       :       :
+2020-04-30 09:34:43,988 WARN [report]  699: surveymonkey.com                                        :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  700: svb.com                                                 :   X   :       :       :
+2020-04-30 09:34:43,989 WARN [report]  701: swiss.com                                               :       :       :       :
+2020-04-30 09:34:43,989 WARN [report]  702: synchrony.com                                           :       :       :       :
+2020-04-30 09:34:43,989 WARN [report]  703: t-mobile.com                                            :       :       :       :
+2020-04-30 09:34:43,989 WARN [report]  704: tableau.com                                             :       :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  705: taboola.com                                             :   X   :       :       :
+2020-04-30 09:34:43,989 WARN [report]  706: tagged.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  707: taobao.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  708: target.com                                              :       :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  709: taringa.net                                             :   X   :       :       :
+2020-04-30 09:34:43,989 WARN [report]  710: tdameritrade.com                                        :   X   :       :       :
+2020-04-30 09:34:43,989 WARN [report]  711: tdbank.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  712: teamblind.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  713: teamviewer.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  714: techcrunch.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  715: techradar.com                                           :       :       :       :
+2020-04-30 09:34:43,989 WARN [report]  716: techraptor.net                                          :       :       :       :
+2020-04-30 09:34:43,989 WARN [report]  717: techrepublic.com                                        :       :       :       :
+2020-04-30 09:34:43,989 WARN [report]  718: ted.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  719: telegram.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  720: tesla.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  721: thaiairways.com                                         :       :       :       :
+2020-04-30 09:34:43,989 WARN [report]  722: the-dots.com                                            :   X   :       :       :
+2020-04-30 09:34:43,989 WARN [report]  723: theguardian.com                                         :       :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  724: thehackernews.com                                       :       :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  725: theiconic.com.au                                        :       :       :       :
+2020-04-30 09:34:43,989 WARN [report]  726: thelancet.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  727: themeforest.net                                         :       :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  728: theonion.com                                            :       :       :       :
+2020-04-30 09:34:43,989 WARN [report]  729: theoutnet.com                                           :       :       :       :
+2020-04-30 09:34:43,989 WARN [report]  730: theregister.co.uk                                       :   X   :       :       :
+2020-04-30 09:34:43,989 WARN [report]  731: thesaurus.com                                           :       :       :       :
+2020-04-30 09:34:43,989 WARN [report]  732: thestar.com                                             :       :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  733: theverge.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  734: thumbtack.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,989 WARN [report]  735: tiaabank.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  736: tianya.cn                                               :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  737: ticketmaster.com                                        :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  738: tiktok.com                                              :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  739: timedoctor.com                                          :       :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  740: timelyapp.com                                           :   X   :       :       :
+2020-04-30 09:34:43,990 WARN [report]  741: tmall.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  742: tomsguide.com                                           :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  743: tomshardware.com                                        :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  744: topcoder.com                                            :   X   :       :       :
+2020-04-30 09:34:43,990 WARN [report]  745: tophosting.com.ua                                       :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  746: topshop.com                                             :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  747: toptal.com                                              :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  748: tplinkrepeater.net                                      :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  749: trainwithmeonline.com                                   :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  750: travelers.com                                           :   X   :       :       :
+2020-04-30 09:34:43,990 WARN [report]  751: travelocity.com                                         :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  752: trello.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  753: tribunnews.com                                          :   X   :       :       :
+2020-04-30 09:34:43,990 WARN [report]  754: tripadvisor.com                                         :       :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  755: tripit.com                                              :       :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  756: tripod.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  757: truecar.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  758: truekey.com                                             :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  759: truist.com                                              :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  760: tsheets.com                                             :       :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  761: tuenti.com                                              :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  762: tumblr.com                                              :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  763: turkishairlines.com                                     :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  764: twitch.tv                                               :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  765: twitter.com                                             :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  766: twoo.com                                                :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  767: uber.com                                                :       :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  768: ubs.com                                                 :   X   :       :       :
+2020-04-30 09:34:43,990 WARN [report]  769: ucnews.in                                               :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  770: udemy.com                                               :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  771: uiowa.edu                                               :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  772: umpquabank.com                                          :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  773: unifyle.co                                              :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  774: unionbank.com                                           :       :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  775: uniqlo.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  776: united.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  777: uol.com.br                                              :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  778: ups.com                                                 :   X   :       :       :
+2020-04-30 09:34:43,990 WARN [report]  779: upward.net                                              :       :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  780: upwork.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  781: urbanoutfitters.com                                     :       :   X   :       :
+2020-04-30 09:34:43,990 WARN [report]  782: usaa.com                                                :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  783: usatoday.com                                            :       :       :       :
+2020-04-30 09:34:43,990 WARN [report]  784: usbank.com                                              :   X   :       :       :
+2020-04-30 09:34:43,990 WARN [report]  785: uscellular.com                                          :       :   X   :       :
+2020-04-30 09:34:43,991 WARN [report]  786: usgenweb.org                                            :       :       :       :
+2020-04-30 09:34:43,991 WARN [report]  787: usps.com                                                :       :   X   :       :
+2020-04-30 09:34:43,991 WARN [report]  788: utah.edu                                                :       :       :       :
+2020-04-30 09:34:43,991 WARN [report]  789: vampirefreaks.com                                       :   X   :       :       :
+2020-04-30 09:34:43,992 WARN [report]  790: vanguard.com                                            :       :       :       :
+2020-04-30 09:34:43,992 WARN [report]  791: vayama.com                                              :       :       :       :
+2020-04-30 09:34:43,992 WARN [report]  792: venmo.com                                               :       :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  793: venturebeat.com                                         :       :       :       :
+2020-04-30 09:34:43,992 WARN [report]  794: vero.co                                                 :       :       :       :
+2020-04-30 09:34:43,992 WARN [report]  795: viadeo.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  796: viasat.com                                              :       :       :       :
+2020-04-30 09:34:43,992 WARN [report]  797: viator.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  798: viber.com                                               :       :       :       :
+2020-04-30 09:34:43,992 WARN [report]  799: virgin.com                                              :       :       :       :
+2020-04-30 09:34:43,992 WARN [report]  800: virginatlantic.com                                      :       :       :       :
+2020-04-30 09:34:43,992 WARN [report]  801: virginaustralia.com                                     :   X   :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  802: vivial.net                                              :       :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  803: vk.com                                                  :   X   :       :       :
+2020-04-30 09:34:43,992 WARN [report]  804: voxer.com                                               :   X   :       :       :
+2020-04-30 09:34:43,992 WARN [report]  805: vrbo.com                                                :   X   :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  806: vroom.com                                               :   X   :       :       :
+2020-04-30 09:34:43,992 WARN [report]  807: w3schools.com                                           :       :       :       :
+2020-04-30 09:34:43,992 WARN [report]  808: wafdbank.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  809: walgreens.com                                           :       :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  810: walmart.com                                             :       :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  811: warriorforum.com                                        :   X   :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  812: washingtonpost.com                                      :       :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  813: washingtontimes.com                                     :       :   X   :       :
+2020-04-30 09:34:43,992 WARN [report]  814: waveapps.com                                            :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  815: wayfair.com                                             :       :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  816: wayn.com                                                :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  817: waze.com                                                :   X   :       :       :
+2020-04-30 09:34:43,993 WARN [report]  818: weather.com                                             :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  819: webmd.com                                               :       :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  820: webrootanywhere.com                                     :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  821: wechat.com                                              :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  822: weheartit.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  823: weibo.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  824: weightwatchers.com                                      :   X   :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  825: welivesecurity.com                                      :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  826: wellsfargo.com                                          :       :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  827: wepay.com                                               :       :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  828: westerndigital.com                                      :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  829: westjet.com                                             :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  830: whatsapp.com                                            :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  831: whirlpool.com                                           :       :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  832: whyville.net                                            :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  833: wikipedia.org                                           :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  834: wiktionary.org                                          :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  835: wired.com                                               :       :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  836: wordpress.com                                           :   X   :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  837: workday.com                                             :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  838: worldpay.com                                            :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  839: wrike.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  840: wsj.com                                                 :       :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  841: wunderground.com                                        :   X   :       :       :
+2020-04-30 09:34:43,993 WARN [report]  842: wunderlist.com                                          :   X   :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  843: www.gov.cn                                              :   X   :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  844: wyndhamhotels.com                                       :   X   :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  845: xanga.com                                               :   X   :       :       :
+2020-04-30 09:34:43,993 WARN [report]  846: xero.com                                                :   X   :       :       :
+2020-04-30 09:34:43,993 WARN [report]  847: xfinity.com                                             :       :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  848: xhamster.com                                            :   X   :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  849: xing.com                                                :   X   :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  850: xinhuanet.com                                           :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  851: xkcd.com                                                :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  852: xnxx.com                                                :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  853: xvideos.com                                             :   X   :       :   X   :
+2020-04-30 09:34:43,993 WARN [report]  854: yahoo.com                                               :       :   X   :       :
+2020-04-30 09:34:43,993 WARN [report]  855: yale.edu                                                :       :       :       :
+2020-04-30 09:34:43,993 WARN [report]  856: yandex.ru                                               :   X   :       :       :
+2020-04-30 09:34:43,994 WARN [report]  857: yelp.com                                                :   X   :   X   :       :
+2020-04-30 09:34:43,994 WARN [report]  858: yolasite.com                                            :   X   :       :       :
+2020-04-30 09:34:43,994 WARN [report]  859: youku.com                                               :       :       :       :
+2020-04-30 09:34:43,994 WARN [report]  860: youporn.com                                             :       :       :       :
+2020-04-30 09:34:43,994 WARN [report]  861: yy.com                                                  :       :       :       :
+2020-04-30 09:34:43,994 WARN [report]  862: zabbix.com                                              :   X   :       :       :
+2020-04-30 09:34:43,994 WARN [report]  863: zappos.com                                              :       :   X   :       :
+2020-04-30 09:34:43,994 WARN [report]  864: zdnet.com                                               :       :       :       :
+2020-04-30 09:34:43,994 WARN [report]  865: zellepay.com                                            :       :       :       :
+2020-04-30 09:34:43,994 WARN [report]  866: zendesk.com                                             :       :       :       :
+2020-04-30 09:34:43,994 WARN [report]  867: zenefits.com                                            :       :   X   :       :
+2020-04-30 09:34:43,994 WARN [report]  868: zhihu.com                                               :   X   :   X   :       :
+2020-04-30 09:34:43,994 WARN [report]  869: zillow.com                                              :       :   X   :       :
+2020-04-30 09:34:43,994 WARN [report]  870: ziprecruiter.com                                        :       :   X   :       :
+2020-04-30 09:34:43,994 WARN [report]  871: zoho.com                                                :   X   :   X   :       :
+2020-04-30 09:34:43,994 WARN [report]  872: zoom.us                                                 :       :   X   :       :
+2020-04-30 09:34:43,994 WARN [report]  873: zorpia.com                                              :   X   :   X   :       :
+2020-04-30 09:34:43,994 WARN [report]  874: ztrip.com                                               :       :       :       :
+2020-04-30 09:34:43,994 WARN [report] --------------------------------------------------------------------------------------------------------------
+X - 546
+- - 325
+--------
+    871
+     14 (error?)
+     --
+    885

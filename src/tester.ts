@@ -47,7 +47,7 @@ class Tester {
     protected static async testWrite(engine: IEngine): Promise<void> {
 
         L.debug("startup engine");
-        await engine.startup();
+        await engine.startup(true);
 
         let report = new ReportLogger(await engine.getEngineName());
         await report.startup();

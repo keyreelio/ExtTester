@@ -23,7 +23,7 @@ module.exports = function(grunt) {
                 ]
             },
             thrift: {
-                cmd: 'thrift-typescript',
+                cmd: './node_modules/@creditkarma/thrift-typescript/dist/main/bin/index.js',
                 args: [
                     '--target',
                     'thrift-server',

@@ -1,11 +1,12 @@
 import {IDatabase} from "../database/database";
 
-import express, {Express} from 'express';
+import express from 'express';
 import * as bodyParser from 'body-parser'
 import * as kr from "../thrift/gencode/AuxoftKeyReel";
 
 import { ThriftServerExpress } from '@creditkarma/thrift-server-express'
 import {LoggingServiceImpl, HostStorageServiceImpl} from "./services";
+import http from "http";
 
 
 export class Server {
@@ -16,8 +17,8 @@ export class Server {
     protected loggingService: LoggingServiceImpl;
     protected hostStorageService: HostStorageServiceImpl;
 
-    protected loggingServer: Express | undefined = undefined;
-    protected hostStorageServer: Express | undefined = undefined;
+    protected loggingServer: http.Server | undefined = undefined;
+    protected hostStorageServer: http.Server | undefined = undefined;
 
 
     public database: IDatabase;
@@ -59,8 +60,8 @@ export class Server {
 
         if (this.loggingServer !== undefined) return;
 
-        this.loggingServer = express();
-        this.loggingServer.use(
+        let logging = express();
+        logging.use(
             '/thrift',
             bodyParser.raw({type: 'application/vnd.apache.thrift.json'}),
             ThriftServerExpress<kr.LoggingService.Processor>({
@@ -69,12 +70,12 @@ export class Server {
                 serviceName: kr.LoggingService.serviceName
             })
         );
-        this.loggingServer.listen(this.LoggingPort, () => {
+        this.loggingServer = logging.listen(this.LoggingPort, () => {
             console.log(`Express server listening [logging]`)
         });
 
-        this.hostStorageServer = express();
-        this.hostStorageServer.use(
+        let hostStorage = express();
+        hostStorage.use(
             '/thrift',
             bodyParser.raw({type: 'application/vnd.apache.thrift.json'}),
             ThriftServerExpress<kr.HostStorageService.Processor>({
@@ -84,12 +85,18 @@ export class Server {
             })
         );
 
-        this.hostStorageServer.listen(this.HostStoragePort, () => {
+        this.hostStorageServer = hostStorage.listen(this.HostStoragePort, () => {
             console.log(`Express server listening [host storage]`)
         });
     }
 
     public async stop(): Promise<void> {
+        if (this.loggingServer !== undefined) {
+            await this.loggingServer.close();
+        }
+        if (this.hostStorageServer !== undefined) {
+            await this.hostStorageServer.close();
+        }
     }
 
     public async restart(): Promise<void> {

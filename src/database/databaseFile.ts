@@ -14,6 +14,10 @@ export class DatabaseFile extends DatabaseMemory {
         this.load();
     }
 
+    public deleteFile() {
+        fs.unlinkSync(this.filePath);
+    }
+
     public add(account: Account): void {
         super.add(account);
         this.save();
@@ -30,8 +34,11 @@ export class DatabaseFile extends DatabaseMemory {
     }
 
     protected load(): void {
-        let obj = JSON.parse(fs.readFileSync(this.filePath, {encoding: 'utf8'}));
-        this.db = new Map<string, Account>(Object.entries(obj));
+        try {
+            let obj = JSON.parse(fs.readFileSync(this.filePath, {encoding: 'utf8'}));
+            this.db = new Map<string, Account>(Object.entries(obj));
+        } catch (e) {
+        }
     }
 
     protected save(): void {

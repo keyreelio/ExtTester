@@ -4,9 +4,9 @@ import {ICredential} from "./credentials";
 
 import {testapiLogger as L} from "./common/log.config";
 import {WebElementExt} from "./common/WebDriverExt";
-import {EReportResult, EReportTest, IReport} from "./report/report";
-import UnsupportedOperationError = error.UnsupportedOperationError;
+import {EReportParsePart, EReportResult, EReportTest, IReport} from "./report/report";
 import {Timeouts} from "./common/timeouts";
+import UnsupportedOperationError = error.UnsupportedOperationError;
 
 
 class Button {
@@ -37,6 +37,7 @@ class LoginForm {
 }
 
 class Page {
+    didNotParse: boolean = true;
     singinButton: Button | undefined = undefined;
     loginForm: LoginForm | undefined = undefined;
     isLoggedIn: boolean = false;
@@ -93,23 +94,38 @@ export class TestAPI {
         let driver = await this.engine.getDriver();
         let extDriver = await this.engine.getExtDriver();
 
-        L.debug("clear browser data");
-        await extDriver.clearBrowserData();
+        let failMessage = function(error: any) {
+            if (error === undefined) return "undefined";
+            if (error.message === undefined) return `${error}`;
+            return error.message;
+        }
 
         L.debug(`open new tab with: ${this.credential.url}`);
         await extDriver.openUrlOnNewTab(this.credential.url);
-
         try {
-            var state: State = State.init;
+            let state = State.init;
 
+            let reloadedPage = false;
             while (true) {
                 L.debug("parse page");
-                let page = await this.parsePage(ParseSearchMap[state]);
+                let page: Page;
+                // try {
+                    page = await this.parsePage(ParseSearchMap[state]);
+                // } catch (e) {
+                //     if (reloadedPage) {
+                //         throw e;
+                //     }
+                //     reloadedPage = true;
+                //     await this.report.setParsePart(EReportParsePart.loggedIn);
+                //     await driver.navigate().refresh();
+                //     continue;
+                // }
 
                 L.debug("check page structure");
                 if (page.singinButton !== undefined && page.loginForm === undefined) {
                     L.debug("page has singin button and hasn't login form");
 
+                    await this.report.setParsePart(EReportParsePart.singInButton);
                     await this.pressOnButton(page.singinButton);
 
                     state = State.waitLoginForm;
@@ -120,14 +136,20 @@ export class TestAPI {
                     if (page.loginForm.loginInput !== undefined && page.loginForm.passwordInput !== undefined) {
                         L.debug("login form has login and password inputs");
 
+                        await this.report.setParsePart(EReportParsePart.fullLoginForm);
+
                         await this.enterToInput(this.credential.login, page.loginForm.loginInput);
                         await this.enterToInput(this.credential.password, page.loginForm.passwordInput);
                     } else if (page.loginForm.passwordInput !== undefined) {
                         L.debug("login form has only password input");
 
+                        await this.report.setParsePart(EReportParsePart.secondStepLoginForm);
+
                         await this.enterToInput(this.credential.password, page.loginForm.passwordInput);
                     } else if (page.loginForm.loginInput !== undefined) {
                         L.debug("login form has only login input");
+
+                        await this.report.setParsePart(EReportParsePart.firstStepLoginForm);
 
                         await this.enterToInput(this.credential.login, page.loginForm.loginInput);
 
@@ -149,9 +171,12 @@ export class TestAPI {
                         await this.engine.processBeforeLogin();
 
                         L.info("credential SAVED as manual before logged in");
+                        await this.report.setResult(EReportResult.waitApprove, EReportTest.load);
                         await this.report.setResult(
-                            EReportResult.success,
-                            useOnlyEnterButton ? EReportTest.saveManualBeforeLoggedInWithoutButtons : EReportTest.saveManualBeforeLoggedInWithButtons);
+                            EReportResult.manual,
+                            useOnlyEnterButton ? EReportTest.saveBeforeLoggedInWithoutButtons : EReportTest.saveBeforeLoggedInWithButtons);
+
+                        break;
                     } catch (e) {
                         if (e as UnsupportedOperationError) {
                             L.debug("engine process before login not supported");
@@ -166,45 +191,85 @@ export class TestAPI {
 
                             state = State.waitLoggedIn;
                             continue;
-                        } else {
-                            L.debug("engine process before login is failed");
-                            L.info("credential FAILED SAVE before logged in");
-                            error = new Error();
                         }
+
+                        L.debug("engine process before login is failed");
+                        L.info("credential FAILED SAVE before logged in");
+                        error = e;
+                        await this.report.setFail(
+                            failMessage(error),
+                            useOnlyEnterButton ? EReportTest.saveBeforeLoggedInWithoutButtons : EReportTest.saveBeforeLoggedInWithButtons);
+                        break;
                     }
                 } else if (page.isLoggedIn) {
+                    await this.report.setParsePart(EReportParsePart.loggedIn);
+
                     try {
                         L.debug("try engine process after login");
 
                         await this.engine.processAfterLogin();
 
                         L.info("credential SAVED as manual after logged in");
+                        await this.report.setResult(EReportResult.waitApprove, EReportTest.load);
                         await this.report.setResult(
-                            EReportResult.success,
-                            useOnlyEnterButton ? EReportTest.saveManualAfterLoggedInWithoutButtons : EReportTest.saveManualAfterLoggedInWithButtons);
+                            EReportResult.manual,
+                            useOnlyEnterButton ? EReportTest.saveAfterLoggedInWithoutButtons : EReportTest.saveAfterLoggedInWithButtons);
+
+                        break;
+                    } catch (e) {
+                        if (!(e instanceof UnsupportedOperationError)) {
+                            L.debug("engine process after login is failed");
+                            L.info("credential FAILED SAVE after logged in");
+                            error = e;
+                            await this.report.setFail(
+                                failMessage(error),
+                                useOnlyEnterButton ? EReportTest.saveAfterLoggedInWithoutButtons : EReportTest.saveAfterLoggedInWithButtons);
+                            break;
+                        }
+                    }
+
+                    try {
+                        L.debug("try engine check saved");
+
+                        await this.engine.checkSaved(this.credential.url, this.credential);
+
+                        L.info("credential SAVED as auto after logged in");
+                        await this.report.setResult(
+                            EReportResult.auto,
+                            useOnlyEnterButton ? EReportTest.saveAfterLoggedInWithoutButtons : EReportTest.saveAfterLoggedInWithButtons);
+
+                        break;
                     } catch (e) {
                         if (e instanceof UnsupportedOperationError) {
-                            L.debug("engine process after login not supported");
+                            L.debug("engine engine check saved not supported");
 
                             L.info("credential MAYBE SAVED as auto after logged in");
                             await this.report.setResult(
-                                EReportResult.success,
-                                useOnlyEnterButton ? EReportTest.saveAutoAfterLoggedInWithoutButtons : EReportTest.saveAutoAfterLoggedInWithButtons);
-                        } else {
-                            L.debug("engine process after login is failed");
-                            L.info("credential FAILED SAVE after logged in");
-                            error = new Error();
+                                EReportResult.waitApprove,
+                                useOnlyEnterButton ? EReportTest.saveAfterLoggedInWithoutButtons : EReportTest.saveAfterLoggedInWithButtons);
+
+                            break;
                         }
+
+                        L.debug("engine process after login is failed");
+                        L.info("credential FAILED SAVE after logged in");
+                        error = e;
+                        await this.report.setFail(
+                            failMessage(error),
+                            useOnlyEnterButton ? EReportTest.saveAfterLoggedInWithoutButtons : EReportTest.saveAfterLoggedInWithButtons);
+                        break;
                     }
+                } else {
+                    error = new Error("Page not parsed");
+                    await this.report.setFail(failMessage(error), EReportTest.unknown);
                 }
 
                 break;
             }
         } catch (e) {
             error = e;
+            // await this.report.setFail(`${error}`, EReportTest.unknown);
         }
-
-        await driver.sleep(5000);
 
         L.debug("close current tab");
         await extDriver.closeCurrentTab();
@@ -233,9 +298,21 @@ export class TestAPI {
         try {
             var state: State = State.init;
 
+            let reloadedPage = false;
             while (true) {
                 L.debug("parse page");
-                let page = await this.parsePage(ParseSearchMap[state]);
+                let page: Page;
+                try {
+                    page = await this.parsePage(ParseSearchMap[state]);
+                } catch (e) {
+                    if (reloadedPage) {
+                        throw e;
+                    }
+                    reloadedPage = true;
+                    await this.report.setParsePart(EReportParsePart.loggedIn);
+                    await driver.navigate().refresh();
+                    continue;
+                }
 
                 L.debug("check page structure");
                 if (page.singinButton !== undefined && page.loginForm === undefined) {
@@ -259,7 +336,7 @@ export class TestAPI {
                                 await this.checkInputValue(this.credential.password, page.loginForm.passwordInput)) {
 
                                 L.debug("credential AUTO LOAD");
-                                await this.report.setResult(EReportResult.success, EReportTest.loadAuto);
+                                await this.report.setResult(EReportResult.auto, EReportTest.load);
                             } else {
                                 L.debug("credential AUTO LOAD failed");
                                 error = new Error();
@@ -293,7 +370,7 @@ export class TestAPI {
                         if (!await this.isEmptyInputValue(page.loginForm.passwordInput)) {
                             if (await this.checkInputValue(this.credential.password, page.loginForm.passwordInput)) {
                                 L.debug("credential AUTO LOAD");
-                                await this.report.setResult(EReportResult.success, EReportTest.loadAuto);
+                                await this.report.setResult(EReportResult.auto, EReportTest.load);
                             } else {
                                 L.debug("credential AUTO LOAD failed");
                                 error = new Error();
@@ -361,49 +438,55 @@ export class TestAPI {
         let driver = await this.engine.getDriver();
         let extDriver = await this.engine.getExtDriver();
 
-        var delay = 0;
+        let delay = 0;
         while (true) {
             let page = new Page();
 
             await extDriver.switchToRootFrame();
 
-            var loginForm = await this.findLoginForm(undefined);
-            if (loginForm === undefined) {
-                loginForm = await this.findLoginFormInFrames();
-            }
+            // let parsed = await this.canParsed();
+            // if (!parsed) {
+            //     parsed = await this.canParsedFrames();
+            // }
+            // if (parsed) {
+                let loginForm = await this.findLoginForm(undefined);
+                if (loginForm === undefined) {
+                    loginForm = await this.findLoginFormInFrames();
+                }
 
-            page.loginForm = loginForm;
+                page.loginForm = loginForm;
 
-            let singInButton: Button | undefined = undefined;
-            //TODO: add find search button
+                let singInButton: Button | undefined = undefined;
+                //TODO: add find search button
 
-            page.singinButton = singInButton;
+                page.singinButton = singInButton;
 
-            if (page.loginForm === undefined && page.singinButton === undefined) {
-                page.isLoggedIn = true;
-            }
+                if (page.loginForm === undefined && page.singinButton === undefined) {
+                    page.isLoggedIn = true;
+                }
 
-            let done: boolean = false;
-            if ((searchFlag & SearchFlagSingInButton) === SearchFlagSingInButton) {
-                done = done || (page.singinButton !== undefined);
-            }
-            if ((searchFlag & SearchFlagLoginOnForm) === SearchFlagLoginOnForm) {
-                done = done || (page.loginForm !== undefined && page.loginForm.loginInput !== undefined);
-            }
-            if ((searchFlag & SearchFlagPasswordOnForm) === SearchFlagPasswordOnForm) {
-                done = done || (page.loginForm !== undefined && page.loginForm.passwordInput !== undefined);
-            }
-            if ((searchFlag & SearchFlagLoggedIn) === SearchFlagLoggedIn) {
-                done = done || page.isLoggedIn;
-            }
+                let done: boolean = false;
+                if ((searchFlag & SearchFlagSingInButton) === SearchFlagSingInButton) {
+                    done = done || (page.singinButton !== undefined);
+                }
+                if ((searchFlag & SearchFlagLoginOnForm) === SearchFlagLoginOnForm) {
+                    done = done || (page.loginForm !== undefined && page.loginForm.loginInput !== undefined);
+                }
+                if ((searchFlag & SearchFlagPasswordOnForm) === SearchFlagPasswordOnForm) {
+                    done = done || (page.loginForm !== undefined && page.loginForm.passwordInput !== undefined);
+                }
+                if ((searchFlag & SearchFlagLoggedIn) === SearchFlagLoggedIn) {
+                    done = done || page.isLoggedIn;
+                }
 
-            if (done) {
-                L.trace("----------------------------------");
-                await this.logPage(page);
-                L.trace("----------------------------------");
+                if (done) {
+                    L.trace("----------------------------------");
+                    await this.logPage(page);
+                    L.trace("----------------------------------");
 
-                return Promise.resolve(page);
-            }
+                    return Promise.resolve(page);
+                }
+            // }
 
             if (this.credential.timeout > 0 && delay < this.credential.timeout) {
                 await driver.sleep(500);
@@ -411,8 +494,50 @@ export class TestAPI {
                 continue;
             }
 
-            return Promise.reject();
+            return Promise.reject(new Error("Page did not parsed"));
         }
+    }
+
+    protected async canParsedFrames(): Promise<boolean> {
+        L.debug("canParsedFrames");
+
+        let driver = await this.engine.getDriver();
+
+        try {
+            for (let iframe of await driver.findElements(By.xpath("//iframe"))) {
+                try {
+                    L.trace(`switch to '${await iframe.getId()}'`);
+                    await driver.switchTo().frame(iframe);
+
+                    let result = await this.canParsed();
+
+                    L.trace("switch to 'root'");
+                    await driver.switchTo().parentFrame();
+
+                    if (result) {
+                        return Promise.resolve(true);
+                    }
+                } catch (e) {
+                }
+            }
+        } catch (e) {
+        }
+
+        return Promise.resolve(false);
+    }
+
+    protected async canParsed(): Promise<boolean> {
+        L.debug("canParsed");
+
+        let extDriver = await this.engine.getExtDriver();
+
+        try {
+            await extDriver.waitLocated("//body[@axt-parser-timing]", Timeouts.WaitParsedPage);
+            return Promise.resolve(true);
+        } catch (e) {
+        }
+
+        return Promise.resolve(false);
     }
 
     protected async findLoginFormInFrames(): Promise<LoginForm | undefined> {
@@ -453,25 +578,28 @@ export class TestAPI {
         let result: LoginForm | undefined = undefined;
         try {
             let body = await extDriver.waitLocated("//body[@axt-parser-timing]", Timeouts.WaitParsedPage);
-            let loginForm = await body.findElement(By.xpath("//*[@axt-form-type='login']"));
-            if (loginForm !== undefined) {
-                result = new LoginForm();
-                let login = await loginForm.findElement(By.xpath("//input[@axt-input-type='login']"));
-                if (login !== undefined) {
-                    result.loginInput = new Input(login, iframe);
+            try {
+                let loginForm = await body.findElement(By.xpath("//*[@axt-form-type='login']"));
+                if (loginForm !== undefined) {
+                    result = new LoginForm();
+                    let login = await loginForm.findElement(By.xpath("//input[@axt-input-type='login']"));
+                    if (login !== undefined) {
+                        result.loginInput = new Input(login, iframe);
+                    }
+                    let password = await loginForm.findElement(By.xpath("//input[@axt-input-type='password']"));
+                    if (password !== undefined) {
+                        result.passwordInput = new Input(password, iframe);
+                    }
+                    let loginButton = await loginForm.findElement(By.xpath("//*[@axt-button-type='login']"));
+                    if (loginButton !== undefined) {
+                        result.loginButton = new Button(loginButton, iframe);
+                    }
+                    let nextButton = await loginForm.findElement(By.xpath("//*[@axt-button-type='next']"));
+                    if (nextButton !== undefined) {
+                        result.nextButton = new Button(nextButton, iframe);
+                    }
                 }
-                let password = await loginForm.findElement(By.xpath("//input[@axt-input-type='password']"));
-                if (password !== undefined) {
-                    result.passwordInput = new Input(password, iframe);
-                }
-                let loginButton = await loginForm.findElement(By.xpath("//*[@axt-button-type='login']"));
-                if (loginButton !== undefined) {
-                    result.loginButton = new Button(loginButton, iframe);
-                }
-                let nextButton = await loginForm.findElement(By.xpath("//*[@axt-button-type='next']"));
-                if (nextButton !== undefined) {
-                    result.nextButton = new Button(nextButton, iframe);
-                }
+            } catch (e) {
             }
         } catch (e) {
         }

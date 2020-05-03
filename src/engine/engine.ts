@@ -3,6 +3,7 @@ import * as chrome from "selenium-webdriver/chrome";
 import UnsupportedOperationError = error.UnsupportedOperationError;
 import {engineLogger as L} from "../common/log.config";
 import {WebDriverExt} from "../common/WebDriverExt";
+import {ICredential} from "../credentials";
 
 
 export interface IEngine {
@@ -14,6 +15,7 @@ export interface IEngine {
     shutdown(): Promise<void>;
     processBeforeLogin(): Promise<void>;
     processAfterLogin(): Promise<void>;
+    checkSaved(url: string, credential: ICredential): Promise<void>;
     dropAllCredentials(): Promise<void>;
 }
 
@@ -101,7 +103,8 @@ export class Engine implements IEngine {
     }
 
     public async shutdown(): Promise<void> {
-        //this.driver?.close();
+        L.debug("shutdown");
+
         await this.shutdownDriver();
     }
 
@@ -113,6 +116,11 @@ export class Engine implements IEngine {
     public async processAfterLogin(): Promise<void> {
         L.debug("unsupported processAfterLogin");
         return Promise.reject(new UnsupportedOperationError("processAfterLogin"));
+    }
+
+    public async checkSaved(url: string, credential: ICredential): Promise<void> {
+        L.debug("unsupported checkSaved");
+        return Promise.reject(new UnsupportedOperationError("checkSaved"));
     }
 
     public async dropAllCredentials(): Promise<void> {

@@ -137,7 +137,13 @@ export class WebElementExt {
 
     public async click(): Promise<void> {
         await this.webElement.getDriver().sleep(Timeouts.BeforeClick);
-        await this.webElement.click();
+        try {
+            await this.webElement.click();
+        } catch (e) {
+            await this.webElement.getDriver().actions()
+                .click(this.webElement)
+                .perform();
+        }
     }
 
     protected async send(delay: number, keys: Array<any>) {

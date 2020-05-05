@@ -7,6 +7,9 @@ import {WebElementExt} from "./common/WebDriverExt";
 import {EReportParsePart, EReportResult, EReportTest, IReport} from "./report/report";
 import {Timeouts} from "./common/timeouts";
 import UnsupportedOperationError = error.UnsupportedOperationError;
+import fs from "fs";
+
+let search_buttons_module = fs.readFileSync("./src/browser/searchButtons.js", "utf8");
 
 
 class Button {
@@ -106,20 +109,31 @@ export class TestAPI {
             let state = State.init;
 
             let reloadedPage = false;
+            let scannerRun = false;
             while (true) {
                 L.debug("parse page");
-                let page: Page;
-                // try {
+                let page: Page = new Page();
+                try {
                     page = await this.parsePage(ParseSearchMap[state]);
-                // } catch (e) {
-                //     if (reloadedPage) {
-                //         throw e;
-                //     }
-                //     reloadedPage = true;
-                //     await this.report.setParsePart(EReportParsePart.loggedIn);
-                //     await driver.navigate().refresh();
-                //     continue;
-                // }
+                } catch (e) {
+                    if (state === State.init) {
+                        if (page.singinButton === undefined && page.loginForm === undefined) {
+                            if (!scannerRun) {
+                                let r: Array<string> = await driver.executeScript(search_buttons_module) as Array<string>;
+                                L.info(`Search buttons result: ${r}`);
+                                scannerRun = true;
+                                continue;
+                            }
+                            if (!reloadedPage) {
+                                await this.report.setParsePart(EReportParsePart.loggedIn);
+                                await driver.navigate().refresh();
+                                reloadedPage = true;
+                                continue;
+                            }
+                        }
+                    }
+                    throw e;
+                }
 
                 L.debug("check page structure");
                 if (page.singinButton !== undefined && page.loginForm === undefined) {
@@ -289,14 +303,10 @@ export class TestAPI {
         let driver = await this.engine.getDriver();
         let extDriver = await this.engine.getExtDriver();
 
-        L.debug("clear browser data");
-        await extDriver.clearBrowserData();
-
         L.debug(`open new tab with: ${this.credential.url}`);
         await extDriver.openUrlOnNewTab(this.credential.url);
-
         try {
-            var state: State = State.init;
+            let state: State = State.init;
 
             let reloadedPage = false;
             while (true) {
@@ -431,66 +441,64 @@ export class TestAPI {
     //      input[@axt-input-type="password"]
     //      *[@axt-button-type="login"]
     //      *[@axt-button-type="next"]
-    //  *[@axt-button-type="singin"]
+    //  *[@axt-button="login"]   *[@axt-button-type="singin"]
     protected async parsePage(searchFlag: number): Promise<Page> {
         L.debug("parsePage");
 
         let driver = await this.engine.getDriver();
         let extDriver = await this.engine.getExtDriver();
 
-        let delay = 0;
+        let startTime = new Date();
         while (true) {
             let page = new Page();
 
             await extDriver.switchToRootFrame();
 
-            // let parsed = await this.canParsed();
-            // if (!parsed) {
-            //     parsed = await this.canParsedFrames();
-            // }
-            // if (parsed) {
-                let loginForm = await this.findLoginForm(undefined);
-                if (loginForm === undefined) {
-                    loginForm = await this.findLoginFormInFrames();
+            let loginForm = await this.findLoginForm(undefined);
+            if (loginForm === undefined) {
+                loginForm = await this.findLoginFormInFrames();
+            }
+
+            page.loginForm = loginForm;
+
+            if (page.loginForm === undefined) {
+                let singInButton = await this.findSinginButton(undefined);
+                if (singInButton === undefined) {
+                    singInButton = await this.findSinginButtonInFrames();
                 }
-
-                page.loginForm = loginForm;
-
-                let singInButton: Button | undefined = undefined;
-                //TODO: add find search button
-
                 page.singinButton = singInButton;
+            }
 
-                if (page.loginForm === undefined && page.singinButton === undefined) {
-                    page.isLoggedIn = true;
-                }
+            if (page.loginForm === undefined && page.singinButton === undefined) {
+                page.isLoggedIn = true;
+            }
 
-                let done: boolean = false;
-                if ((searchFlag & SearchFlagSingInButton) === SearchFlagSingInButton) {
-                    done = done || (page.singinButton !== undefined);
-                }
-                if ((searchFlag & SearchFlagLoginOnForm) === SearchFlagLoginOnForm) {
-                    done = done || (page.loginForm !== undefined && page.loginForm.loginInput !== undefined);
-                }
-                if ((searchFlag & SearchFlagPasswordOnForm) === SearchFlagPasswordOnForm) {
-                    done = done || (page.loginForm !== undefined && page.loginForm.passwordInput !== undefined);
-                }
-                if ((searchFlag & SearchFlagLoggedIn) === SearchFlagLoggedIn) {
-                    done = done || page.isLoggedIn;
-                }
+            let done: boolean = false;
+            if ((searchFlag & SearchFlagSingInButton) === SearchFlagSingInButton) {
+                done = done || (page.singinButton !== undefined);
+            }
+            if ((searchFlag & SearchFlagLoginOnForm) === SearchFlagLoginOnForm) {
+                done = done || (page.loginForm !== undefined && page.loginForm.loginInput !== undefined);
+            }
+            if ((searchFlag & SearchFlagPasswordOnForm) === SearchFlagPasswordOnForm) {
+                done = done || (page.loginForm !== undefined && page.loginForm.passwordInput !== undefined);
+            }
+            if ((searchFlag & SearchFlagLoggedIn) === SearchFlagLoggedIn) {
+                done = done || page.isLoggedIn;
+            }
 
-                if (done) {
-                    L.trace("----------------------------------");
-                    await this.logPage(page);
-                    L.trace("----------------------------------");
+            if (done) {
+                L.trace("----------------------------------");
+                await this.logPage(page);
+                L.trace("----------------------------------");
 
-                    return Promise.resolve(page);
-                }
-            // }
+                return Promise.resolve(page);
+            }
 
-            if (this.credential.timeout > 0 && delay < this.credential.timeout) {
+            let nowTime = new Date();
+            let delta = nowTime.getTime() - startTime.getTime();
+            if (this.credential.timeout > 0 && delta <= this.credential.timeout) {
                 await driver.sleep(500);
-                delay += 500;
                 continue;
             }
 
@@ -540,6 +548,55 @@ export class TestAPI {
         return Promise.resolve(false);
     }
 
+    protected async findSinginButtonInFrames(): Promise<Button | undefined> {
+        L.debug("findSinginButtonInFrames");
+
+        let driver = await this.engine.getDriver();
+
+        let button: Button | undefined = undefined;
+
+        try {
+            for (let iframe of await driver.findElements(By.xpath("//iframe"))) {
+                try {
+                    L.trace(`switch to '${await iframe.getId()}'`);
+                    await driver.switchTo().frame(iframe);
+
+                    button = await this.findSinginButton(iframe);
+
+                    L.trace("switch to 'root'");
+                    await driver.switchTo().parentFrame();
+
+                    if (button !== undefined) {
+                        break;
+                    }
+                } catch (e) {
+                }
+            }
+        } catch (e) {
+        }
+
+        return Promise.resolve(button);
+    }
+
+    protected async findSinginButton(iframe: WebElement | undefined): Promise<Button | undefined> {
+        L.debug("findSinginButton");
+
+        let extDriver = await this.engine.getExtDriver();
+
+        let button: Button | undefined = undefined;
+        try {
+            let buttonElm = await extDriver.waitLocated(
+                "//*[@axt-button='login']",
+                iframe === undefined ? Timeouts.WaitParsedPage : Timeouts.WaitParsedPageMin);
+            if (buttonElm !== undefined) {
+                button = new Button(buttonElm, iframe);
+            }
+        } catch (e) {
+        }
+
+        return Promise.resolve(button);
+    }
+
     protected async findLoginFormInFrames(): Promise<LoginForm | undefined> {
         L.debug("findLoginFormInFrames");
 
@@ -577,7 +634,9 @@ export class TestAPI {
 
         let result: LoginForm | undefined = undefined;
         try {
-            let body = await extDriver.waitLocated("//body[@axt-parser-timing]", Timeouts.WaitParsedPage);
+            let body = await extDriver.waitLocated(
+                "//body[@axt-parser-timing]",
+                iframe === undefined ? Timeouts.WaitParsedPage : Timeouts.WaitParsedPageMin);
             try {
                 let loginForm = await body.findElement(By.xpath("//*[@axt-form-type='login']"));
                 if (loginForm !== undefined) {
@@ -698,7 +757,7 @@ export class TestAPI {
 
             return Promise.resolve();
         } catch (UnhandledPromiseRejectionWarning) {
-            L.debug("fail enter to input");
+            L.debug("fail press on button");
             return Promise.reject();
         }
     }

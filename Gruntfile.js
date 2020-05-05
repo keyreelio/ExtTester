@@ -11,10 +11,24 @@ module.exports = function(grunt) {
         run: {
             options: {
             },
+            tester_debug: {
+                cmd: 'node',
+                args: [
+                    './build/tester.js',
+                    'debug'
+                ]
+            },
             tester: {
                 cmd: 'node',
                 args: [
                     './build/tester.js'
+                ]
+            },
+            tester_continue: {
+                cmd: 'node',
+                args: [
+                    './build/tester.js',
+                    'continue'
                 ]
             },
             scanner: {
@@ -46,8 +60,11 @@ module.exports = function(grunt) {
     grunt.registerTask("default", ["build"]);
 
     grunt.registerTask("thrift", ["run:thrift"]);
-
     grunt.registerTask("build", ["thrift", "ts"]);
-    grunt.registerTask("runner", ["clean", "build", "run:tester"]);
-    grunt.registerTask("scanner", ["clean", "ts", "run:scanner"]);
+
+    grunt.registerTask("tester_debug", ["clean", "build", "run:tester_debug"]);
+    grunt.registerTask("tester", ["clean", "build", "run:tester"]);
+    grunt.registerTask("tester_continue", ["clean", "build", "run:tester_continue"]);
+
+    grunt.registerTask("scanner", ["clean", "build", "run:scanner"]);
 };

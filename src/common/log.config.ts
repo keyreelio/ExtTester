@@ -7,7 +7,6 @@ CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLeve
 export let testerLogger = new Category("tester");
 export let testapiLogger = new Category("testAPI");
 
-export let scannerLogger = new Category("scanner");
 export let engineLogger = new Category("engine");
 export let dashlaneEngineLogger = new Category("dashlane", engineLogger);
 export let lastpassEngineLogger = new Category("lastpass", engineLogger);
@@ -20,3 +19,6 @@ export let serviceJSLogger = new Category("servicejs");
 
 export let loggingServiceJSLogger = new Category("logservice");
 export let hostServiceJSLogger = new Category("hostservice");
+
+
+export let scannerLogger = new Category("scanner");

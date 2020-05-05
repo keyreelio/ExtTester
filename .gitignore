@@ -8,5 +8,5 @@
 *.old
 *.new
 *.orig
-.idea
 
+/tmp/

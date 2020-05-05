@@ -1,3 +1,4 @@
+import {passdb} from "./common/passdb";
 
 
 export interface ICredential {
@@ -8,11 +9,17 @@ export interface ICredential {
 }
 
 export class Credentials {
-    static credentials: Array<ICredential> = Array(
+    credentials: Array<ICredential> = Array(
         {
             url: "https://dashboard.devmate.com/",
             login: "petro@auxoft.com",
             password: "K8yb1g6iw5f7GK238lHk",
+            timeout: 2000
+        },
+        {// DONT work before parser update and need create account
+            url: "https://www.dropbox.com/",
+            login: "donna.simple.oluso@gmail.com",
+            password: "CWxm66RzW3cNnGjKMHz2",
             timeout: 2000
         },
         {// need create account
@@ -70,16 +77,46 @@ export class Credentials {
             password: "9v23c2TXXyCWHYdV377K",
             timeout: 2000
         },
-        {// DONT work before parser update and need create account
-            url: "https://www.dropbox.com/",
-            login: "donna.simple.oluso@gmail.com",
-            password: "CWxm66RzW3cNnGjKMHz2",
-            timeout: 2000
-        },
     );
 
-    public static all(): Array<ICredential> {
+    public loadFromPassDB() {
+        this.credentials = new Array<ICredential>();
+        let credentials = this.credentials;
+
+        let parse = function(sites: any) {
+            if (sites === undefined) return;
+            let map = new Map(Object.entries(sites));
+            if (map === undefined) return;
+            map.forEach(function (accounts: any, url: string) {
+                let account = accounts[0];
+                if (account === undefined) return;
+                let login = account.login;
+                let password = account.password;
+                let u = new URL(`http://${url}`);
+
+                credentials.push({
+                    url: u.toString(),
+                    login: login === undefined ? "" : login,
+                    password: password === undefined ? "" : password,
+                    timeout: 2000
+                });
+            });
+        }
+
+        parse(passdb["0"]);
+        parse(passdb["1"]);
+        parse(passdb["2"]);
+    }
+
+    public all(): Array<ICredential> {
         return this.credentials;
+    }
+
+    public dump() {
+        for (let cred of (this.credentials as Array<ICredential>)) {
+            console.log(`${cred.url}`);
+            console.log(`  ${cred.login}  ${cred.password}`);
+        }
     }
 }
 

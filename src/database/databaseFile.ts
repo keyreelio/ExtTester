@@ -42,12 +42,6 @@ export class DatabaseFile extends DatabaseMemory {
     }
 
     protected save(): void {
-        fs.writeFile(this.filePath, JSON.stringify(Object.fromEntries(this.db)), (err) => {
-            if (err) {
-                console.error(err);
-                return;
-            };
-            console.log("File has been created");
-        });
+        fs.writeFileSync(this.filePath, JSON.stringify(Object.fromEntries(this.db)), {encoding: 'utf8'});
     }
 }

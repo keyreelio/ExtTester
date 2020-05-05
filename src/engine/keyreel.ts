@@ -3,9 +3,7 @@ import {keyreelEngineLogger as L} from "../common/log.config";
 import {Server} from "../service/server";
 import {DatabaseEvent, DatabaseEventType, IDatabase} from "../database/database";
 import {ICredential} from "../credentials";
-import {Timeout} from "typescript-logging/dist/commonjs/utils/Timeout";
 import {error} from "selenium-webdriver";
-import TimeoutError = error.TimeoutError;
 
 
 export class KeyReelEngine extends Engine {
@@ -56,6 +54,11 @@ export class KeyReelEngine extends Engine {
         });
 
         await Promise.race([waitAdd, waitTimeout]);
+    }
+
+    public async canSaved(url: string): Promise<boolean> {
+        let u = new URL(url);
+        return Promise.resolve(this.mockServer.database.isExist(u.host));
     }
 
     public async dropAllCredentials(): Promise<void> {

@@ -17,6 +17,7 @@ export class Timeouts {
     static WaitLocatedAnimationElement = 2000;
 
     static WaitParsedPage = 500;
+    static WaitParsedPageMin = 50;
 
 
     /**

@@ -16,6 +16,7 @@ export interface IEngine {
     processBeforeLogin(): Promise<void>;
     processAfterLogin(): Promise<void>;
     checkSaved(url: string, credential: ICredential): Promise<void>;
+    canSaved(url: string): Promise<boolean>;
     dropAllCredentials(): Promise<void>;
 }
 
@@ -121,6 +122,10 @@ export class Engine implements IEngine {
     public async checkSaved(url: string, credential: ICredential): Promise<void> {
         L.debug("unsupported checkSaved");
         return Promise.reject(new UnsupportedOperationError("checkSaved"));
+    }
+
+    public async canSaved(url: string): Promise<boolean> {
+        return Promise.resolve(true);
     }
 
     public async dropAllCredentials(): Promise<void> {

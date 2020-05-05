@@ -65,15 +65,17 @@ export class HostStorageServiceImpl implements kr.HostStorageService.IHandler<ex
         context: express.Request | undefined): kr.IGetSiteDataResponseArgs | Promise<kr.IGetSiteDataResponseArgs> {
 
         Lh.debug("getSiteData");
-        Lh.trace(`domain: ${request.domain}`);
+        Lh.trace(`siteUrl: ${request.siteUrl}`);
 
         let response = new kr.GetSiteDataResponse();
         response.info = this.run(request.info, () => {
-            if (request.domain === undefined) {
+            if (request.siteUrl === undefined) {
                 throw Errors.NotFound();
             }
 
-            let account = this.database.get(request.domain);
+            let url = new URL(request.siteUrl);
+
+            let account = this.database.get(url.host);
             if (account === undefined) {
                 throw Errors.NotFound();
             }
@@ -97,7 +99,7 @@ export class HostStorageServiceImpl implements kr.HostStorageService.IHandler<ex
         context: express.Request | undefined): kr.IChooseSiteDataResponseArgs | Promise<kr.IChooseSiteDataResponseArgs> {
 
         Lh.debug("chooseSiteData");
-        Lh.trace(`domain: ${request.domain}`);
+        Lh.trace(`siteUrl: ${request.siteUrl}`);
 
         let response = new kr.ChooseSiteDataResponse();
         response.info = this.run(request.info, () => {
@@ -114,20 +116,20 @@ export class HostStorageServiceImpl implements kr.HostStorageService.IHandler<ex
         context: express.Request | undefined): kr.IAddLoginDataResponseArgs | Promise<kr.IAddLoginDataResponseArgs> {
 
         Lh.debug("addLoginData");
+        Lh.trace(`siteUrl: ${request.siteUrl}`);
 
         let response = new kr.AddLoginDataResponse();
         response.info = this.run(request.info, () => {
-            if (request.domain === undefined || request.loginData === undefined) {
+            if (request.siteUrl === undefined || request.loginData === undefined) {
                 throw Errors.NotFound();
             }
 
-            Lh.trace(`domain: ${request.domain}`);
-            Lh.trace(`username: ${request.loginData.login}`);
+            let url = new URL(request.siteUrl);
 
             let account = new Account();
-            account.path = request.domain;
+            account.path = url.host;
             account.username = request.loginData.login;
-            account.password = request.loginData.password;
+            account.password = Buffer.from(request.loginData.password === undefined ? "" : request.loginData.password, 'base64').toString();
 
             this.database.add(account);
         });
@@ -140,24 +142,24 @@ export class HostStorageServiceImpl implements kr.HostStorageService.IHandler<ex
         context: express.Request | undefined): kr.IGetLoginDataResponseArgs | Promise<kr.IGetLoginDataResponseArgs> {
 
         Lh.debug("getLoginData");
+        Lh.trace(`siteUrl: ${request.siteUrl}`);
 
         let response = new kr.GetLoginDataResponse();
         response.info = this.run(request.info, () => {
-            if (request.domain === undefined || request.login === undefined) {
+            if (request.siteUrl === undefined || request.login === undefined) {
                 throw Errors.NotFound();
             }
 
-            Lh.trace(`domain: ${request.domain}`);
-            Lh.trace(`username: ${request.login}`);
+            let url = new URL(request.siteUrl);
 
-            let account = this.database.get(request.domain);
+            let account = this.database.get(url.host);
             if (account === undefined || account.username === undefined || account.username !== request.login) {
                 throw Errors.NotFound();
             }
 
             response.data = new kr.LoginData({
                 login: account.username,
-                password: account.password
+                password: Buffer.from(account.password === undefined ? "" : account.password).toString('base64')
             });
         });
 

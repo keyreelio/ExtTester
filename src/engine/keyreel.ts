@@ -1,7 +1,11 @@
 import {Engine} from './engine'
 import {keyreelEngineLogger as L} from "../common/log.config";
 import {Server} from "../service/server";
-import {IDatabase} from "../database/database";
+import {DatabaseEvent, DatabaseEventType, IDatabase} from "../database/database";
+import {ICredential} from "../credentials";
+import {Timeout} from "typescript-logging/dist/commonjs/utils/Timeout";
+import {error} from "selenium-webdriver";
+import TimeoutError = error.TimeoutError;
 
 
 export class KeyReelEngine extends Engine {
@@ -23,8 +27,38 @@ export class KeyReelEngine extends Engine {
         return this.profileName();
     }
 
+    public async checkSaved(url: string, credential: ICredential): Promise<void> {
+        let database = this.mockServer.database;
+        let waitAdd = new Promise(function(resolve, reject) {
+            let u = new URL(url);
+            database.addEventListener(
+                DatabaseEventType.add,
+                u.host,
+                function (event: DatabaseEvent) {
+                    if (event === undefined || event.account === undefined) {
+                        return reject(new Error("Fail saved: unknown"));
+                    }
+                    if (event.account.username !== credential.login) {
+                        return reject(new Error(`Fail saved: login not equal - stored '${event.account.username}'  real '${credential.login}'`));
+                    }
+                    if (event.account.password !== credential.password) {
+                        return reject(new Error(`Fail saved: login not equal - stored '${event.account.password}'  real '${credential.password}'`));
+                    }
+
+                    return resolve();
+                });
+        });
+
+        let waitTimeout = new Promise(function(resolve, reject) {
+            setTimeout(function () {
+                reject(new Error('Fail saved: timeout'));
+            }, 15000);
+        });
+
+        await Promise.race([waitAdd, waitTimeout]);
+    }
+
     public async dropAllCredentials(): Promise<void> {
-        // TODO: clear DB
         return Promise.resolve();
     }
 

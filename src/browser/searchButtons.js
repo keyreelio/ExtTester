@@ -322,15 +322,15 @@ let ALL_BUTTON_SELECTORS = [ BUTTON_SELECTORS, ANCHOR_SELECTORS ].join(',');
 /* * - any one world; = - entire string */
 let tokens = {
   'loginButton': [
-    '=log in', '=login', '=вхід', '=вход', '=登录', 'signin', '=sign in',
-    '=sign up in'
+    '=log in', '=login', '=вхід', '=вход', '=увійти', '=ввойти', '=登录', 'signin',
+    '=sign in', '=sign up in'
   ],
 
   'registerButton': [
     '=sign up', '=sign up * *', 'signup', '=sign on', 'signon', '=sign up in',
-    '=register', '=реєстрація', '=регистрация', '=注册',
-    '=create a free account', '=create account', '=get started', '=open an account',
-    'open account', 'join / sign in', 'join for free', 'try it free',
+    '=register', '=реєстрація', '=регистрация', '=зареєструватися', '=зарегистрироваться',
+    '=注册', '=create a free account', '=create account', '=get started',
+    '=open an account', 'open account', 'join / sign in', 'join for free', 'try it free',
     '=try * free', '=try premium', 'join now for free'
   ],
 

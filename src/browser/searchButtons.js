@@ -322,13 +322,13 @@ let ALL_BUTTON_SELECTORS = [ BUTTON_SELECTORS, ANCHOR_SELECTORS ].join(',');
 /* * - any one world; = - entire string */
 let tokens = {
   'loginButton': [
-    '=log in', '=login', '=вхід', '=вход', '=登录', 'join / signin'
+    '=log in', '=login', '=вхід', '=вход', '=登录', 'signin', '=sign in',
+    '=sign up in'
   ],
 
   'registerButton': [
-    'sign up', //'sign up with email',
-    'signup', '=sign in', 'signin', '=sign on', 'signon',
-    '=register', '=реєстрація', '=регистрация', '=注册', // 'sign up for free'
+    '=sign up', '=sign up * *', 'signup', '=sign on', 'signon', '=sign up in',
+    '=register', '=реєстрація', '=регистрация', '=注册',
     '=create a free account', '=create account', '=get started', '=open an account',
     'open account', 'join / sign in', 'join for free', 'try it free',
     '=try * free', '=try premium', 'join now for free'
@@ -349,9 +349,9 @@ function equalsLabel(text, label) {
 
   if (label.includes('*')) {
     if (label[0] === '=') {
-      return RegExp(`^${label.substring(1).replace(/\*/g, '\\w+')}$`).test(text);
+      return RegExp(`^${label.substring(1).replace(/\*/g, '\\w+')}$`).test(t);
     } else {
-      return RegExp(label.replace(/\*/g, '\\w+')).test(text);
+      return RegExp(label.replace(/\*/g, '\\w+')).test(t);
     }
   } else if (label[0] === '=') {
     return t === label.substring(1);
@@ -361,11 +361,14 @@ function equalsLabel(text, label) {
 }
 
 let res = Object.keys(tokens).reduce( (acc, token) => {
-  let btns  = buttons.filter((button) =>
-    tokens[token].some((label) =>
+  let btns  = buttons.filter((button) => {
+    console.log(`button.id = ${button.id}`);
+
+    return tokens[token].some((label) =>
       equalsLabel(button.innerText, label) ||
+      equalsLabel(button.id, label) ||
       Array.from(button.classList).some((c) => equalsLabel(c, label)))
-  );
+  });
   if (btns.length > 0) {
     console.info(`${token}: ${btns}`);
     acc[token] = btns;
@@ -377,6 +380,9 @@ if ("loginButton" in res) {
   res["loginButton"].forEach( (btn) => btn.setAttribute('axt-button', 'login'));
 }
 
+if ("accountButton" in res) {
+  res["loginButton"].forEach( (btn) => btn.setAttribute('axt-button', 'account'));
+}
 
 let result = Array.from(Object.keys(res));
 console.info("found buttons:", result);

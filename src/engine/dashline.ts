@@ -1,12 +1,11 @@
 import {Engine} from './engine'
 import {dashlaneEngineLogger as L} from "../common/log.config";
 
-import {WebElementExt} from "../common/WebDriverExt";
+import {WebElementExt} from "../common/webElementExt";
 import {By, Key, until, WebElement} from "selenium-webdriver";
 import fs from "fs";
 import {Timeouts} from "../common/timeouts";
 import {IDatabase} from "../database/database";
-import {Server} from "../service/server";
 
 
 interface IDashlaneAccount {

@@ -1,10 +1,10 @@
 {
   "name": "KeyReel - Smart Security Assistant",
-  "short_name": "KeyReel Dev",
+  "short_name": "KeyReel",
   "author": "Auxoft LLC",
-  "description": "KeyReel - the most convenient and secure password manager, saves passwords on your phone and automatically fills them on your computer.",
-  "version": "1.23.48.2",
-  "version_name": "1.23.48.2",
+  "description": "KeyReel - Smart Security Assistant, manages password on your phone and automatically fills on paired computers.",
+  "version": "20.5.4.0",
+  "version_name": "20.5.4.0",
   "manifest_version": 2,
 
   "icons": {

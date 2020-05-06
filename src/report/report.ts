@@ -23,17 +23,14 @@ class ReportItem {
 
     public constructor(url: string) {
         this.url = url;
-        this.results[EReportTest.unknown] = EReportResult.skip;
-        this.results[EReportTest.saveBeforeLoggedInWithButtons] = EReportResult.skip;
-        this.results[EReportTest.saveBeforeLoggedInWithoutButtons] = EReportResult.skip;
-        this.results[EReportTest.saveAfterLoggedInWithButtons] = EReportResult.skip;
-        this.results[EReportTest.saveAfterLoggedInWithoutButtons] = EReportResult.skip;
+        this.results[EReportTest.saveWithButtons] = EReportResult.skip;
+        this.results[EReportTest.saveWithoutButtons] = EReportResult.skip;
         this.results[EReportTest.load] = EReportResult.skip;
         this.parseParts[EReportParsePart.singInButton] = false;
         this.parseParts[EReportParsePart.fullLoginForm] = false;
         this.parseParts[EReportParsePart.firstStepLoginForm] = false;
         this.parseParts[EReportParsePart.secondStepLoginForm] = false;
-        this.parseParts[EReportParsePart.reloaded] = false;
+        this.parseParts[EReportParsePart.notParsed] = false;
     }
 }
 
@@ -41,17 +38,16 @@ class ReportItem {
 export enum EReportResult {
     skip,
     manual,
+    manualBeforeLoggedIn,
+    manualAfterLoggedIn,
     auto,
     waitApprove,
     fail
 }
 
 export enum EReportTest {
-    unknown,
-    saveBeforeLoggedInWithButtons,
-    saveBeforeLoggedInWithoutButtons,
-    saveAfterLoggedInWithButtons,
-    saveAfterLoggedInWithoutButtons,
+    saveWithButtons,
+    saveWithoutButtons,
     load
 }
 
@@ -61,7 +57,7 @@ export enum EReportParsePart {
     firstStepLoginForm,
     secondStepLoginForm,
     loggedIn,
-    reloaded
+    notParsed
 }
 
 export interface IReport {
@@ -106,8 +102,8 @@ export class ReportLogger implements IReport {
             let map = new Map(Object.entries(this.reports));
             map.forEach((report: ReportItem, u: string) => {
                 if (report.results[EReportTest.load] === EReportResult.waitApprove) {
-                    if (report.results[EReportTest.saveAfterLoggedInWithButtons] === EReportResult.manual
-                        || report.results[EReportTest.saveAfterLoggedInWithoutButtons] === EReportResult.manual) {
+                    if (report.results[EReportTest.saveWithButtons] === EReportResult.manualAfterLoggedIn
+                        || report.results[EReportTest.saveWithoutButtons] === EReportResult.manualAfterLoggedIn) {
 
                         report.results[EReportTest.load] = EReportResult.manual;
                     }
@@ -185,22 +181,20 @@ export class ReportLogger implements IReport {
 
 
     protected async printHeader(): Promise<void> {
-        L.warn(`  sbb - save before logged in with login button`);
-        L.warn(`  sbe - save before logged in with out login button (press 'Enter')`);
-        L.warn(`  sab - save after logged in with login button`);
-        L.warn(`  sae - save after logged in with out login button (press 'Enter')`);
-        L.warn(`  lod - load`);
-        L.warn(`  sib - page has singin button`);
-        L.warn(`  ffl - page has full login form`);
-        L.warn(`  ffs - page has first step of login form`);
-        L.warn(`  fss - page has second step of login form`);
-        L.warn(`  lin - page is logged in`);
-        L.warn(`  rld - page reloaded for parse again`);
-        L.warn(`---------------------------------------------------------------------------------------------------------------------------`);
-        L.warn(`  engine: ${this.engineName}`);
-        L.warn(`---------------------------------------------------------------------------------------------------------------------------`);
-        L.warn(" url                                                    | sbb | sbe | sab | sae | lod | sib | ffl | ffs | fss | lin | rld |");
-        L.warn(`---------------------------------------------------------------------------------------------------------------------------`);
+        this.print(`  swb - save with login button,  MBL - manual before logedin, MAL - manual after loggedin`);
+        this.print(`  sob - save with out login button (press 'Enter'),  MBL - manual before logedin, MAL - manual after loggedin`);
+        this.print(`  lod - load`);
+        this.print(`  sib - page has singin button`);
+        this.print(`  ffl - page has full login form`);
+        this.print(`  ffs - page has first step of login form`);
+        this.print(`  fss - page has second step of login form`);
+        this.print(`  lin - page is logged in`);
+        this.print(`  nps - page did not parse`);
+        this.print(`---------------------------------------------------------------------------------------------------------------`);
+        this.print(`  engine: ${this.engineName}`);
+        this.print(`---------------------------------------------------------------------------------------------------------------`);
+        this.print(" url                                                    | swb | sob | lod | sib | ffl | ffs | fss | lin | nps |");
+        this.print(`---------------------------------------------------------------------------------------------------------------`);
     }
 
     protected async printReport(): Promise<void> {
@@ -209,10 +203,13 @@ export class ReportLogger implements IReport {
                 case undefined: return "     ";
                 case EReportResult.skip: return "     ";
                 case EReportResult.manual: return "  M  ";
+                case EReportResult.manualBeforeLoggedIn: return " MBL ";
+                case EReportResult.manualAfterLoggedIn: return " MAL ";
                 case EReportResult.fail: return "  F  ";
                 case EReportResult.auto: return "  A  ";
                 case EReportResult.waitApprove: return "  W  ";
             }
+            return "     ";
         }
 
         let formMarker = function (result: boolean | undefined) {
@@ -224,27 +221,29 @@ export class ReportLogger implements IReport {
             let part: string[] = [];
 
             part.push("  ".concat(report.url).padEnd(56, " "));
-            part.push(marker(report.results[EReportTest.saveBeforeLoggedInWithButtons]));
-            part.push(marker(report.results[EReportTest.saveBeforeLoggedInWithoutButtons]));
-            part.push(marker(report.results[EReportTest.saveAfterLoggedInWithButtons]));
-            part.push(marker(report.results[EReportTest.saveAfterLoggedInWithoutButtons]));
+            part.push(marker(report.results[EReportTest.saveWithButtons]));
+            part.push(marker(report.results[EReportTest.saveWithButtons]));
             part.push(marker(report.results[EReportTest.load]));
             part.push(formMarker(report.parseParts[EReportParsePart.singInButton]));
             part.push(formMarker(report.parseParts[EReportParsePart.fullLoginForm]));
             part.push(formMarker(report.parseParts[EReportParsePart.firstStepLoginForm]));
             part.push(formMarker(report.parseParts[EReportParsePart.secondStepLoginForm]));
             part.push(formMarker(report.parseParts[EReportParsePart.loggedIn]));
-            part.push(formMarker(report.parseParts[EReportParsePart.reloaded]));
+            part.push(formMarker(report.parseParts[EReportParsePart.notParsed]));
             part.push(report.failMessages.join("; "));
 
-            L.warn(`${part.join("|")}`);
+            this.print(`${part.join("|")}`);
         });
     }
 
     protected async printFooter(): Promise<void> {
-        L.warn(`---------------------------------------------------------------------------------------------------------------------------`);
-        L.warn(" url                                                    | sbb | sbe | sab | sae | lod | sib | ffl | ffs | fss | lin | rld |");
-        L.warn(`---------------------------------------------------------------------------------------------------------------------------`);
+        this.print(`---------------------------------------------------------------------------------------------------------------`);
+        this.print(" url                                                    | swb | sob | lod | sib | ffl | ffs | fss | lin | nps |");
+        this.print(`---------------------------------------------------------------------------------------------------------------`);
+    }
+
+    protected print(message: string): void {
+        L.warn(message);
     }
 
     protected async saveDump(): Promise<void> {
@@ -270,71 +269,8 @@ export class ReportTxt extends ReportLogger {
         this.reportFile = reportFile;
     }
 
-    protected async printHeader(): Promise<void> {
-        this.writeToFile(`  sbb - save before logged in with login button\n`);
-        this.writeToFile(`  sbe - save before logged in with out login button (press 'Enter')\n`);
-        this.writeToFile(`  sab - save after logged in with login button\n`);
-        this.writeToFile(`  sae - save after logged in with out login button (press 'Enter')\n`);
-        this.writeToFile(`  lod - load\n`);
-        this.writeToFile(`  sib - page has singin button\n`);
-        this.writeToFile(`  ffl - page has full login form\n`);
-        this.writeToFile(`  ffs - page has first step of login form\n`);
-        this.writeToFile(`  fss - page has second step of login form\n`);
-        this.writeToFile(`  lin - page is logged in\n`);
-        this.writeToFile(`  rld - page reloaded for parse again\n`);
-        this.writeToFile(`---------------------------------------------------------------------------------------------------------------------------\n`);
-        this.writeToFile(`  engine: ${this.engineName}\n`);
-        this.writeToFile(`---------------------------------------------------------------------------------------------------------------------------\n`);
-        this.writeToFile(" url                                                    | sbb | sbe | sab | sae | lod | sib | ffl | ffs | fss | lin | rld |\n");
-        this.writeToFile(`---------------------------------------------------------------------------------------------------------------------------\n`);
-    }
-
-    protected async printReport(): Promise<void> {
-        let marker = function (result: EReportResult | undefined) {
-            switch (result) {
-                case undefined: return "     ";
-                case EReportResult.skip: return "  -  ";
-                case EReportResult.manual: return "  M  ";
-                case EReportResult.fail: return "  F  ";
-                case EReportResult.auto: return "  A  ";
-                case EReportResult.waitApprove: return "  W  ";
-            }
-        }
-
-        let formMarker = function (result: boolean | undefined) {
-            return result ? "  X  " : "     ";
-        }
-
-        let map = new Map(Object.entries(this.reports));
-        map.forEach((report: ReportItem, u: string) => {
-            let part: string[] = [];
-
-            part.push("  ".concat(report.url).padEnd(56, " "));
-            part.push(marker(report.results[EReportTest.saveBeforeLoggedInWithButtons]));
-            part.push(marker(report.results[EReportTest.saveBeforeLoggedInWithoutButtons]));
-            part.push(marker(report.results[EReportTest.saveAfterLoggedInWithButtons]));
-            part.push(marker(report.results[EReportTest.saveAfterLoggedInWithoutButtons]));
-            part.push(marker(report.results[EReportTest.load]));
-            part.push(formMarker(report.parseParts[EReportParsePart.singInButton]));
-            part.push(formMarker(report.parseParts[EReportParsePart.fullLoginForm]));
-            part.push(formMarker(report.parseParts[EReportParsePart.firstStepLoginForm]));
-            part.push(formMarker(report.parseParts[EReportParsePart.secondStepLoginForm]));
-            part.push(formMarker(report.parseParts[EReportParsePart.loggedIn]));
-            part.push(formMarker(report.parseParts[EReportParsePart.reloaded]));
-            part.push(report.failMessages.join("; "));
-
-            this.writeToFile(`${part.join("|")}\n`);
-        });
-    }
-
-    protected async printFooter(): Promise<void> {
-        this.writeToFile(`---------------------------------------------------------------------------------------------------------------------------\n`);
-        this.writeToFile(" url                                                    | sbb | sbe | sab | sae | lod | sib | ffl | ffs | fss | lin | rld |\n");
-        this.writeToFile(`---------------------------------------------------------------------------------------------------------------------------\n`);
-    }
-
-    protected writeToFile(line: string) {
-        fs.writeFileSync(this.reportFile, line, {flag: "a"});
+    protected print(message: string): void {
+        fs.writeFileSync(this.reportFile, `${message}\n`, {flag: "a"});
     }
 }
 
@@ -346,9 +282,8 @@ export class ReportCsv extends ReportTxt {
     }
 
     protected async printHeader(): Promise<void> {
-        this.writeToFile("url;save_before_loggedin_with_button;save_before_loggedin_without_button;" +
-            "save_after_loggedin_with_button;save_after_loggedin_without_button;load;has_singin_button;" +
-            "has_full_form;has_first_step_form;has_second_step_form;has_loggedin;reloaded;fail_messages\n");
+        this.print("url;save_with_button;save_without_button;load;has_singin_button;" +
+            "has_full_form;has_first_step_form;has_second_step_form;has_loggedin;did_not_parse;fail_messages\n");
     }
 
     protected async printReport(): Promise<void> {
@@ -357,10 +292,13 @@ export class ReportCsv extends ReportTxt {
                 case undefined: return "";
                 case EReportResult.skip: return "skip";
                 case EReportResult.manual: return "manual";
+                case EReportResult.manualBeforeLoggedIn: return "manual_before";
+                case EReportResult.manualAfterLoggedIn: return "manual_after";
                 case EReportResult.fail: return "fail";
                 case EReportResult.auto: return "auto";
                 case EReportResult.waitApprove: return "wait_approve";
             }
+            return "";
         }
 
         let formMarker = function (result: boolean | undefined) {
@@ -372,27 +310,18 @@ export class ReportCsv extends ReportTxt {
             let part: string[] = [];
 
             part.push(report.url);
-            part.push(marker(report.results[EReportTest.saveBeforeLoggedInWithButtons]));
-            part.push(marker(report.results[EReportTest.saveBeforeLoggedInWithoutButtons]));
-            part.push(marker(report.results[EReportTest.saveAfterLoggedInWithButtons]));
-            part.push(marker(report.results[EReportTest.saveAfterLoggedInWithoutButtons]));
-            part.push(marker(report.results[EReportTest.load]));
             part.push(formMarker(report.parseParts[EReportParsePart.singInButton]));
             part.push(formMarker(report.parseParts[EReportParsePart.fullLoginForm]));
             part.push(formMarker(report.parseParts[EReportParsePart.firstStepLoginForm]));
             part.push(formMarker(report.parseParts[EReportParsePart.secondStepLoginForm]));
             part.push(formMarker(report.parseParts[EReportParsePart.loggedIn]));
-            part.push(formMarker(report.parseParts[EReportParsePart.reloaded]));
+            part.push(formMarker(report.parseParts[EReportParsePart.notParsed]));
             part.push(report.failMessages.join(" : "));
 
-            this.writeToFile(`${part.join(";")}\n`);
+            this.print(`${part.join(";")}\n`);
         });
     }
 
     protected async printFooter(): Promise<void> {
-    }
-
-    protected writeToFile(line: string) {
-        fs.writeFileSync(this.reportFile, line, {flag: "a"});
     }
 }

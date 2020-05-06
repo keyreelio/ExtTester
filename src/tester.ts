@@ -1,6 +1,6 @@
 import {IEngine} from './engine/engine'
 import {testerLogger as L} from "./common/log.config";
-import {Credentials} from "./credentials";
+import {Credentials} from "./credentials/credentials";
 import {TestAPI} from "./testapi";
 import {EReportResult, EReportTest, IReport, ReportLogger, ReportTxt} from "./report/report";
 import {KeyReelEngine} from './engine/keyreel';
@@ -78,15 +78,15 @@ class Tester {
         for (let credential of credentials.all()) {
             await report.start(credential.url);
 
-            let result = await report.getResult(useOnlyEnterButton ? EReportTest.saveBeforeLoggedInWithoutButtons : EReportTest.saveBeforeLoggedInWithButtons);
+            let result = await report.getResult(useOnlyEnterButton ? EReportTest.saveWithoutButtons : EReportTest.saveWithButtons);
             if (result !== undefined && result !== EReportResult.skip) {
-                L.debug(`skip credential (already checked - ${result}, ${useOnlyEnterButton ? EReportTest.saveBeforeLoggedInWithoutButtons : EReportTest.saveBeforeLoggedInWithButtons})`);
+                L.debug(`skip credential (already checked - ${result}, ${useOnlyEnterButton ? EReportTest.saveWithoutButtons : EReportTest.saveWithButtons})`);
                 await report.finish();
                 continue;
             }
-            result = await report.getResult(useOnlyEnterButton ? EReportTest.saveAfterLoggedInWithoutButtons : EReportTest.saveAfterLoggedInWithButtons);
+            result = await report.getResult(useOnlyEnterButton ? EReportTest.saveWithoutButtons : EReportTest.saveWithButtons);
             if (result !== undefined && result !== EReportResult.skip) {
-                L.debug(`skip credential (already checked - ${result}, ${useOnlyEnterButton ? EReportTest.saveAfterLoggedInWithoutButtons : EReportTest.saveAfterLoggedInWithButtons})`);
+                L.debug(`skip credential (already checked - ${result}, ${useOnlyEnterButton ? EReportTest.saveWithoutButtons : EReportTest.saveWithButtons})`);
                 await report.finish();
                 continue;
             }

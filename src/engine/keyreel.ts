@@ -2,7 +2,7 @@ import {Engine} from './engine'
 import {keyreelEngineLogger as L} from "../common/log.config";
 import {Server} from "../service/server";
 import {DatabaseEvent, DatabaseEventType, IDatabase} from "../database/database";
-import {ICredential} from "../credentials";
+import {ICredential} from "../credentials/credentials";
 import {error} from "selenium-webdriver";
 
 

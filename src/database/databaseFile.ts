@@ -12,6 +12,7 @@ export class DatabaseFile extends DatabaseMemory {
         super();
         this.filePath = filePath;
         this.load();
+        this.save();
     }
 
     public deleteFile() {

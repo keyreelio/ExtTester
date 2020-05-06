@@ -2,8 +2,8 @@ import {Builder, error, WebDriver} from "selenium-webdriver";
 import * as chrome from "selenium-webdriver/chrome";
 import UnsupportedOperationError = error.UnsupportedOperationError;
 import {engineLogger as L} from "../common/log.config";
-import {WebDriverExt} from "../common/WebDriverExt";
-import {ICredential} from "../credentials";
+import {WebDriverExt} from "../common/webDriverExt";
+import {ICredential} from "../credentials/credentials";
 
 
 export interface IEngine {

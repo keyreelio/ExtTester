@@ -1,11 +1,18 @@
 import {Category, CategoryConfiguration, CategoryServiceFactory, LogLevel} from "typescript-logging";
+import exp from "constants";
 
 
-CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Trace));
+CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Debug));
+
+
+export let ConfigureLoggerForDebug = function() {
+    CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Trace));
+}
 
 
 export let testerLogger = new Category("tester");
 export let testapiLogger = new Category("testAPI");
+export let parserLogger = new Category("parser");
 
 export let engineLogger = new Category("engine");
 export let dashlaneEngineLogger = new Category("dashlane", engineLogger);

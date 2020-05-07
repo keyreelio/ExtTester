@@ -5,9 +5,9 @@ import {ICredential} from "./credentials/credentials";
 import {testapiLogger as L} from "./common/log.config";
 import {EReportParsePart, EReportResult, EReportTest, IReport} from "./report/report";
 import fs from "fs";
-import UnsupportedOperationError = error.UnsupportedOperationError;
-import {Parser, Page, LoginForm} from "./parser";
+import {LoginForm, Parser} from "./parser";
 import {Input} from "./common/input";
+import UnsupportedOperationError = error.UnsupportedOperationError;
 
 let search_buttons_module = fs.readFileSync("./src/browser/searchButtons.js", "utf8");
 
@@ -80,6 +80,8 @@ export class TestAPI {
         await extDriver.openUrlOnNewTab(this.credential.url);
         try {
             let state = EState.init;
+
+            if (test === EReportTest.load) await driver.sleep(500);
 
             L.debug("run scanner");
             let r: Array<string> = await driver.executeScript(search_buttons_module) as Array<string>;

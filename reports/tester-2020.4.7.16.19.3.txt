@@ -1,0 +1,17 @@
+  swb - save with login button,  MBL - manual before logedin, MAL - manual after loggedin
+  sob - save with out login button (press 'Enter'),  MBL - manual before logedin, MAL - manual after loggedin
+  lod - load
+  sib - page has singin button
+  ffl - page has full login form
+  ffs - page has first step of login form
+  fss - page has second step of login form
+  lin - page is logged in
+  nps - page did not parse
+----------------------------------------------------------------------------------------------------------------------
+  engine: KeyReel
+----------------------------------------------------------------------------------------------------------------------
+ idx  | url                                                    | swb | sob | lod | sib | ffl | ffs | fss | lin | nps |
+----------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+ idx  | url                                                    | swb | sob | lod | sib | ffl | ffs | fss | lin | nps |
+----------------------------------------------------------------------------------------------------------------------

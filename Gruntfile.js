@@ -11,31 +11,44 @@ module.exports = function(grunt) {
         run: {
             options: {
             },
+
             tester_debug: {
                 cmd: 'node',
-                args: [
-                    './build/tester.js',
-                    'debug'
-                ]
+                args: ['./build/tester.js', 'debug']
             },
             tester: {
                 cmd: 'node',
-                args: [
-                    './build/tester.js'
-                ]
+                args: ['./build/tester.js']
             },
             tester_continue: {
                 cmd: 'node',
-                args: [
-                    './build/tester.js',
-                    'continue'
-                ]
+                args: ['./build/tester.js', 'continue']
             },
+
             scanner: {
-                args: [
-                    './build/scanner.js'
-                ]
+                args: ['./build/scanner.js']
             },
+
+            report: {
+                cmd: 'node',
+                args: ['./build/tester.js', 'report', '--console']
+            },
+
+            report: {
+                cmd: 'node',
+                args: ['./build/tester.js', 'report', '--console']
+            },
+
+            report_txt: {
+                cmd: 'node',
+                args: ['./build/tester.js', 'report', '--txt']
+            },
+
+            report_csv: {
+                cmd: 'node',
+                args: ['./build/tester.js', 'report', '--csv']
+            },
+
             thrift: {
                 cmd: './node_modules/@creditkarma/thrift-typescript/dist/main/bin/index.js',
                 args: [
@@ -65,6 +78,10 @@ module.exports = function(grunt) {
     grunt.registerTask("tester_debug", ["clean", "build", "run:tester_debug"]);
     grunt.registerTask("tester", ["clean", "build", "run:tester"]);
     grunt.registerTask("tester_continue", ["clean", "build", "run:tester_continue"]);
+
+    grunt.registerTask("report", ["run:report"]);
+    grunt.registerTask("report_txt", ["run:report_txt"]);
+    grunt.registerTask("report_csv", ["run:report_csv"]);
 
     grunt.registerTask("scanner", ["clean", "build", "run:scanner"]);
 };

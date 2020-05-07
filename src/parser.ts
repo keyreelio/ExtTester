@@ -1,4 +1,4 @@
-import {testapiLogger as L} from "./common/log.config";
+import {parserLogger as L} from "./common/log.config";
 import {By, WebElement} from "selenium-webdriver";
 import {Timeouts} from "./common/timeouts";
 import {Button} from "./common/button";
@@ -14,7 +14,7 @@ export class LoginForm {
 }
 
 export class Page {
-    didNotParse: boolean = true;
+    didNotParse: boolean = false;
     singinButton: Button | undefined = undefined;
     loginForm: LoginForm | undefined = undefined;
     isLoggedIn: boolean = false;
@@ -53,43 +53,74 @@ export class Parser {
         let driver = await this.engine.getDriver();
         let extDriver = await this.engine.getExtDriver();
 
+        let iframe: WebElement | undefined = undefined;
+        let iframes: WebElement[] | undefined = undefined;
+
+        await extDriver.switchToRootFrame();
+
         let startTime = new Date();
+
+        let page: Page = new Page();
         while (true) {
-            let page = new Page();
+            let waitTimeout = iframe === undefined ? Timeouts.WaitParsedPage : Timeouts.WaitParsedPageMin;
 
-            await extDriver.switchToRootFrame();
-
-            let loginForm = await this.findLoginForm(undefined);
-            if (loginForm === undefined) {
-                loginForm = await this.findLoginFormInFrames();
-            }
-
-            page.loginForm = loginForm;
-
-            if (page.loginForm === undefined) {
-                let singInButton = await this.findSinginButton(undefined);
-                if (singInButton === undefined) {
-                    singInButton = await this.findSinginButtonInFrames();
-                }
-                page.singinButton = singInButton;
-            }
-
-            if (page.loginForm === undefined && page.singinButton === undefined) {
-                page.isLoggedIn = true;
+            page.didNotParse = false;
+            try {
+                L.trace("can parsed or scanned page");
+                await Promise.race([
+                    this.canScannedPage(waitTimeout, page.singinButton !== undefined),
+                    this.canParsedPage(waitTimeout, page.loginForm !== undefined)
+                ]);
+            } catch (e) {
+                L.trace(`${e}`);
+                page.didNotParse = true;
             }
 
             let done: boolean = false;
-            if (this.checkFlag(searchFlag, Parser.SearchFlagSingInButton)) {
-                done = done || (page.singinButton !== undefined);
+
+            if (this.checkFlag(searchFlag, Parser.SearchFlagPasswordOnForm)
+                || this.checkFlag(searchFlag, Parser.SearchFlagLoginOnForm)) {
+
+                L.trace("get login form");
+                page.loginForm = page.loginForm !== undefined ? page.loginForm : await this.findLoginForm(iframe);
+                if (this.checkFlag(searchFlag, Parser.SearchFlagLoginOnForm)) {
+                    done = done || (page.loginForm !== undefined && page.loginForm.loginInput !== undefined);
+                } else if (page.loginForm !== undefined) {
+                    page.loginForm.loginInput = undefined;
+                }
+                if (this.checkFlag(searchFlag, Parser.SearchFlagPasswordOnForm)) {
+                    done = done || (page.loginForm !== undefined && page.loginForm.passwordInput !== undefined);
+                } else if (page.loginForm !== undefined) {
+                    page.loginForm.passwordInput = undefined;
+                }
             }
-            if (this.checkFlag(searchFlag, Parser.SearchFlagLoginOnForm)) {
-                done = done || (page.loginForm !== undefined && page.loginForm.loginInput !== undefined);
-            }
-            if (this.checkFlag(searchFlag, Parser.SearchFlagPasswordOnForm)) {
-                done = done || (page.loginForm !== undefined && page.loginForm.passwordInput !== undefined);
-            }
-            if (this.checkFlag(searchFlag, Parser.SearchFlagLoggedIn)) {
-                done = done || page.isLoggedIn;
+
+            if (!done) {
+                if (this.checkFlag(searchFlag, Parser.SearchFlagSingInButton)) {
+                    L.trace("get singin button");
+                    page.singinButton = page.singinButton !== undefined ? page.singinButton : await this.findSinginButton(iframe);
+                    done = done || (page.singinButton !== undefined);
+                } else {
+                    page.singinButton = undefined;
+                }
+
+                iframes = iframes !== undefined ? iframes : await driver.findElements(By.xpath("//iframe"));
+                if (iframes !== undefined && iframes.length > 0) {
+                    iframe = iframes.shift();
+                    if (iframe !== undefined) {
+                        await extDriver.switchToRootFrame();
+                        L.trace(`switch to '${await iframe.getId()}'`);
+                        await driver.switchTo().frame(iframe);
+                        continue;
+                    }
+                }
+
+                if (this.checkFlag(searchFlag, Parser.SearchFlagLoggedIn)) {
+                    if (page.loginForm === undefined && page.singinButton === undefined) {
+                        page.isLoggedIn = true;
+                    }
+                    done = done || page.isLoggedIn;
+                }
             }
 
             if (done) {
@@ -97,155 +128,66 @@ export class Parser {
                 await this.logPage(page);
                 L.trace("----------------------------------");
 
-                return Promise.resolve(page);
+                break;
             }
 
             let nowTime = new Date();
             let delta = nowTime.getTime() - startTime.getTime();
             if (timeout > 0 && delta <= timeout) {
-                await driver.sleep(500);
+                page = new Page();
+                iframe = undefined;
+                iframes = undefined;
+                await extDriver.switchToRootFrame();
                 continue;
             }
 
-            return Promise.reject(new Error("Page did not parsed"));
-        }
-    }
-
-    protected checkFlag(flags: number, flag: number): boolean {
-        return (flags & flag) === flag;
-    }
-
-    protected async canParsedFrames(): Promise<boolean> {
-        L.debug("canParsedFrames");
-
-        let driver = await this.engine.getDriver();
-
-        try {
-            for (let iframe of await driver.findElements(By.xpath("//iframe"))) {
-                try {
-                    L.trace(`switch to '${await iframe.getId()}'`);
-                    await driver.switchTo().frame(iframe);
-
-                    let result = await this.canParsed();
-
-                    L.trace("switch to 'root'");
-                    await driver.switchTo().parentFrame();
-
-                    if (result) {
-                        return Promise.resolve(true);
-                    }
-                } catch (e) {
-                }
-            }
-        } catch (e) {
+            break;
         }
 
-        return Promise.resolve(false);
+        return Promise.resolve(page);
     }
 
-    protected async canParsed(): Promise<boolean> {
-        L.debug("canParsed");
+    protected async canParsedPage(timeout: number, skip: boolean): Promise<void> {
+        if (skip) return Promise.resolve();
 
         let extDriver = await this.engine.getExtDriver();
+        await extDriver.waitLocated("//body[@axt-parser-timing]", timeout);
 
-        try {
-            await extDriver.waitLocated("//body[@axt-parser-timing]", Timeouts.WaitParsedPage);
-            return Promise.resolve(true);
-        } catch (e) {
-        }
-
-        return Promise.resolve(false);
+        return Promise.resolve();
     }
 
-    protected async findSinginButtonInFrames(): Promise<Button | undefined> {
-        L.debug("findSinginButtonInFrames");
+    protected async canScannedPage(timeout: number, skip: boolean): Promise<void> {
+        if (skip) return Promise.resolve();
 
-        let driver = await this.engine.getDriver();
+        let extDriver = await this.engine.getExtDriver();
+        await extDriver.waitLocated("//*[@axt-button='login']", timeout);
 
-        let button: Button | undefined = undefined;
-
-        try {
-            for (let iframe of await driver.findElements(By.xpath("//iframe"))) {
-                try {
-                    L.trace(`switch to '${await iframe.getId()}'`);
-                    await driver.switchTo().frame(iframe);
-
-                    button = await this.findSinginButton(iframe);
-
-                    L.trace("switch to 'root'");
-                    await driver.switchTo().parentFrame();
-
-                    if (button !== undefined) {
-                        break;
-                    }
-                } catch (e) {
-                }
-            }
-        } catch (e) {
-        }
-
-        return Promise.resolve(button);
+        return Promise.resolve();
     }
 
     protected async findSinginButton(iframe: WebElement | undefined): Promise<Button | undefined> {
-        L.debug("findSinginButton");
-
-        let extDriver = await this.engine.getExtDriver();
+        let driver = await this.engine.getDriver();
 
         let button: Button | undefined = undefined;
         try {
-            let buttonElm = await extDriver.waitLocated(
-                "//*[@axt-button='login']",
-                iframe === undefined ? Timeouts.WaitParsedPage : Timeouts.WaitParsedPageMin);
+            let buttonElm = await driver.findElement(By.xpath("//*[@axt-button='login']"));
             if (buttonElm !== undefined) {
                 button = new Button(buttonElm, iframe);
             }
         } catch (e) {
         }
 
+        L.trace(`finded singin button: ${button}`);
+
         return Promise.resolve(button);
     }
 
-    protected async findLoginFormInFrames(): Promise<LoginForm | undefined> {
-        L.debug("findLoginFormInFrames");
-
-        let driver = await this.engine.getDriver();
-
-        var loginForm: LoginForm | undefined = undefined;
-
-        try {
-            for (let iframe of await driver.findElements(By.xpath("//iframe"))) {
-                try {
-                    L.trace(`switch to '${await iframe.getId()}'`);
-                    await driver.switchTo().frame(iframe);
-
-                    loginForm = await this.findLoginForm(iframe);
-
-                    L.trace("switch to 'root'");
-                    await driver.switchTo().parentFrame();
-
-                    if (loginForm !== undefined) {
-                        break;
-                    }
-                } catch (e) {
-                }
-            }
-        } catch (e) {
-        }
-
-        return Promise.resolve(loginForm);
-    }
-
     protected async findLoginForm(iframe: WebElement | undefined): Promise<LoginForm | undefined> {
-        L.debug("findLoginForm");
-
-        let extDriver = await this.engine.getExtDriver();
+        let driver = await this.engine.getDriver();
 
         let result: LoginForm | undefined = undefined;
         try {
-            let body = await extDriver.waitLocated(
-                "//body[@axt-parser-timing]",
-                iframe === undefined ? Timeouts.WaitParsedPage : Timeouts.WaitParsedPageMin);
+            let body = await driver.findElement(By.xpath("//body[@axt-parser-timing]"));
             try {
                 let loginForm = await body.findElement(By.xpath("//*[@axt-form-type='login']"));
                 if (loginForm !== undefined) {
@@ -272,7 +214,14 @@ export class Parser {
         } catch (e) {
         }
 
+        L.trace(`finded login form: ${result}`);
+
         return Promise.resolve(result);
+    }
+
+
+    protected checkFlag(flags: number, flag: number): boolean {
+        return (flags & flag) === flag;
     }
 
 

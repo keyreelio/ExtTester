@@ -16,12 +16,24 @@ export class Credentials {
         //     password: "K8yb1g6iw5f7GK238lHk",
         //     timeout: 2000
         // },
-        {// DONT work before parser update and need create account
-            url: "https://www.dropbox.com/",
-            login: "donna.simple.oluso@gmail.com",
-            password: "CWxm66RzW3cNnGjKMHz2",
-            timeout: 2000
-        },
+        // {
+        //     url: "https://www.dropbox.com/",
+        //     login: "donna.simple.oluso@gmail.com",
+        //     password: "CWxm66RzW3cNnGjKMHz2",
+        //     timeout: 2000
+        // },
+        // {
+        //     url: "https://twitter.com/login",
+        //     login: "hdayfg6wq5sq@gmail.com",
+        //     password: "5lKZfBc@L^PG",
+        //     timeout: 2000
+        // },
+        // {// DONT work before parser update and need create account
+        //     url: "https://adobe.com/",
+        //     login: "donna.simple.oluso@gmail.com",
+        //     password: "h+58t7WDXd6$Hp?$yrPS",
+        //     timeout: 2000
+        // },
         // {// need create account
         //     url: "https://www.facebook.com/",
         //     login: "donna.simple.oluso@gmail.com",
@@ -53,22 +65,9 @@ export class Credentials {
         //     timeout: 2000
         // },
         // {// need fix url after parser update
-        //     url: "https://twitter.com/login",
-        //     login: "hdayfg6wq5sq@gmail.com",
-        //     password: "5lKZfBc@L^PG",
-        //     timeout: 2000
-        // },
-        // {// need fix url after parser update
         //     url: "https://appstoreconnect.apple.com/login",
         //     login: "hdayfg6wq5sq@gmail.com",
         //     password: "cYZ6HcG2Z7xd2t5DazXc",
-        //     timeout: 5000
-        // },
-        //
-        // {// DONT work - need create account
-        //     url: "https://auth.services.adobe.com/en_US/index.html#/",
-        //     login: "donna.simple.oluso@gmail.com",
-        //     password: "h+58t7WDXd6$Hp?$yrPS",
         //     timeout: 2000
         // },
         // {// DONT work before parser update and need create account

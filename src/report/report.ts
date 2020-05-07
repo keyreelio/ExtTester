@@ -156,10 +156,18 @@ export class ReportLogger implements IReport {
     }
 
     public async setFail(failMessage: string, test: EReportTest): Promise<void> {
+        let getPrefix = function (test: EReportTest): string {
+            switch (test) {
+                case EReportTest.saveWithButtons: return "SaveWithButtons";
+                case EReportTest.saveWithoutButtons: return "SaveWithoutButtons";
+                case EReportTest.load: return "Load";
+            }
+        }
+
         return await this.mutex.dispatch(async () => {
             if (this.currentReport === undefined) return Promise.resolve();
             this.currentReport.results[test] = EReportResult.fail;
-            this.currentReport.failMessages.push(failMessage);
+            this.currentReport.failMessages.push(`[${getPrefix(test)}] ${failMessage}`);
         });
     }
 
@@ -190,11 +198,11 @@ export class ReportLogger implements IReport {
         this.print(`  fss - page has second step of login form`);
         this.print(`  lin - page is logged in`);
         this.print(`  nps - page did not parse`);
-        this.print(`---------------------------------------------------------------------------------------------------------------`);
+        this.print(`----------------------------------------------------------------------------------------------------------------------`);
         this.print(`  engine: ${this.engineName}`);
-        this.print(`---------------------------------------------------------------------------------------------------------------`);
-        this.print(" url                                                    | swb | sob | lod | sib | ffl | ffs | fss | lin | nps |");
-        this.print(`---------------------------------------------------------------------------------------------------------------`);
+        this.print(`----------------------------------------------------------------------------------------------------------------------`);
+        this.print(" idx  | url                                                    | swb | sob | lod | sib | ffl | ffs | fss | lin | nps |");
+        this.print(`----------------------------------------------------------------------------------------------------------------------`);
     }
 
     protected async printReport(): Promise<void> {
@@ -216,13 +224,15 @@ export class ReportLogger implements IReport {
             return result ? "  X  " : "     ";
         }
 
+        let count = 0;
         let map = new Map(Object.entries(this.reports));
         map.forEach((report: ReportItem, u: string) => {
             let part: string[] = [];
 
+            part.push(` ${count++}`.padEnd(6, " "));
             part.push("  ".concat(report.url).padEnd(56, " "));
             part.push(marker(report.results[EReportTest.saveWithButtons]));
-            part.push(marker(report.results[EReportTest.saveWithButtons]));
+            part.push(marker(report.results[EReportTest.saveWithoutButtons]));
             part.push(marker(report.results[EReportTest.load]));
             part.push(formMarker(report.parseParts[EReportParsePart.singInButton]));
             part.push(formMarker(report.parseParts[EReportParsePart.fullLoginForm]));
@@ -230,16 +240,16 @@ export class ReportLogger implements IReport {
             part.push(formMarker(report.parseParts[EReportParsePart.secondStepLoginForm]));
             part.push(formMarker(report.parseParts[EReportParsePart.loggedIn]));
             part.push(formMarker(report.parseParts[EReportParsePart.notParsed]));
-            part.push(report.failMessages.join("; "));
+            part.push(report.failMessages.join("; ").replace(/(\r\n|\n|\r)/gm, ""));
 
             this.print(`${part.join("|")}`);
         });
     }
 
     protected async printFooter(): Promise<void> {
-        this.print(`---------------------------------------------------------------------------------------------------------------`);
-        this.print(" url                                                    | swb | sob | lod | sib | ffl | ffs | fss | lin | nps |");
-        this.print(`---------------------------------------------------------------------------------------------------------------`);
+        this.print(`----------------------------------------------------------------------------------------------------------------------`);
+        this.print(" idx  | url                                                    | swb | sob | lod | sib | ffl | ffs | fss | lin | nps |");
+        this.print(`----------------------------------------------------------------------------------------------------------------------`);
     }
 
     protected print(message: string): void {
@@ -283,7 +293,7 @@ export class ReportCsv extends ReportTxt {
 
     protected async printHeader(): Promise<void> {
         this.print("url;save_with_button;save_without_button;load;has_singin_button;" +
-            "has_full_form;has_first_step_form;has_second_step_form;has_loggedin;did_not_parse;fail_messages\n");
+            "has_full_form;has_first_step_form;has_second_step_form;has_loggedin;did_not_parse;fail_messages");
     }
 
     protected async printReport(): Promise<void> {
@@ -310,15 +320,18 @@ export class ReportCsv extends ReportTxt {
             let part: string[] = [];
 
             part.push(report.url);
+            part.push(marker(report.results[EReportTest.saveWithButtons]));
+            part.push(marker(report.results[EReportTest.saveWithoutButtons]));
+            part.push(marker(report.results[EReportTest.load]));
             part.push(formMarker(report.parseParts[EReportParsePart.singInButton]));
             part.push(formMarker(report.parseParts[EReportParsePart.fullLoginForm]));
             part.push(formMarker(report.parseParts[EReportParsePart.firstStepLoginForm]));
             part.push(formMarker(report.parseParts[EReportParsePart.secondStepLoginForm]));
             part.push(formMarker(report.parseParts[EReportParsePart.loggedIn]));
             part.push(formMarker(report.parseParts[EReportParsePart.notParsed]));
-            part.push(report.failMessages.join(" : "));
+            part.push(report.failMessages.join(" : ").replace(/(\r\n|\n|\r)/gm, ""));
 
-            this.print(`${part.join(";")}\n`);
+            this.print(`${part.join(";")}`);
         });
     }
 

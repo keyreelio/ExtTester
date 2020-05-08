@@ -42,7 +42,7 @@ class Tester {
                 let credentials: Credentials = new Credentials();
                 if (!debug) {
                     L.debug("load credential from: './src/common/passdb.ts'");
-                    //credentials.loadFromPassDB();
+                    credentials.loadFromPassDB();
 
                     let reportFilePath = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.txt`;
                     L.debug(`save report to txt file: ${reportFilePath}`);

@@ -61,100 +61,6 @@ export class TestAPI {
         this.report = report;
     }
 
-    protected async checkCredentialFor(
-        test: EReportTest,
-        hasFullLoginForm: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
-        hasFirstStepLoginForm: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
-        hasSecondStepLoginForm: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
-        afterFillLoginForm: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
-        hasIsLoggedIn: ((test: EReportTest) => Promise<ECheck>)
-        ): Promise<void> {
-
-        L.info("checkWriteCredential");
-
-        let driver = await this.engine.getDriver();
-        let extDriver = await this.engine.getExtDriver();
-        let parser = new Parser(this.engine);
-
-        L.debug(`open new tab with: ${this.credential.url}`);
-        await extDriver.openUrlOnNewTab(this.credential.url);
-        try {
-            let state = EState.init;
-
-            if (test === EReportTest.load) await driver.sleep(500);
-
-            L.debug("run scanner");
-            let r: Array<string> = await driver.executeScript(search_buttons_module) as Array<string>;
-            L.info(`Search buttons result: ${r}`);
-
-            while (true) {
-
-                L.debug("parse page");
-                let page = await parser.parsePage(ParseSearchMap[state], this.credential.timeout);
-
-                L.debug("check page structure");
-                if (page.singinButton !== undefined && page.loginForm === undefined) {
-                    L.debug("page has singin button and hasn't login form");
-
-                    await this.report.setParsePart(EReportParsePart.singInButton);
-                    await page.singinButton.press();
-
-                    state = EState.waitLoginForm;
-                    continue;
-                } else if (page.loginForm !== undefined) {
-                    if (page.loginForm.loginInput !== undefined && page.loginForm.passwordInput !== undefined) {
-                        L.debug("login form has login and password inputs");
-
-                        await this.report.setParsePart(EReportParsePart.fullLoginForm);
-                        if (await hasFullLoginForm(page.loginForm, test) == ECheck.break) break;
-                    } else if (page.loginForm.loginInput !== undefined) {
-                        L.debug("login form has only login input");
-
-                        await this.report.setParsePart(EReportParsePart.firstStepLoginForm);
-                        if (await hasFirstStepLoginForm(page.loginForm, test) == ECheck.break) break;
-
-                        state = EState.waitSecondLoginForm;
-                        continue;
-                    } else if (page.loginForm.passwordInput !== undefined) {
-                        L.debug("login form has only password input");
-
-                        await this.report.setParsePart(EReportParsePart.secondStepLoginForm);
-                        if (await hasSecondStepLoginForm(page.loginForm, test) == ECheck.break) break;
-                    } else {
-                        L.debug("login form did not have login or password inputs");
-
-                        await this.report.setFail("login form did not have login or password inputs", test);
-                        break;
-                    }
-
-                    if (await afterFillLoginForm(page.loginForm, test) == ECheck.break) break;
-
-                    state = EState.waitLoggedIn;
-                    continue;
-                } else if (page.isLoggedIn) {
-                    L.debug("page is logged in");
-
-                    await this.report.setParsePart(EReportParsePart.loggedIn);
-
-                    if (await hasIsLoggedIn(test) == ECheck.break) break;
-                } else if (page.didNotParse) {
-                    L.debug("page did not parsed");
-
-                    await this.report.setParsePart(EReportParsePart.notParsed);
-                }
-
-                break;
-            }
-        } catch (e) {
-            await this.report.setFail(failMessage(e), test);
-        }
-
-        L.debug("close current tab");
-        await extDriver.closeCurrentTab();
-
-        return Promise.resolve();
-    }
-
     public async checkWriteCredential(
         options:
             { useOnlyEnterButton: boolean } |
@@ -344,6 +250,100 @@ export class TestAPI {
 
                 return Promise.resolve(ECheck.break);
             });
+
+        return Promise.resolve();
+    }
+    
+    protected async checkCredentialFor(
+        test: EReportTest,
+        hasFullLoginForm: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
+        hasFirstStepLoginForm: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
+        hasSecondStepLoginForm: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
+        afterFillLoginForm: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
+        hasIsLoggedIn: ((test: EReportTest) => Promise<ECheck>)
+    ): Promise<void> {
+
+        L.info("checkWriteCredential");
+
+        let driver = await this.engine.getDriver();
+        let extDriver = await this.engine.getExtDriver();
+        let parser = new Parser(this.engine);
+
+        L.debug(`open new tab with: ${this.credential.url}`);
+        await extDriver.openUrlOnNewTab(this.credential.url);
+        try {
+            let state = EState.init;
+
+            if (test === EReportTest.load) await driver.sleep(500);
+
+            L.debug("run scanner");
+            let r: Array<string> = await driver.executeScript(search_buttons_module) as Array<string>;
+            L.info(`Search buttons result: ${r}`);
+
+            while (true) {
+
+                L.debug("parse page");
+                let page = await parser.parsePage(ParseSearchMap[state], this.credential.timeout);
+
+                L.debug("check page structure");
+                if (page.singinButton !== undefined && page.loginForm === undefined) {
+                    L.debug("page has singin button and hasn't login form");
+
+                    await this.report.setParsePart(EReportParsePart.singInButton);
+                    await page.singinButton.press();
+
+                    state = EState.waitLoginForm;
+                    continue;
+                } else if (page.loginForm !== undefined) {
+                    if (page.loginForm.loginInput !== undefined && page.loginForm.passwordInput !== undefined) {
+                        L.debug("login form has login and password inputs");
+
+                        await this.report.setParsePart(EReportParsePart.fullLoginForm);
+                        if (await hasFullLoginForm(page.loginForm, test) == ECheck.break) break;
+                    } else if (page.loginForm.loginInput !== undefined) {
+                        L.debug("login form has only login input");
+
+                        await this.report.setParsePart(EReportParsePart.firstStepLoginForm);
+                        if (await hasFirstStepLoginForm(page.loginForm, test) == ECheck.break) break;
+
+                        state = EState.waitSecondLoginForm;
+                        continue;
+                    } else if (page.loginForm.passwordInput !== undefined) {
+                        L.debug("login form has only password input");
+
+                        await this.report.setParsePart(EReportParsePart.secondStepLoginForm);
+                        if (await hasSecondStepLoginForm(page.loginForm, test) == ECheck.break) break;
+                    } else {
+                        L.debug("login form did not have login or password inputs");
+
+                        await this.report.setFail("login form did not have login or password inputs", test);
+                        break;
+                    }
+
+                    if (await afterFillLoginForm(page.loginForm, test) == ECheck.break) break;
+
+                    state = EState.waitLoggedIn;
+                    continue;
+                } else if (page.isLoggedIn) {
+                    L.debug("page is logged in");
+
+                    await this.report.setParsePart(EReportParsePart.loggedIn);
+
+                    if (await hasIsLoggedIn(test) == ECheck.break) break;
+                } else if (page.didNotParse) {
+                    L.debug("page did not parsed");
+
+                    await this.report.setParsePart(EReportParsePart.notParsed);
+                }
+
+                break;
+            }
+        } catch (e) {
+            await this.report.setFail(failMessage(e), test);
+        }
+
+        L.debug("close current tab");
+        await extDriver.closeCurrentTab();
 
         return Promise.resolve();
     }

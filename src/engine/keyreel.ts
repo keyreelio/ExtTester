@@ -4,6 +4,7 @@ import {Server} from "../service/server";
 import {DatabaseEvent, DatabaseEventType, IDatabase} from "../database/database";
 import {ICredential} from "../credentials/credentials";
 import {error} from "selenium-webdriver";
+import {Timeouts} from "../common/timeouts";
 
 
 export class KeyReelEngine extends Engine {
@@ -12,13 +13,13 @@ export class KeyReelEngine extends Engine {
 
 
     public constructor(
-        database: IDatabase,
+        mockServer: Server,
         options:
             { withoutProfile: boolean } |
             undefined = undefined) {
 
         super(options);
-        this.mockServer = new Server(database);
+        this.mockServer = mockServer;
     }
 
     public async getEngineName(): Promise<string> {
@@ -27,6 +28,7 @@ export class KeyReelEngine extends Engine {
 
     public async checkSaved(url: string, credential: ICredential): Promise<void> {
         let database = this.mockServer.database;
+
         let waitAdd = new Promise(function(resolve, reject) {
             let u = new URL(url);
             database.addEventListener(
@@ -50,7 +52,7 @@ export class KeyReelEngine extends Engine {
         let waitTimeout = new Promise(function(resolve, reject) {
             setTimeout(function () {
                 reject(new Error('Fail saved: timeout'));
-            }, 15000);
+            }, Timeouts.WaitToAutosaveAccount);
         });
 
         await Promise.race([waitAdd, waitTimeout]);
@@ -78,19 +80,5 @@ export class KeyReelEngine extends Engine {
 
         L.debug("add 'keyreel' extension");
         options.addArguments("load-extension=./resources/raws/KeyReel");
-    }
-
-    protected async startupDriver(): Promise<void> {
-
-        await this.mockServer.start();
-
-        return Promise.resolve();
-    }
-
-    protected async shutdownDriver(): Promise<void> {
-
-        await this.mockServer.stop();
-
-        return Promise.resolve();
     }
 }

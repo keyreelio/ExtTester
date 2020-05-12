@@ -90,8 +90,8 @@ export class Input {
             await extInput.pressEnter();
 
             return Promise.resolve();
-        } catch (UnhandledPromiseRejectionWarning) {
-            return Promise.reject();
+        } catch (e) {
+            return Promise.reject(e);
         }
     }
 }

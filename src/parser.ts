@@ -109,9 +109,13 @@ export class Parser {
                     iframe = iframes.shift();
                     if (iframe !== undefined) {
                         await extDriver.switchToRootFrame();
-                        L.trace(`switch to '${await iframe.getId()}'`);
-                        await driver.switchTo().frame(iframe);
-                        continue;
+                        try {
+                            L.trace(`switch to '${await iframe.getId()}'`);
+                            await driver.switchTo().frame(iframe);
+                            continue;
+                        } catch (e) {
+                            L.trace(`switch to iframe error: ${e}`);
+                        }
                     }
                 }
 

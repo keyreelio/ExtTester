@@ -16,9 +16,12 @@ export class Timeouts {
     static WaitLocatedElement = 200;
     static WaitLocatedAnimationElement = 2000;
 
+    // tester
     static WaitParsedPage = 500;
     static WaitParsedPageMin = 50;
 
+    //
+    static WaitToAutosaveAccount = 10000;
 
     /**
      * For time measuring

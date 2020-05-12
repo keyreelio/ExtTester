@@ -14,15 +14,15 @@ module.exports = function(grunt) {
 
             tester_debug: {
                 cmd: 'node',
-                args: ['./build/tester.js', 'debug']
+                args: ['./build/tester.js', 'debug', '--count', '1']
             },
             tester: {
                 cmd: 'node',
-                args: ['./build/tester.js']
+                args: ['./build/tester.js', '--count', '1']
             },
             tester_continue: {
                 cmd: 'node',
-                args: ['./build/tester.js', 'continue']
+                args: ['./build/tester.js', 'continue', '--count', '1']
             },
 
             scanner: {

@@ -381,7 +381,7 @@ if ("loginButton" in res) {
 }
 
 if ("accountButton" in res) {
-  res["loginButton"].forEach( (btn) => btn.setAttribute('axt-button', 'account'));
+  res["accountButton"].forEach( (btn) => btn.setAttribute('axt-button', 'account'));
 }
 
 let result = Array.from(Object.keys(res));

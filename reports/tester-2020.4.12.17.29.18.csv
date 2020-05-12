@@ -1,0 +1,175 @@
+url;save_with_button;save_without_button;load;has_singin_button;has_full_form;has_first_step_form;has_second_step_form;has_loggedin;did_not_parse;fail_messages
+adobe.com;skip;skip;skip;true;;;;;true;
+amazon.com;fail;fail;skip;true;;true;true;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+apple.com;skip;skip;skip;;;;;;true;
+archive.org;auto;auto;auto;true;true;;;true;;
+aws.amazon.com;skip;skip;skip;;;;;;;
+bbc.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+booking.com;skip;skip;skip;true;;;;;;
+cnbc.com;skip;skip;skip;true;;;;;true;
+cnet.com;skip;skip;skip;;;;;;true;
+craigslist.org;skip;skip;skip;;;;;;true;
+dropbox.com;skip;skip;skip;true;;;;;true;
+ebay.com;fail;skip;skip;true;;true;true;true;true;[SaveWithButtons] credential fail autosave: Fail saved: timeout
+espn.com;skip;skip;skip;true;;;;;;
+facebook.com;fail;fail;skip;;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+godaddy.com;skip;skip;skip;;;true;;;true;
+google.com;skip;skip;skip;true;;true;;;true;
+imdb.com;skip;skip;skip;true;;;;;true;
+imgur.com;auto;auto;skip;true;true;;;true;;
+instagram.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+linkedin.com;skip;skip;skip;;;;;;true;
+live.com;fail;fail;skip;true;;true;;;;[SaveWithButtons] login form did not have login or password inputs : [SaveWithoutButtons] login form did not have login or password inputs
+nytimes.com;skip;fail;skip;true;true;true;;true;true;[SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+paypal.com;fail;fail;skip;true;;true;true;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+pinterest.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+reddit.com;skip;skip;skip;true;;;;;true;
+soundcloud.com;skip;skip;skip;true;;;;;true;
+stackoverflow.com;auto;auto;auto;true;true;;;true;;
+theguardian.com;skip;skip;skip;;;;;;;
+tumblr.com;skip;skip;skip;;;;;;true;
+twitch.tv;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+twitter.com;auto;fail;auto;true;true;;;true;;[SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+vimeo.com;auto;auto;auto;true;true;;;true;;
+vk.com;skip;skip;skip;;;;;;true;
+walmart.com;skip;skip;skip;;;;;;true;
+weebly.com;skip;skip;skip;;;;;;true;
+wikipedia.org;skip;skip;skip;;;;;;;
+wordpress.com;skip;skip;skip;true;;;;;true;
+yahoo.com;skip;skip;skip;true;;true;;;true;
+yelp.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+zillow.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+airbnb.com;skip;skip;skip;true;;;;;true;
+alibaba.com;skip;skip;skip;true;;;;;true;
+aliexpress.com;skip;skip;skip;;;;;;;
+asana.com;skip;fail;skip;true;true;;;true;true;[SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+battle.net;skip;skip;skip;;;;;;true;
+bitbucket.org;fail;skip;skip;true;;true;;;true;[SaveWithButtons] login form did not have login or password inputs
+blogs.forbes.com;skip;skip;skip;;;;;;true;
+collegeboard.org;fail;fail;skip;;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+constantcontact.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+dailymotion.com;skip;skip;skip;;;;;;true;
+deviantart.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+dx.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+ea.com;skip;skip;skip;;;;;;;
+etsy.com;skip;fail;skip;true;true;;;true;true;[SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+evernote.com;fail;fail;skip;true;;true;true;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+fabric.io;skip;skip;skip;;;;;;true;
+foxnews.com;skip;skip;skip;true;;;;;true;
+goodreads.com;fail;fail;skip;;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+hgtv.com;skip;skip;skip;;;;;;;
+hrblock.com;skip;skip;skip;true;;;;;true;
+ibm.com;skip;skip;skip;;;;;;true;
+kickstarter.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+latimes.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+npr.org;fail;skip;skip;true;;true;true;true;true;[SaveWithButtons] credential fail autosave: Fail saved: timeout
+pbs.org;skip;skip;skip;true;;;;;;
+shopify.com;fail;fail;skip;true;;true;;;;[SaveWithButtons] undefined : [SaveWithoutButtons] undefined
+shutterstock.com;skip;skip;skip;true;;;;;true;
+slideshare.net;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+squarespace.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+starbucks.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+steamcommunity.com;skip;skip;skip;true;;;;;;
+surveymonkey.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+ted.com;skip;skip;skip;true;;true;;;true;
+telegraph.co.uk;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+tripadvisor.com;skip;skip;skip;true;;;;;;
+usatoday.com;skip;skip;skip;;;;;;true;
+webmd.com;skip;skip;skip;true;;;;;true;
+wix.com;skip;skip;skip;true;;;;;true;
+4shared.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+aa.com;fail;fail;skip;;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+accorhotels.com;skip;skip;skip;;;;;;true;
+adf.ly;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+allrecipes.com;skip;skip;skip;;;;;;;
+bhphotovideo.com;skip;skip;skip;;;;;;true;
+biblegateway.com;skip;skip;skip;true;;;;;true;
+bleacherreport.com;skip;skip;skip;true;;;;;true;
+canva.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+cargurus.com;skip;skip;skip;;;;;;true;
+cbssports.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+codewars.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+crunchyroll.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+dingit.tv;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+discordapp.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+ebates.com;skip;skip;skip;true;;;;;true;
+eventbrite.com;skip;skip;skip;true;;;;;true;
+expedia.com;skip;skip;skip;true;;;;;true;
+fandango.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+fanfiction.net;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+feedly.com;skip;skip;skip;true;;;;;true;
+fiverr.com;skip;fail;skip;true;true;;;true;true;[SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+foodnetwork.com;skip;skip;skip;;;;;;true;
+foxsports.com;skip;skip;skip;;;;;;;
+freedelivery.com.ua;skip;skip;skip;;;;;;true;
+gap.com;skip;skip;skip;true;;;;;true;
+genius.com;auto;auto;skip;true;true;;;true;;
+gfycat.com;auto;auto;skip;true;true;;;true;;
+giphy.com;skip;auto;skip;true;true;;;true;;
+gizmodo.com;skip;skip;skip;;;;;;true;
+glassdoor.com;skip;skip;skip;true;;;;;true;
+groupon.com;skip;skip;skip;true;;;;;true;
+hannaandersson.com;skip;skip;skip;;;;;;true;
+hautelook.com;skip;skip;skip;;;;;;true;
+hotnewhiphop.com;skip;skip;skip;true;;;;;true;
+houzz.com;skip;skip;skip;;;;;;true;
+hubspot.com;skip;skip;skip;true;;;;;true;
+indeed.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+infusionsoft.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+instructables.com;skip;skip;skip;;;;;;true;
+invisionapp.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+jcpenney.com;skip;skip;skip;;;;;;true;
+jsfiddle.net;auto;auto;skip;true;true;;;true;;
+kayak.com;fail;skip;skip;true;true;;;true;true;[SaveWithButtons] credential fail autosave: Fail saved: timeout
+kissanime.ru;skip;skip;skip;;;;;;true;
+lds.org;skip;skip;skip;;;;;;true;
+lifebuzz.com;skip;skip;skip;;;;;;true;
+lingualeo.com;skip;skip;skip;;;;;;true;
+lowes.com;skip;skip;skip;;;;;;true;
+mail.com;skip;skip;skip;true;;;;;true;
+mailchimp.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+mediafire.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+monster.com;skip;skip;skip;;;;;;true;
+neteller.com;skip;skip;skip;true;;;;;;
+newegg.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+nextdoor.com;skip;skip;skip;;;;;;;
+nfl.com;skip;skip;skip;true;;;;;true;
+nike.com;skip;skip;skip;true;;;;;true;
+oracle.com;skip;skip;skip;;;;;;true;
+outbrain.com;skip;skip;skip;true;;;;;;
+overstock.com;skip;skip;skip;;;;;;true;
+paigeeworld.com;skip;skip;skip;;;;;;true;
+plex.tv;skip;skip;skip;;;;;;true;
+popads.net;fail;fail;skip;;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+priceline.com;fail;skip;skip;true;true;;;true;true;[SaveWithButtons] credential fail autosave: Fail saved: timeout
+privat24.ua;skip;skip;skip;;;;;;true;
+quirky.com;skip;skip;skip;true;;;;;;
+quizlet.com;auto;auto;skip;true;true;;;true;;
+quora.com;fail;fail;skip;;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+realtor.com;skip;skip;skip;true;;;;;true;
+redfin.com;skip;skip;skip;true;;;;;true;
+retailmenot.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+roblox.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+rumble.com;skip;skip;skip;;;;;;;
+similarweb.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+slickdeals.net;skip;skip;skip;true;;;;;true;
+spanishdict.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+splashid.com;skip;skip;skip;true;;;;;;
+staples.com;skip;skip;skip;;;;;;true;
+steampowered.com;skip;skip;skip;true;;;;;;
+stopcrawl.com;auto;auto;skip;true;true;;;true;;
+thumbtack.com;skip;skip;skip;;;;;;true;
+ticketmaster.com;skip;skip;skip;true;;;;;true;
+trello.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+tribuna.com;skip;skip;skip;;;;;;;
+trulia.com;skip;skip;skip;;;;;;true;
+uber.com;skip;skip;skip;;;;;;true;
+udemy.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+ultimate-guitar.com;skip;skip;skip;true;;;;;true;
+upwork.com;skip;skip;skip;true;;;;;true;
+walgreens.com;skip;skip;skip;;;;;;true;
+wayfair.com;skip;skip;skip;;;;;;true;
+westernunion.com;skip;skip;skip;true;;;;;true;
+wikihow.com;fail;fail;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+wunderground.com;fail;skip;skip;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout
+yellowpages.com;skip;skip;skip;;;;;;true;

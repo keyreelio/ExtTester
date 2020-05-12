@@ -88,7 +88,18 @@ export class CredentialsFactoryDebug implements ICredentialsFactory {
             password: "94U7Gez4D87G6C42iub0",
             timeout: 2000
         }
-    );
+
+        // dont close tab
+    // "booking.com": [
+    //     {
+    //         "login": "donna.simple.oluso@gmail.com",
+    //         "password": "N9dCCc9rwRq95YUeuSUS"
+    //     }
+    // ],
+
+        //https://www.rakuten.com/
+        // висить
+);
 
     public credentials(): Credentials {
         return new Credentials(Array.from(this.items));

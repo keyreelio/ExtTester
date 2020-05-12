@@ -13,10 +13,11 @@ export interface IEngine {
     getExtDriver(): Promise<WebDriverExt>;
     startup(maximize: Boolean): Promise<void>;
     shutdown(): Promise<void>;
+    start(credential: ICredential, forRead: boolean): Promise<void>;
     processBeforeLogin(): Promise<void>;
     processAfterLogin(): Promise<void>;
     checkSaved(url: string, credential: ICredential): Promise<void>;
-    canSaved(url: string): Promise<boolean>;
+    finish(): Promise<void>;
     dropAllCredentials(): Promise<void>;
 }
 
@@ -109,6 +110,10 @@ export class Engine implements IEngine {
         await this.shutdownDriver();
     }
 
+    public async start(credential: ICredential, forRead: boolean): Promise<void> {
+        return Promise.resolve();
+    }
+
     public async processBeforeLogin(): Promise<void> {
         L.debug("unsupported processBeforeLogin");
         return Promise.reject(new UnsupportedOperationError("processBeforeLogin"));
@@ -124,8 +129,8 @@ export class Engine implements IEngine {
         return Promise.reject(new UnsupportedOperationError("checkSaved"));
     }
 
-    public async canSaved(url: string): Promise<boolean> {
-        return Promise.resolve(true);
+    public async finish(): Promise<void> {
+        return Promise.resolve();
     }
 
     public async dropAllCredentials(): Promise<void> {

@@ -4,11 +4,9 @@ import {Credentials, ICredentialsFactory} from "./credentials/credentials";
 import {TestAPI} from "./testapi";
 import {EReportResult, EReportTest, IReport, ReportCsv, ReportLogger, ReportTxt} from "./report/report";
 import {KeyReelEngine} from './engine/keyreel';
-import {DatabaseFile} from "./database/databaseFile";
 import {CredentialsFactoryPassDB} from "./credentials/credentialsFactoryPassDB";
 import {CredentialsFactoryDebug} from "./credentials/credentialsFactoryDebug";
 import {Server} from "./service/server";
-import {IDatabase} from "./database/database";
 
 
 let timeFormat = function(d: Date): string {
@@ -120,40 +118,23 @@ class Tester {
             toContinue: boolean,
             instanceCount: number): Promise<void> {
 
-        let db1FilePath = `${Tester.DBFolderPath}keyreel.db.json`;
-        let db2FilePath = `${Tester.DBFolderPath}keyreel.db.json`;
-        if (debug) {
-            db1FilePath = `${Tester.DBFolderPath}keyreel-debug.db.json`;
-            db2FilePath = `${Tester.DBFolderPath}keyreel-debug.db.json`;
-        }
-
-        let db1 = new DatabaseFile(db1FilePath);
-        if (!toContinue) db1.clear();
-
-        let db2 = new DatabaseFile(db2FilePath);
-        if (!toContinue) db2.clear();
-
         L.debug("testing write");
-        await this.testWrites(db1, report,credentialsFactory, instanceCount, false);
+        await this.testWrites(report,credentialsFactory, instanceCount, false);
 
         L.debug("testing write without click on buttons (only sites which did not save) - withoutProfile: true");
-        await this.testWrites(db2, report,credentialsFactory, instanceCount, true);
+        await this.testWrites(report,credentialsFactory, instanceCount, true);
 
-        L.debug("testing read from DB1 (only sites which saved) - withoutProfile: true");
-        await this.testReads(db1, report,credentialsFactory, instanceCount);
-
-        L.debug("testing read from DB2 (only sites which saved) - withoutProfile: true");
-        await this.testReads(db2, report,credentialsFactory, instanceCount);
+        L.debug("testing read (only sites which saved) - withoutProfile: true");
+        await this.testReads(report,credentialsFactory, instanceCount);
     }
 
     protected static async testWrites(
-        database: IDatabase,
         report: IReport,
         credentialsFactory: ICredentialsFactory,
         instanceCount: number,
         useOnlyEnterButton: boolean): Promise<void> {
 
-        let server = new Server(database);
+        let server = new Server();
 
         L.debug("start server");
         await server.start();
@@ -172,12 +153,11 @@ class Tester {
     }
 
     protected static async testReads(
-        database: IDatabase,
         report: IReport,
         credentialsFactory: ICredentialsFactory,
         instanceCount: number): Promise<void> {
 
-        let server = new Server(database);
+        let server = new Server();
 
         L.debug("start server");
         await server.start();
@@ -208,18 +188,20 @@ class Tester {
 
         let credential = await credentials.shift();
         while (credential !== undefined) {
-            L.debug(`report start: ${credential.url}`);
-            await report.start(credential.url);
-
             let test = useOnlyEnterButton ? EReportTest.saveWithoutButtons : EReportTest.saveWithButtons;
             let result = await report.getResult(credential.url, test);
 
             if (result !== undefined && result !== EReportResult.unknown) {
                 L.debug(`skip credential (already checked - ${result})`);
-                await report.finish(credential.url, test);
                 credential = await credentials.shift();
                 continue;
             }
+
+            L.debug(`report start: ${credential.url}`);
+            await report.start(credential.url);
+
+            L.debug(`engine start`);
+            await engine.start(credential, false);
 
             L.debug("create test API");
             let api = new TestAPI(engine, credential, report);
@@ -231,8 +213,13 @@ class Tester {
                 L.warn(`write credential filed with: '${e}'`);
             }
 
+            L.debug("engine finish");
+            await engine.finish();
+
             L.debug("report finish");
             await report.finish(credential.url, test);
+
+            await driver.sleep(500);
 
             credential = await credentials.shift();
         }
@@ -253,23 +240,18 @@ class Tester {
 
         let credential = await credentials.shift();
         while (credential !== undefined) {
-            L.debug(`report start: ${credential.url}`);
-            await report.start(credential.url);
-
-            if (!await engine.canSaved(credential.url)) {
-                L.debug(`skip credential (not saved)`);
-                await report.finish(credential.url, EReportTest.load);
-                credential = await credentials.shift();
-                continue;
-            }
-
             let result = await report.getResult(credential.url, EReportTest.load);
             if (result !== undefined && result !== EReportResult.unknown) {
                 L.debug(`skip credential (already checked - ${result})`);
-                await report.finish(credential.url, EReportTest.load);
                 credential = await credentials.shift();
                 continue;
             }
+
+            L.debug(`report start: ${credential.url}`);
+            await report.start(credential.url);
+
+            L.debug(`engine start`);
+            await engine.start(credential, true);
 
             L.debug("create test API");
             let api = new TestAPI(engine, credential, report);
@@ -281,8 +263,13 @@ class Tester {
                 L.warn(`read credential filed with: '${e}'`);
             }
 
+            L.debug("engine finish");
+            await engine.finish();
+
             L.debug("report finish");
             await report.finish(credential.url, EReportTest.load);
+
+            await driver.sleep(500);
 
             credential = await credentials.shift();
         }

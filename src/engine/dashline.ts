@@ -5,7 +5,6 @@ import {WebElementExt} from "../common/webElementExt";
 import {By, Key, until, WebElement} from "selenium-webdriver";
 import fs from "fs";
 import {Timeouts} from "../common/timeouts";
-import {IDatabase} from "../database/database";
 
 
 interface IDashlaneAccount {
@@ -34,7 +33,6 @@ export class DashlaneEngine extends Engine {
     ];
 
     public constructor(
-        database: IDatabase,
         options:
             { withoutProfile: boolean } |
             undefined = undefined) {

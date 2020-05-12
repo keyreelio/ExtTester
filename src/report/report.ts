@@ -250,7 +250,7 @@ export class ReportLogger implements IReport {
         map.forEach((report: ReportItem, u: string) => {
             let part: string[] = [];
 
-            part.push(` ${count++}`.padEnd(6, " "));
+            part.push(`${count++} `.padStart(6, " "));
             part.push("  ".concat(report.url).padEnd(56, " "));
             part.push(marker(report.results[EReportTest.saveWithButtons]));
             part.push(marker(report.results[EReportTest.saveWithoutButtons]));
@@ -261,7 +261,7 @@ export class ReportLogger implements IReport {
             part.push(formMarker(report.parseParts[EReportParsePart.secondStepLoginForm]));
             part.push(formMarker(report.parseParts[EReportParsePart.loggedIn]));
             part.push(formMarker(report.parseParts[EReportParsePart.notParsed]));
-            part.push(report.failMessages.join("; ").replace(/(\r\n|\n|\r)/gm, ""));
+            part.push(` ${report.failMessages.join("; ").replace(/(\r\n|\n|\r)/gm, "")}`);
 
             this.printLine(`${part.join("|")}`);
         });

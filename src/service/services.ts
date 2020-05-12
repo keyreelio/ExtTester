@@ -1,8 +1,8 @@
 import * as express from 'express'
 import * as kr from "../thrift/gencode/AuxoftKeyReel";
-import {Account, IDatabase} from "../database/database";
 
 import {loggingServiceJSLogger as Ll, hostServiceJSLogger as Lh} from "../common/log.config";
+import { DBAccount } from './dbaccount';
 
 
 export class LoggingServiceImpl implements kr.LoggingService.IHandler<express.Request> {
@@ -30,7 +30,6 @@ export class LoggingServiceImpl implements kr.LoggingService.IHandler<express.Re
 
 export class HostStorageServiceImpl implements kr.HostStorageService.IHandler<express.Request> {
 
-    protected database: IDatabase;
     protected paused: boolean;
     protected unauthorized: boolean;
     protected deviceOfflined: boolean;
@@ -38,8 +37,11 @@ export class HostStorageServiceImpl implements kr.HostStorageService.IHandler<ex
     protected nextResponseId = 0;
 
 
-    public constructor(database: IDatabase, paused: boolean, unauthorized: boolean, deviceOfflined: boolean) {
-        this.database = database;
+    public onGetAccount: ((path: string) => DBAccount | undefined) | undefined = undefined;
+    public onAddAccount: ((path: string, account: DBAccount) => void) | undefined = undefined;
+
+
+    public constructor(paused: boolean, unauthorized: boolean, deviceOfflined: boolean) {
         this.paused = paused;
         this.unauthorized = unauthorized;
         this.deviceOfflined = deviceOfflined;
@@ -75,14 +77,18 @@ export class HostStorageServiceImpl implements kr.HostStorageService.IHandler<ex
 
             let url = new URL(request.siteUrl);
 
-            let account = this.database.get(url.host);
+            if (this.onGetAccount === undefined) {
+                throw Errors.NotFound();
+            }
+
+            let account = this.onGetAccount(url.host);
             if (account === undefined) {
                 throw Errors.NotFound();
             }
 
             response.record = new kr.SiteData({
-                siteUrl: account.path,
-                domain: account.path,
+                siteUrl: request.siteUrl,
+                domain: url.host,
                 loginData: new Array<kr.ILoginDataArgs>(
                     new kr.LoginData({
                         login: account.username
@@ -126,12 +132,13 @@ export class HostStorageServiceImpl implements kr.HostStorageService.IHandler<ex
 
             let url = new URL(request.siteUrl);
 
-            let account = new Account();
-            account.path = url.host;
+            let account = new DBAccount();
             account.username = request.loginData.login;
             account.password = Buffer.from(request.loginData.password === undefined ? "" : request.loginData.password, 'base64').toString();
 
-            this.database.add(account);
+            if (this.onAddAccount !== undefined) {
+                this.onAddAccount(url.host, account);
+            }
         });
 
         return response;
@@ -152,7 +159,11 @@ export class HostStorageServiceImpl implements kr.HostStorageService.IHandler<ex
 
             let url = new URL(request.siteUrl);
 
-            let account = this.database.get(url.host);
+            if (this.onGetAccount === undefined) {
+                throw Errors.NotFound();
+            }
+
+            let account = this.onGetAccount(url.host);
             if (account === undefined || account.username === undefined || account.username !== request.login) {
                 throw Errors.NotFound();
             }
@@ -299,61 +310,3 @@ class Errors {
         });
     }
 }
-
-/*
-    class Errors
-    {
-        public static Error DeviceNotFound => new Error()
-        {
-            Category = ErrorCategory.NOT_FOUND,
-            Id = (long)ErrorCode.DEVICE_NOT_FOUND,
-            DebugMessage = protocolsConstants.EDM_DEVICE_NOT_FOUND
-        };
-
-        public static Error DeviceNotPaired => new Error()
-        {
-            Category = ErrorCategory.NOT_FOUND,
-            Id = (long)ErrorCode.DEVICE_NOT_PAIRED,
-            DebugMessage = protocolsConstants.EDM_DEVICE_NOT_PAIRED
-        };
-
-        public static Error DeviceNotAvailable => new Error()
-        {
-            Category = ErrorCategory.NOT_FOUND,
-            Id = (long)ErrorCode.DEVICE_NOT_AVAILABLE,
-            DebugMessage = protocolsConstants.EDM_DEVICE_NOT_AVAILABLE
-        };
-
-        public static Error DuplicatedAccount => new Error()
-        {
-            Category = ErrorCategory.INTERNAL_ERROR,
-            Id = (long)ErrorCode.ACCOUNT_DUPLICATED,
-            DebugMessage = protocolsConstants.EDM_ACCOUNT_DUPLICATED
-        };
-
-        public static Error RequestTimedOut => new Error()
-        {
-            Category = ErrorCategory.PERMISSION_DENIED,
-            Id = (long)ErrorCode.USER_TIMEOUT,
-            DebugMessage = protocolsConstants.EDM_USER_TIMEOUT
-        };
-
-        public static Error RequestCanceledByUser => new Error()
-        {
-            Category = ErrorCategory.PERMISSION_DENIED,
-            Id = (long)ErrorCode.USER_CANCELED,
-            DebugMessage = protocolsConstants.EDM_USER_CANCELED
-        };
-
-        public static Error InternalException(Exception exception)
-        {
-            return new Error()
-            {
-                Category = ErrorCategory.INTERNAL_ERROR,
-                Id = (long)ErrorCode.APP_EXCEPTION,
-                DebugMessage = $"exception: {exception.Message}"
-            };
-        }
-    }
-
- */

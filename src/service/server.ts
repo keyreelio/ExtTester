@@ -1,5 +1,3 @@
-import {IDatabase} from "../database/database";
-
 import express from 'express';
 import * as bodyParser from 'body-parser'
 import * as kr from "../thrift/gencode/AuxoftKeyReel";
@@ -7,6 +5,7 @@ import * as kr from "../thrift/gencode/AuxoftKeyReel";
 import { ThriftServerExpress } from '@creditkarma/thrift-server-express'
 import {LoggingServiceImpl, HostStorageServiceImpl} from "./services";
 import http from "http";
+import {DBAccount} from "./dbaccount";
 
 
 export class Server {
@@ -21,10 +20,11 @@ export class Server {
     protected hostStorageServer: http.Server | undefined = undefined;
 
 
-    public database: IDatabase;
+    public onGetAccount: ((path: string) => DBAccount | undefined) | undefined = undefined;
+    public onAddAccount: ((path: string, account: DBAccount) => void) | undefined = undefined;
+
 
     public constructor(
-        database: IDatabase,
         options:
             { paused: boolean } |
             { unauthorized: boolean } |
@@ -50,10 +50,18 @@ export class Server {
             }
         }
 
-        this.database = database;
-
         this.loggingService = new LoggingServiceImpl();
-        this.hostStorageService = new HostStorageServiceImpl(this.database, paused, unauthorized, deviceOfflined);
+        this.hostStorageService = new HostStorageServiceImpl(paused, unauthorized, deviceOfflined);
+
+        this.hostStorageService.onGetAccount = (path => {
+            if (this.onGetAccount === undefined) return undefined;
+            return this.onGetAccount(path);
+        });
+
+        this.hostStorageService.onAddAccount = ((path, account) => {
+            if (this.onAddAccount === undefined) return;
+            return this.onAddAccount(path, account);
+        });
     }
 
     public async start(): Promise<void> {

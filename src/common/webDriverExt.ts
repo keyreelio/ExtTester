@@ -35,8 +35,10 @@ export class WebDriverExt {
 
     public async closeCurrentTab() {
         let tabs = await this.webDriver.getAllWindowHandles();
-        await this.webDriver.close();
-        await this.webDriver.switchTo().window(tabs[0]);
+        if (tabs.length > 1) {
+            await this.webDriver.close();
+            await this.webDriver.switchTo().window(tabs[0]);
+        }
     }
 
     public async switchToRootFrame(): Promise<void> {

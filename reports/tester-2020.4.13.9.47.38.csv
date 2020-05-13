@@ -1,0 +1,175 @@
+url;save_with_button;save_without_button;load;has_singin_button;has_full_form;has_first_step_form;has_second_step_form;has_loggedin;did_not_parse;fail_messages
+adobe.com;skip;skip;skip;true;;;;;true;
+amazon.com;fail;fail;auto;true;;true;true;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout : [SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+apple.com;skip;skip;skip;;;;;;true;
+archive.org;auto;auto;auto;true;true;;;true;;
+aws.amazon.com;skip;skip;skip;;;;;;;
+bbc.com;auto;auto;auto;true;true;;;true;;
+booking.com;skip;skip;skip;true;;;;;;
+cnbc.com;skip;skip;skip;true;;;;;true;
+cnet.com;skip;skip;skip;;;;;;true;
+craigslist.org;skip;skip;skip;;;;;;true;
+dropbox.com;skip;skip;skip;true;;;;;true;
+ebay.com;auto;auto;fail;true;;true;true;true;;[Load] password is not equal with 
+espn.com;skip;skip;skip;true;;;;;;
+facebook.com;auto;auto;auto;true;true;;;true;;
+godaddy.com;skip;skip;skip;;;true;;;true;
+google.com;skip;skip;skip;true;;true;;;true;
+imdb.com;skip;skip;skip;true;;;;;true;
+imgur.com;auto;auto;auto;true;true;;;true;;
+instagram.com;auto;auto;auto;true;true;;;true;;
+linkedin.com;skip;skip;auto;true;true;;;;true;
+live.com;fail;fail;fail;true;;true;;;;[SaveWithButtons] login form did not have login or password inputs : [SaveWithoutButtons] login form did not have login or password inputs : [Load] login is not equal with 
+nytimes.com;auto;auto;fail;true;true;;;true;;[Load] Wait timed out after 5040ms
+paypal.com;auto;auto;fail;true;;true;true;true;;[Load] password is not equal with 
+pinterest.com;auto;auto;auto;true;true;;;true;;
+reddit.com;skip;fail;skip;true;;;;;true;[SaveWithoutButtons] Wait timed out after 5033ms
+soundcloud.com;fail;skip;skip;true;;true;;;true;[SaveWithButtons] login form did not have login or password inputs
+stackoverflow.com;auto;auto;auto;true;true;;;true;;
+theguardian.com;skip;skip;skip;;;;;;;
+tumblr.com;skip;skip;skip;true;;true;;;true;
+twitch.tv;auto;auto;auto;true;true;;;true;;
+twitter.com;auto;auto;auto;true;true;;;true;;
+vimeo.com;auto;auto;auto;true;true;;;true;;
+vk.com;skip;skip;skip;;;;;;true;
+walmart.com;skip;skip;skip;;;;;;true;
+weebly.com;skip;skip;skip;;;;;;true;
+wikipedia.org;skip;skip;skip;;;;;;;
+wordpress.com;skip;skip;skip;true;;;;;true;
+yahoo.com;skip;skip;skip;true;;true;;;true;
+yelp.com;auto;auto;auto;true;true;;;true;;
+zillow.com;auto;auto;skip;true;true;;;true;true;
+airbnb.com;skip;fail;skip;true;;;;;true;[SaveWithoutButtons] unknown error: cannot determine loading statusfrom unknown error: cannot determine loading statusfrom disconnected: Unable to receive message from renderer  (Session info: chrome=81.0.4044.138)
+alibaba.com;skip;skip;fail;true;;;;;true;[Load] Wait timed out after 7493ms
+aliexpress.com;skip;fail;fail;;;;;;;[SaveWithoutButtons] Wait timed out after 5042ms : [Load] Wait timed out after 5104ms
+asana.com;skip;skip;skip;true;;;;;true;
+battle.net;skip;fail;skip;;;;;;true;[SaveWithoutButtons] Wait timed out after 5047ms
+bitbucket.org;fail;fail;fail;true;;true;;;;[SaveWithButtons] login form did not have login or password inputs : [SaveWithoutButtons] Wait timed out after 1649563ms : [Load] login form did not have login or password inputs
+blogs.forbes.com;skip;fail;skip;;;;;;true;[SaveWithoutButtons] Wait timed out after 5133ms
+collegeboard.org;auto;auto;auto;;true;;;true;;
+constantcontact.com;auto;auto;auto;true;true;;;true;;
+dailymotion.com;skip;skip;skip;;;;;;true;
+deviantart.com;auto;auto;auto;true;true;;;true;;
+dx.com;auto;auto;auto;true;true;;;true;;
+ea.com;skip;skip;skip;;;;;;;
+etsy.com;skip;auto;auto;true;true;;;true;true;
+evernote.com;auto;auto;fail;true;;true;true;true;;[Load] password is not equal with 
+fabric.io;skip;skip;skip;;;;;;true;
+foxnews.com;skip;skip;fail;;;;;;true;[Load] Wait timed out after 5544ms
+goodreads.com;auto;auto;auto;;true;;;true;;
+hgtv.com;skip;skip;fail;true;;;;;true;[Load] Wait timed out after 5062ms
+hrblock.com;skip;skip;skip;true;;;;;true;
+ibm.com;skip;skip;skip;;;;;;true;
+kickstarter.com;auto;auto;auto;true;true;;;true;;
+latimes.com;skip;skip;auto;true;true;;;;true;
+npr.org;skip;auto;auto;true;;true;true;true;true;
+pbs.org;skip;skip;skip;true;;;;;;
+shopify.com;fail;fail;fail;true;;true;;;;[SaveWithButtons] undefined : [SaveWithoutButtons] undefined : [Load] login is not equal with 
+shutterstock.com;skip;skip;skip;true;;;;;true;
+slideshare.net;auto;auto;auto;true;true;;;true;;
+squarespace.com;auto;auto;auto;true;true;;;true;;
+starbucks.com;auto;auto;auto;true;true;;;true;;
+steamcommunity.com;skip;skip;skip;true;;;;;;
+surveymonkey.com;auto;auto;auto;true;true;;;true;;
+ted.com;skip;skip;skip;true;;true;;;true;
+telegraph.co.uk;auto;auto;auto;true;true;;;true;;
+tripadvisor.com;skip;skip;skip;true;;;;;;
+usatoday.com;skip;skip;skip;;;;;;true;
+webmd.com;skip;fail;fail;;;;;;;[SaveWithoutButtons] Wait timed out after 5251ms : [Load] Wait timed out after 5150ms
+wix.com;skip;fail;skip;true;;;;;true;[SaveWithoutButtons] Wait timed out after 5080ms
+4shared.com;auto;auto;auto;true;true;;;true;;
+aa.com;auto;fail;auto;;true;;;true;;[SaveWithoutButtons] Wait timed out after 5048ms
+accorhotels.com;skip;skip;skip;;;;;;true;
+adf.ly;auto;auto;auto;true;true;;;true;;
+allrecipes.com;skip;fail;fail;;;;;;;[SaveWithoutButtons] Wait timed out after 5150ms : [Load] Wait timed out after 5132ms
+bhphotovideo.com;skip;skip;skip;;;;;;true;
+biblegateway.com;skip;skip;skip;true;;;;;true;
+bleacherreport.com;skip;skip;skip;true;;;;;true;
+canva.com;fail;auto;auto;true;true;;;true;;[SaveWithButtons] credential fail autosave: Fail saved: timeout
+cargurus.com;skip;skip;skip;;;;;;true;
+cbssports.com;auto;auto;auto;true;true;;;true;;
+codewars.com;auto;auto;auto;true;true;;;true;;
+crunchyroll.com;auto;auto;auto;true;true;;;true;;
+dingit.tv;auto;auto;auto;true;true;;;true;;
+discordapp.com;auto;auto;auto;true;true;;;true;;
+ebates.com;skip;skip;skip;true;;;;;true;
+eventbrite.com;skip;skip;skip;true;;;;;true;
+expedia.com;skip;skip;skip;true;;;;;true;
+fandango.com;auto;fail;auto;true;true;;;true;;[SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+fanfiction.net;auto;fail;auto;true;true;;;true;;[SaveWithoutButtons] credential fail autosave: Fail saved: timeout
+feedly.com;skip;skip;skip;true;;;;;true;
+fiverr.com;skip;skip;skip;true;;;;;true;
+foodnetwork.com;fail;fail;skip;;;;;;true;[SaveWithButtons] Wait timed out after 5085ms : [SaveWithoutButtons] Wait timed out after 5185ms
+foxsports.com;skip;skip;fail;true;;;;;true;[Load] Wait timed out after 5082ms
+freedelivery.com.ua;skip;skip;skip;;;;;;true;
+gap.com;skip;skip;skip;true;;;;;true;
+genius.com;auto;auto;auto;true;true;;;true;;
+gfycat.com;auto;auto;auto;true;true;;;true;;
+giphy.com;fail;auto;fail;true;true;;;true;;[SaveWithButtons] Wait timed out after 5140ms : [Load] Wait timed out after 5149ms
+gizmodo.com;skip;skip;skip;;;;;;true;
+glassdoor.com;skip;skip;skip;true;;;;;true;
+groupon.com;skip;fail;skip;true;;;;;true;[SaveWithoutButtons] undefined
+hannaandersson.com;skip;skip;skip;;;;;;true;
+hautelook.com;skip;skip;skip;;;;;;true;
+hotnewhiphop.com;skip;skip;skip;;;;;;true;
+houzz.com;skip;skip;skip;;;;;;true;
+hubspot.com;skip;skip;skip;true;;;;;true;
+indeed.com;auto;auto;auto;true;true;;;true;;
+infusionsoft.com;auto;auto;auto;true;true;;;true;;
+instructables.com;skip;skip;auto;true;true;;;;true;
+invisionapp.com;auto;auto;auto;true;true;;;true;;
+jcpenney.com;skip;skip;skip;;;;;;true;
+jsfiddle.net;auto;auto;auto;true;true;;;true;;
+kayak.com;auto;auto;auto;true;true;;;true;;
+kissanime.ru;skip;skip;skip;;;;;;true;
+lds.org;skip;skip;skip;;;;;;true;
+lifebuzz.com;skip;skip;skip;;;;;;true;
+lingualeo.com;skip;skip;skip;;;;;;true;
+lowes.com;skip;fail;skip;;;;;;true;[SaveWithoutButtons] Wait timed out after 5089ms
+mail.com;skip;skip;auto;true;true;;;;true;
+mailchimp.com;auto;auto;auto;true;true;;;true;;
+mediafire.com;auto;auto;auto;true;true;;;true;;
+monster.com;skip;skip;skip;;;;;;true;
+neteller.com;skip;skip;skip;true;;;;;true;
+newegg.com;auto;auto;fail;true;true;;;true;;[Load] Wait timed out after 5134ms
+nextdoor.com;skip;skip;skip;;;;;;;
+nfl.com;skip;skip;skip;true;;;;;true;
+nike.com;skip;skip;skip;true;;;;;true;
+oracle.com;skip;skip;skip;;;;;;true;
+outbrain.com;skip;skip;skip;true;;;;;;
+overstock.com;skip;skip;skip;;;;;;true;
+paigeeworld.com;skip;skip;skip;;;;;;true;
+plex.tv;skip;skip;skip;true;;;;;true;
+popads.net;auto;auto;auto;;true;;;true;;
+priceline.com;auto;auto;skip;true;true;;;true;true;
+privat24.ua;skip;skip;skip;;;;;;true;
+quirky.com;skip;skip;skip;true;;;;;;
+quizlet.com;auto;auto;auto;true;true;;;true;;
+quora.com;auto;auto;auto;;true;;;true;;
+realtor.com;skip;skip;skip;true;;;;;true;
+redfin.com;skip;skip;skip;true;;;;;true;
+retailmenot.com;auto;auto;auto;true;true;;;true;;
+roblox.com;auto;auto;auto;true;true;;;true;;
+rumble.com;skip;skip;skip;;;;;;;
+similarweb.com;auto;auto;auto;true;true;;;true;;
+slickdeals.net;skip;fail;skip;true;;;;;true;[SaveWithoutButtons] Wait timed out after 5054ms
+spanishdict.com;auto;auto;auto;true;true;;;true;;
+splashid.com;skip;skip;skip;true;;;;;;
+staples.com;skip;skip;skip;;;;;;true;
+steampowered.com;skip;skip;skip;true;;;;;;
+stopcrawl.com;auto;auto;auto;true;true;;;true;;
+thumbtack.com;skip;skip;skip;;;;;;true;
+ticketmaster.com;skip;skip;skip;true;;;;;true;
+trello.com;auto;auto;fail;true;true;;;true;;[Load] Wait timed out after 1034978ms
+tribuna.com;fail;fail;fail;;;;;;;[SaveWithButtons] Wait timed out after 5018ms : [SaveWithoutButtons] Wait timed out after 8047ms : [Load] Wait timed out after 6323ms
+trulia.com;skip;skip;skip;;;;;;true;
+uber.com;skip;skip;skip;;;;;;true;
+udemy.com;auto;auto;skip;true;true;;;true;true;
+ultimate-guitar.com;skip;auto;auto;true;true;;;true;true;
+upwork.com;skip;skip;skip;true;;;;;true;
+walgreens.com;skip;skip;skip;;;;;;true;
+wayfair.com;skip;skip;skip;;;;;;true;
+westernunion.com;skip;skip;skip;true;;;;;true;
+wikihow.com;auto;auto;auto;true;true;;;true;;
+wunderground.com;auto;auto;skip;true;true;;;true;true;
+yellowpages.com;skip;skip;skip;;;;;;true;

@@ -274,9 +274,10 @@ export class TestAPI {
         let extDriver = await this.engine.getExtDriver();
         let parser = new Parser(this.engine);
 
-        L.debug(`open new tab with: ${this.credential.url}`);
-        await extDriver.openUrlOnNewTab(this.credential.url);
         try {
+            L.debug(`open new tab with: ${this.credential.url}`);
+            await extDriver.openUrlOnNewTab(this.credential.url);
+
             let state = EState.init;
 
             if (test === EReportTest.load) await driver.sleep(500);

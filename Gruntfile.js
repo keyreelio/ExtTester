@@ -113,10 +113,5 @@ module.exports = function(grunt) {
     grunt.registerTask("dashlane_continue", ["clean", "build", "run:tester_dashlane_continue"]);
     grunt.registerTask("dashlane_debug", ["clean", "build", "run:tester_dashlane_debug"]);
 
-
-    grunt.registerTask("report", ["run:report"]);
-    grunt.registerTask("report_txt", ["run:report_txt"]);
-    grunt.registerTask("report_csv", ["run:report_csv"]);
-
     grunt.registerTask("scanner", ["clean", "build", "run:scanner"]);
 };

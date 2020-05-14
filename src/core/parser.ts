@@ -1,9 +1,9 @@
-import {parserLogger as L} from "./common/log.config";
+import {parserLogger as L} from "../common/log.config";
 import {By, WebElement} from "selenium-webdriver";
-import {Timeouts} from "./common/timeouts";
-import {Button} from "./common/button";
-import {Input} from "./common/input";
-import {IEngine} from "./engine/engine";
+import {Timeouts} from "../common/timeouts";
+import {Button} from "../common/button";
+import {Input} from "../common/input";
+import {IEngine} from "../engine/engine";
 
 
 export class LoginForm {

@@ -1,4 +1,3 @@
-import {EReportResult, EReportTest, IReport} from "./report";
 import {reportLogger as L} from "../common/log.config";
 import * as fs from "fs";
 import {WriteStream} from "fs";

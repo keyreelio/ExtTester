@@ -1,15 +1,13 @@
-import {IEngine, IEngineFactory} from "./engine/engine";
+import {IEngine, IEngineFactory} from "../engine/engine";
 import {error} from "selenium-webdriver";
-import {Credentials, ICredential, ICredentialsFactory} from "./credentials/credentials";
+import {Credentials, ICredential, ICredentialsFactory} from "../credentials/credentials";
 
-import {testapiLogger as L} from "./common/log.config";
-import {EReportParsePart, EReportResult, EReportTest, IReport} from "./report/report";
+import {testapiLogger as L} from "../common/log.config";
+import {EReportParsePart, EReportResult, EReportTest, Report} from "../report/report";
 import fs from "fs";
 import {LoginForm, Parser} from "./parser";
-import {Input} from "./common/input";
+import {Input} from "../common/input";
 import UnsupportedOperationError = error.UnsupportedOperationError;
-import {Server} from "./service/server";
-import {KeyReelEngine} from "./engine/keyreel";
 
 let search_buttons_module = fs.readFileSync("./src/browser/searchButtons.js", "utf8");
 
@@ -58,14 +56,14 @@ let goToNext = async function (loginForm: LoginForm, input: Input | undefined, u
 
 export class TestAPI {
 
-    report: IReport;
+    report: Report;
     engineFactory: IEngineFactory;
     credentialsFactory: ICredentialsFactory;
     threadCount: number;
 
 
     public constructor(
-            report: IReport,
+            report: Report,
             engineFactory: IEngineFactory,
             credentialsFactory: ICredentialsFactory,
             threadCount: number) {
@@ -167,7 +165,7 @@ export class TestAPI {
             await this.report.start(credential.url);
 
             L.debug(`engine start`);
-            await engine.start(credential, false);
+            await engine.start(credential, test == EReportTest.load);
 
             try {
                 L.debug("check write credential");

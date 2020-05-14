@@ -1,12 +1,18 @@
-import {IEngine} from './engine/engine'
+import {IEngineFactory} from './engine/engine'
 import {ConfigureLoggerForDebug, testerLogger as L} from "./common/log.config";
-import {Credentials, ICredentialsFactory} from "./credentials/credentials";
-import {TestAPI} from "./testapi";
-import {EReportResult, EReportTest, IReport, ReportCsv, ReportLogger, ReportTxt} from "./report/report";
-import {KeyReelEngine} from './engine/keyreel';
+import {ICredentialsFactory} from "./credentials/credentials";
+import {IReport, ReportCsv, ReportLogger, ReportTxt} from "./report/report";
+import {KeyReelEngineFactory} from './engine/keyreel';
 import {CredentialsFactoryPassDB} from "./credentials/credentialsFactoryPassDB";
 import {CredentialsFactoryDebug} from "./credentials/credentialsFactoryDebug";
-import {Server} from "./service/server";
+import {CredentialsFactorDomains} from "./credentials/credentialsFactoryDomains";
+import {TestAPI} from "./testapi";
+
+
+//TODO: add duration time to report
+//TODO: separate flags to tests
+//TODO: add test for negative save with ded credential
+//TODO: add test for autoload for sites without credential
 
 
 let timeFormat = function(d: Date): string {
@@ -16,89 +22,106 @@ let timeFormat = function(d: Date): string {
 
 class Tester {
 
-    static DBFolderPath = "./tmp/";
     static DumpFolderPath = "./tmp/";
     static ReportsFolderPath = "./reports/";
 
 
     public static async run(args: string[]) {
 
-        if (args.includes("report")) {
-            L.info("generate report");
+        if (this.parseArg(args, "report")) {
+            L.debug("generate report");
 
             await this.report(args);
         } else {
-            L.info("start testing");
+            L.debug("start testing");
 
             await this.testing(args);
-        }
-    }
 
-
-    protected static async report(args: string[]) {
-        let report: IReport;
-        let reportDumpFilePath = `${Tester.DumpFolderPath}tester.dump.json`;
-        if (args.includes("--txt")) {
-            let filePath = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.txt`;
-            L.debug(`report to TXT file: ${filePath}`);
-            report = new ReportTxt("KeyReel", reportDumpFilePath, filePath);
-        } else if (args.includes("--csv")) {
-            let filePath = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.csv`;
-            L.debug(`report to CSV file: ${filePath}`);
-            report = new ReportCsv("KeyReel", reportDumpFilePath, filePath);
-        } else {
-            L.debug("report to console");
-            report = new ReportLogger("KeyReel", reportDumpFilePath);
+            L.debug("finish testing");
         }
-        await report.startup(true);
-        await report.shutdown();
     }
 
     protected static async testing(args: string[]) {
-        let debug = args.includes("debug");
-        let toContinue = args.includes("continue");
-        let paraller = args.includes("--count");
+        let debug = this.parseArg(args, "debug");
+        let toContinue = this.parseArg(args, "continue");
+        let domainDB = this.parseArg(args, "--domains");
+        let writeDisable = this.parseArg(args, "--withoutWrite");
+        let failWriteDisable = this.parseArg(args, "--withoutFailWrite");
+        let readDisable = this.parseArg(args, "--withoutRead");
+        let threadCount = this.parseNumValueArg(args, "--count", 1);
+        let engineName = this.parseStrValueArg(args, "--engine", "keyreel");
 
-        let instanceCount = 1;
-        if (paraller) {
-            let index = args.indexOf("--count");
-            let count = args[index + 1];
-            if (count !== undefined) {
-                let num = Number(count);
-                if (num !== undefined && !isNaN(num)) {
-                    instanceCount = num;
-                }
-            }
+        failWriteDisable = true;
+        if (domainDB) {
+            writeDisable = true;
+            failWriteDisable = false;
+            readDisable = false;
         }
-
-        L.debug(`  arg.debug: ${debug}`);
-        L.debug(`  arg.continue: ${toContinue}`);
-        L.debug(`  arg.count: ${instanceCount}`);
 
         if (debug) {
             ConfigureLoggerForDebug();
         }
+
+        L.debug(`args:`);
+        L.debug(`  debug: ${debug}`);
+        L.debug(`  continue: ${toContinue}`);
+        L.debug(`  domainDB: ${domainDB}`);
+        L.debug(`  writeDisable: ${writeDisable}`);
+        L.debug(`  failWriteDisable: ${failWriteDisable}`);
+        L.debug(`  readDisable: ${readDisable}`);
+        L.debug(`  threadCount: ${threadCount}`);
+        L.debug(`  engine: ${engineName}`);
 
         try {
             let report: IReport;
             let credentialsFactory: ICredentialsFactory;
             if (debug) {
                 credentialsFactory = new CredentialsFactoryDebug();
-                let reportDumpFilePath = `${Tester.DumpFolderPath}tester-debug.dump.json`;
-                report = new ReportLogger("KeyReel", reportDumpFilePath);
+                let reportDumpFilePath = `${Tester.DumpFolderPath}tester-debug.${engineName}.dump.json`;
+                report = new ReportLogger(engineName, reportDumpFilePath);
             } else {
-                credentialsFactory = new CredentialsFactoryPassDB();
-                let reportDumpFilePath = `${Tester.DumpFolderPath}tester.dump.json`;
-                let reportFilePath = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.txt`;
-                L.debug(`save report to txt file: ${reportFilePath}`);
-                report = new ReportTxt("KeyReel", reportDumpFilePath, reportFilePath);
+                if (domainDB) {
+                    writeDisable = true;
+                    failWriteDisable = false;
+                    readDisable = false;
+                    credentialsFactory = new CredentialsFactorDomains();
+                } else {
+                    credentialsFactory = new CredentialsFactoryPassDB();
+                }
+                let reportDumpFilePath = `${Tester.DumpFolderPath}tester.${engineName}.dump.json`;
+                let reportFilePath = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.${engineName}.txt`;
+                report = new ReportTxt(engineName, reportDumpFilePath, reportFilePath);
+            }
+
+            let engineFactory: IEngineFactory;
+            if (engineName === "keyreel") {
+                engineFactory = new KeyReelEngineFactory({ withoutProfile: true });
+            } else /* by default use KeyReel engine*/ {
+                engineFactory = new KeyReelEngineFactory({ withoutProfile: true });
             }
 
             L.debug("startup report");
             await report.startup(toContinue);
 
-            L.debug("testing KeyReel (ServiceJS)");
-            await this.testKeyreel(report, credentialsFactory, debug, toContinue, instanceCount);
+            let test = new TestAPI(report, engineFactory, credentialsFactory, threadCount);
+
+            if (!writeDisable) {
+                L.debug("testing write");
+                await test.checkWrites(false);
+
+                L.debug("testing write without click on buttons (only sites which did not save) - withoutProfile: true");
+                await test.checkWrites(true);
+            }
+
+            if (!failWriteDisable) {
+                L.debug("testing fail write");
+                await test.checkFailWrites();
+            }
+
+            if (!readDisable) {
+                L.debug("testing read (only sites which saved) - withoutProfile: true");
+                await test.checkReads();
+            }
 
             L.debug("shutdown report")
             await report.shutdown();
@@ -107,180 +130,51 @@ class Tester {
             L.warn(`testing fail with: ${e}`);
             return Promise.reject(e);
         }
-
-        L.info("finish testing");
     }
 
-    protected static async testKeyreel(
-            report: IReport,
-            credentialsFactory: ICredentialsFactory,
-            debug: boolean,
-            toContinue: boolean,
-            instanceCount: number): Promise<void> {
 
-        L.debug("testing write");
-        await this.testWrites(report,credentialsFactory, instanceCount, false);
+    protected static async report(args: string[]) {
+        let engineName = this.parseStrValueArg(args, "--engine", "keyreel");
 
-        L.debug("testing write without click on buttons (only sites which did not save) - withoutProfile: true");
-        await this.testWrites(report,credentialsFactory, instanceCount, true);
+        let report: IReport;
+        let reportDumpFilePath = `${Tester.DumpFolderPath}tester.${engineName}.dump.json`;
 
-        L.debug("testing read (only sites which saved) - withoutProfile: true");
-        await this.testReads(report,credentialsFactory, instanceCount);
-    }
+        if (this.parseArg(args, "--txt")) {
 
-    protected static async testWrites(
-        report: IReport,
-        credentialsFactory: ICredentialsFactory,
-        instanceCount: number,
-        useOnlyEnterButton: boolean): Promise<void> {
+            let filePath = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.txt`;
+            L.debug(`report to TXT file: ${filePath}`);
+            report = new ReportTxt("KeyReel", reportDumpFilePath, filePath);
+        } else if (this.parseArg(args, "--csv")) {
 
-        let server = new Server();
+            let filePath = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.csv`;
+            L.debug(`report to CSV file: ${filePath}`);
+            report = new ReportCsv("KeyReel", reportDumpFilePath, filePath);
+        } else {
 
-        L.debug("start server");
-        await server.start();
-
-        L.debug("testing write");
-        let credentials = credentialsFactory.credentials();
-        let writeTests1: any[] = [];
-        for (let i = 0; i < instanceCount; i++) {
-            let engine = new KeyReelEngine(server, { withoutProfile: true });
-            writeTests1.push(this.testWrite(engine, report, credentials, useOnlyEnterButton));
+            L.debug("report to console");
+            report = new ReportLogger("KeyReel", reportDumpFilePath);
         }
-        await Promise.all(writeTests1);
-
-        L.debug("stop server");
-        await server.stop();
+        await report.startup(true);
+        await report.shutdown();
     }
 
-    protected static async testReads(
-        report: IReport,
-        credentialsFactory: ICredentialsFactory,
-        instanceCount: number): Promise<void> {
-
-        let server = new Server();
-
-        L.debug("start server");
-        await server.start();
-
-        L.debug("testing write");
-        let credentials = credentialsFactory.credentials();
-        let readTests1: any[] = [];
-        for (let i = 0; i < instanceCount; i++) {
-            let engine = new KeyReelEngine(server, { withoutProfile: true });
-            readTests1.push(this.testRead(engine, report, credentials));
-        }
-        await Promise.all(readTests1);
-
-        L.debug("stop server");
-        await server.stop();
+    protected static parseArg(args: string[], arg: string): boolean {
+        return args.includes(arg);
     }
 
-    protected static async testWrite(
-            engine: IEngine,
-            report: IReport,
-            credentials: Credentials,
-            useOnlyEnterButton: boolean): Promise<void> {
-
-        L.debug("startup engine");
-        await engine.startup(true);
-
-        let driver = await engine.getDriver();
-
-        let credential = await credentials.shift();
-        while (credential !== undefined) {
-            let test = useOnlyEnterButton ? EReportTest.saveWithoutButtons : EReportTest.saveWithButtons;
-            let result = await report.getResult(credential.url, test);
-
-            if (result !== undefined && result !== EReportResult.unknown) {
-                L.debug(`skip credential (already checked - ${result})`);
-                credential = await credentials.shift();
-                continue;
-            }
-
-            L.debug(`report start: ${credential.url}`);
-            await report.start(credential.url);
-
-            L.debug(`engine start`);
-            await engine.start(credential, false);
-
-            L.debug("create test API");
-            let api = new TestAPI(engine, credential, report);
-
-            try {
-                L.debug("check write credential");
-                await api.checkWriteCredential({useOnlyEnterButton: useOnlyEnterButton});
-            } catch (e) {
-                L.warn(`write credential filed with: '${e}'`);
-            }
-
-            L.debug("engine finish");
-            await engine.finish();
-
-            L.debug("report finish");
-            await report.finish(credential.url, test);
-
-            await driver.sleep(500);
-
-            credential = await credentials.shift();
-        }
-
-        L.debug("shutdown engine");
-        await engine.shutdown();
-
-        L.debug("driver quit");
-        await driver.quit();
+    protected static parseStrValueArg(args: string[], arg: string, defValue: string = ""): string {
+        if (!args.includes(arg)) return defValue;
+        let index = args.indexOf(arg);
+        if (index < 0 || index === (args.length - 1)) return defValue;
+        let value = args[index + 1]
+        if (value === undefined) return defValue;
+        return value;
     }
 
-    protected static async testRead(engine: IEngine, report: IReport, credentials: Credentials): Promise<void> {
-
-        L.debug("startup engine");
-        await engine.startup(true);
-
-        let driver = await engine.getDriver();
-
-        let credential = await credentials.shift();
-        while (credential !== undefined) {
-            let result = await report.getResult(credential.url, EReportTest.load);
-            if (result !== undefined && result !== EReportResult.unknown) {
-                L.debug(`skip credential (already checked - ${result})`);
-                credential = await credentials.shift();
-                continue;
-            }
-
-            L.debug(`report start: ${credential.url}`);
-            await report.start(credential.url);
-
-            L.debug(`engine start`);
-            await engine.start(credential, true);
-
-            L.debug("create test API");
-            let api = new TestAPI(engine, credential, report);
-
-            try {
-                L.debug("read credential");
-                await api.checkReadCredential();
-            } catch (e) {
-                L.warn(`read credential filed with: '${e}'`);
-            }
-
-            L.debug("engine finish");
-            await engine.finish();
-
-            L.debug("report finish");
-            await report.finish(credential.url, EReportTest.load);
-
-            await driver.sleep(500);
-
-            credential = await credentials.shift();
-        }
-
-        L.debug("shutdown engine");
-        await engine.shutdown();
-
-        L.debug("driver quit");
-        await driver.quit();
-
-        return Promise.resolve();
+    protected static parseNumValueArg(args: string[], arg: string, defValue: number = 0): number {
+        let value = Number(this.parseStrValueArg(args, arg, `${defValue}`));
+        if (value === undefined || !isNaN(value)) return defValue;
+        return value;
     }
 }
 

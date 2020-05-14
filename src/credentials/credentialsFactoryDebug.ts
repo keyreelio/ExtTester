@@ -5,9 +5,9 @@ export class CredentialsFactoryDebug implements ICredentialsFactory {
 
     items: Array<ICredential> = Array(
         {
-            url: "https://dashboard.devmate.com/",
-            login: "petro@auxoft.com",
-            password: "K8yb1g6iw5f7GK238lHk",
+            url: "https://paypal.com/",
+            login: "donna.simple.oluso@gmail.com",
+            password: "g8MYA5wnLx8AfBKz3F5v",
             timeout: 2000
         },
         // {

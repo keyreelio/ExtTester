@@ -12,31 +12,50 @@ module.exports = function(grunt) {
             options: {
             },
 
-            tester_debug: {
+            // new
+            tester_keyreel: {
                 cmd: 'node',
-                args: ['./build/tester.js', 'debug', '--count', '1']
+                args: ['./build/tester.js']
             },
-            tester: {
+            tester_keyreel_continue: {
                 cmd: 'node',
-                args: ['./build/tester.js', '--count', '1']
+                args: ['./build/tester.js', 'continue']
             },
-            tester_continue: {
+            tester_keyreel_debug: {
                 cmd: 'node',
-                args: ['./build/tester.js', 'continue', '--count', '1']
+                args: ['./build/tester.js', 'debug']
             },
 
-            scanner: {
-                args: ['./build/scanner.js']
+            tester_domains: {
+                cmd: 'node',
+                args: ['./build/tester.js', '--domains']
             },
+            tester_domains_continue: {
+                cmd: 'node',
+                args: ['./build/tester.js', 'continue', '--domains']
+            },
+            tester_domains_debug: {
+                cmd: 'node',
+                args: ['./build/tester.js', 'debug', '--domains']
+            },
+
+            tester_dashlane: {
+                cmd: 'node',
+                args: ['./build/tester.js', '--engine', 'dashlane']
+            },
+            tester_dashlane_continue: {
+                cmd: 'node',
+                args: ['./build/tester.js', 'continue', '--engine', 'dashlane']
+            },
+            tester_dashlane_debug: {
+                cmd: 'node',
+                args: ['./build/tester.js', 'debug', '--engine', 'dashlane']
+            },
+
 
             report: {
                 cmd: 'node',
-                args: ['./build/tester.js', 'report', '--console']
-            },
-
-            report: {
-                cmd: 'node',
-                args: ['./build/tester.js', 'report', '--console']
+                args: ['./build/tester.js', 'report']
             },
 
             report_txt: {
@@ -47,6 +66,11 @@ module.exports = function(grunt) {
             report_csv: {
                 cmd: 'node',
                 args: ['./build/tester.js', 'report', '--csv']
+            },
+
+
+            scanner: {
+                args: ['./build/scanner.js']
             },
 
             thrift: {
@@ -68,16 +92,27 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-run');
-    // grunt.loadNpmTasks('grunt-webpack');
 
     grunt.registerTask("default", ["build"]);
 
     grunt.registerTask("thrift", ["run:thrift"]);
     grunt.registerTask("build", ["thrift", "ts"]);
 
-    grunt.registerTask("tester_debug", ["clean", "build", "run:tester_debug"]);
-    grunt.registerTask("tester", ["clean", "build", "run:tester"]);
-    grunt.registerTask("tester_continue", ["clean", "build", "run:tester_continue"]);
+
+    // new
+    grunt.registerTask("keyreel", ["clean", "build", "run:tester_keyreel"]);
+    grunt.registerTask("keyreel_continue", ["clean", "build", "run:tester_keyreel_continue"]);
+    grunt.registerTask("keyreel_debug", ["clean", "build", "run:tester_keyreel_debug"]);
+
+    grunt.registerTask("domains", ["clean", "build", "run:tester_domains"]);
+    grunt.registerTask("domains_continue", ["clean", "build", "run:tester_domains_continue"]);
+    grunt.registerTask("domains_debug", ["clean", "build", "run:tester_domains_debug"]);
+
+
+    grunt.registerTask("dashlane", ["clean", "build", "run:tester_dashlane"]);
+    grunt.registerTask("dashlane_continue", ["clean", "build", "run:tester_dashlane_continue"]);
+    grunt.registerTask("dashlane_debug", ["clean", "build", "run:tester_dashlane_debug"]);
+
 
     grunt.registerTask("report", ["run:report"]);
     grunt.registerTask("report_txt", ["run:report_txt"]);

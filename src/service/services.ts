@@ -3,26 +3,31 @@ import * as kr from "../thrift/gencode/AuxoftKeyReel";
 
 import {loggingServiceJSLogger as Ll, hostServiceJSLogger as Lh} from "../common/log.config";
 import { DBAccount } from './dbaccount';
+import * as thrift from "@creditkarma/thrift-server-core";
 
 
 export class LoggingServiceImpl implements kr.LoggingService.IHandler<express.Request> {
     public sendLog(logMessage: kr.ILogMessage, context?: express.Request): void | Promise<void> {
 
+        if (logMessage.message === undefined) return;
+        let message = Buffer.from(logMessage.message, 'base64').toString();
+        let tags = logMessage.tags === undefined ? "" : logMessage.tags;
+        let contextName = logMessage.contextName === undefined ? "" : logMessage.contextName;
         switch (logMessage.level) {
             case kr.LogLevel.VERBOSE:
-                Ll.trace(`${logMessage.message}`);
+                Ll.trace(`${contextName}: [${tags}] ${message}`);
                 break;
             case kr.LogLevel.DEBUG:
-                Ll.debug(`${logMessage.message}`);
+                Ll.debug(`${contextName}: [${tags}] ${message}`);
                 break;
             case kr.LogLevel.INFO:
-                Ll.info(`${logMessage.message}`);
+                Ll.info(`${contextName}: [${tags}] ${message}`);
                 break;
             case kr.LogLevel.WARNING:
-                Ll.warn(`${logMessage.message}`);
+                Ll.warn(`${contextName}: [${tags}] ${message}`);
                 break;
             case kr.LogLevel.ERROR:
-                Ll.warn(`${logMessage.message}`);
+                Ll.warn(`${contextName}: [${tags}] ${message}`);
                 break;
         }
     }
@@ -54,8 +59,11 @@ export class HostStorageServiceImpl implements kr.HostStorageService.IHandler<ex
         let response = new kr.PongTestResponse();
         response.info = this.run(request.info, () => {
 
+            let flags: number = Number(kr.LOG_LEVEL_VERBOSE);
+            flags = flags | Number(this.deviceOfflined ? kr.DEVICE_STATE_OFFLINE : kr.DEVICE_STATE_ONLINE);
+
             response.extendedMode = false;
-            response.flags = this.deviceOfflined ? kr.DEVICE_STATE_OFFLINE : kr.DEVICE_STATE_ONLINE;
+            response.flags = new thrift.Int64(flags);
             response.clientSecret = '939b3c15-a7a0-4ec1-8667-75cbc5d4cd4f';
         });
 

@@ -1,12 +1,38 @@
-import {Engine} from './engine'
+import {Engine, IEngine, IEngineFactory} from './engine'
 import {keyreelEngineLogger as L} from "../common/log.config";
 import {Server} from "../service/server";
-// import {DatabaseEvent, DatabaseEventType, IDatabase} from "../database/database";
 import {ICredential} from "../credentials/credentials";
-import {error} from "selenium-webdriver";
 import {Timeouts} from "../common/timeouts";
 import {DBAccount} from "../service/dbaccount";
 import {Mutex} from "../common/mutex";
+
+
+export class KeyReelEngineFactory implements IEngineFactory {
+
+    server: Server = new Server();
+    options: { withoutProfile: boolean } | undefined;
+
+
+    public constructor(
+        options:
+            { withoutProfile: boolean } |
+            undefined = undefined) {
+
+        this.options = options;
+    }
+
+    public async createEngine(): Promise<IEngine> {
+        return Promise.resolve(new KeyReelEngine(this.server, this.options));
+    }
+
+    public async start(): Promise<void> {
+        return await this.server.start();
+    }
+
+    public async finish(): Promise<void> {
+        return await this.server.stop();
+    }
+}
 
 
 export class KeyReelEngine extends Engine {

@@ -21,6 +21,12 @@ export interface IEngine {
     dropAllCredentials(): Promise<void>;
 }
 
+export interface IEngineFactory {
+    start(): Promise<void>;
+    createEngine(): Promise<IEngine>;
+    finish(): Promise<void>;
+}
+
 export class Engine implements IEngine {
 
     static WaitInitExtension = 2000;

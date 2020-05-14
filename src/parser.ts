@@ -193,8 +193,10 @@ export class Parser {
         try {
             let body = await driver.findElement(By.xpath("//body[@axt-parser-timing]"));
             try {
+                await driver.sleep(100);
                 let loginForm = await body.findElement(By.xpath("//*[@axt-form-type='login']"));
                 if (loginForm !== undefined) {
+                    await driver.sleep(100);
                     result = new LoginForm();
                     let login = await loginForm.findElement(By.xpath("//input[@axt-input-type='login']"));
                     if (login !== undefined) {

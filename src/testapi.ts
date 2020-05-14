@@ -1,6 +1,6 @@
-import {IEngine} from "./engine/engine";
+import {IEngine, IEngineFactory} from "./engine/engine";
 import {error} from "selenium-webdriver";
-import {ICredential} from "./credentials/credentials";
+import {Credentials, ICredential, ICredentialsFactory} from "./credentials/credentials";
 
 import {testapiLogger as L} from "./common/log.config";
 import {EReportParsePart, EReportResult, EReportTest, IReport} from "./report/report";
@@ -8,6 +8,8 @@ import fs from "fs";
 import {LoginForm, Parser} from "./parser";
 import {Input} from "./common/input";
 import UnsupportedOperationError = error.UnsupportedOperationError;
+import {Server} from "./service/server";
+import {KeyReelEngine} from "./engine/keyreel";
 
 let search_buttons_module = fs.readFileSync("./src/browser/searchButtons.js", "utf8");
 
@@ -56,17 +58,146 @@ let goToNext = async function (loginForm: LoginForm, input: Input | undefined, u
 
 export class TestAPI {
 
-    engine: IEngine;
-    credential: ICredential;
     report: IReport;
+    engineFactory: IEngineFactory;
+    credentialsFactory: ICredentialsFactory;
+    threadCount: number;
 
-    constructor(engine: IEngine, credential: ICredential, report: IReport) {
-        this.engine = engine;
-        this.credential = credential;
+
+    public constructor(
+            report: IReport,
+            engineFactory: IEngineFactory,
+            credentialsFactory: ICredentialsFactory,
+            threadCount: number) {
+
         this.report = report;
+        this.engineFactory = engineFactory;
+        this.credentialsFactory = credentialsFactory;
+        this.threadCount = threadCount;
     }
 
-    public async checkWriteCredential(
+
+    public async checkWrites(useOnlyEnterButton: boolean): Promise<void> {
+
+        await this.checkTests(
+            `write: useOnlyEnterButton = ${useOnlyEnterButton}`,
+            (engine, credentials) => {
+                return this.checkWrite(engine, credentials, useOnlyEnterButton);
+            });
+    }
+
+    public async checkFailWrites(): Promise<void> {
+
+        // await this.checkTests(
+        //     `write: useOnlyEnterButton = ${useOnlyEnterButton}`,
+        //     (engine, credentials) => {
+        //         return this.checkWrite(engine, credentials, useOnlyEnterButton);
+        //     });
+    }
+
+    public async checkReads(): Promise<void> {
+
+        await this.checkTests(
+            `read`,
+            (engine, credentials) => {
+                return this.checkRead(engine, credentials);
+            });
+    }
+
+    protected async checkTests(testName: string, getTest: ((engine: IEngine, credentials: Credentials) => Promise<void>)) {
+        L.debug("start engine factory");
+        await this.engineFactory.start();
+
+        L.debug(`testing ${testName}`);
+        let credentials = this.credentialsFactory.credentials();
+        let tests: any[] = [];
+        for (let i = 0; i < this.threadCount; i++) {
+            let engine = await this.engineFactory.createEngine();
+            tests.push(await getTest(engine, credentials));
+        }
+        await Promise.all(tests);
+
+        L.debug("finish engine factory");
+        await this.engineFactory.finish();
+    }
+
+    protected async checkWrite(engine: IEngine, credentials: Credentials, useOnlyEnterButton: boolean): Promise<void> {
+
+        return await this.checkTest(
+            useOnlyEnterButton ? EReportTest.saveWithoutButtons : EReportTest.saveWithButtons,
+            engine,
+            credentials,
+            (credential: ICredential) => {
+                return this.checkWriteCredential(engine, credential, { useOnlyEnterButton: useOnlyEnterButton });
+            });
+    }
+
+    protected async checkRead(engine: IEngine, credentials: Credentials): Promise<void> {
+
+        return await this.checkTest(
+            EReportTest.load,
+            engine,
+            credentials,
+            (credential: ICredential) => {
+                return this.checkReadCredential(engine, credential);
+            });
+    }
+
+    protected async checkTest(
+        test: EReportTest,
+        engine: IEngine,
+        credentials: Credentials,
+        getCheckCredential: ((credential: ICredential) => Promise<void>)): Promise<void> {
+
+        L.debug("startup engine");
+        await engine.startup(true);
+
+        let driver = await engine.getDriver();
+
+        let credential = await credentials.shift();
+        while (credential !== undefined) {
+            let result = await this.report.getResult(credential.url, test);
+            if (result !== undefined && result !== EReportResult.unknown) {
+                L.debug(`skip credential (already checked - ${result})`);
+                credential = await credentials.shift();
+                continue;
+            }
+
+            L.debug(`report start: ${credential.url}`);
+            await this.report.start(credential.url);
+
+            L.debug(`engine start`);
+            await engine.start(credential, false);
+
+            try {
+                L.debug("check write credential");
+                let checkCredential = getCheckCredential(credential);
+                await checkCredential.then().catch(e => { throw e; });
+            } catch (e) {
+                L.warn(`write credential filed with: '${e}'`);
+            }
+
+            L.debug("engine finish");
+            await engine.finish();
+
+            L.debug("report finish");
+            await this.report.finish(credential.url, test);
+
+            // await driver.sleep(500);
+
+            credential = await credentials.shift();
+        }
+
+        L.debug("shutdown engine");
+        await engine.shutdown();
+
+        L.debug("driver quit");
+        await driver.quit();
+    }
+
+    protected async checkWriteCredential(
+        engine: IEngine,
+        credential: ICredential,
         options:
             { useOnlyEnterButton: boolean } |
             undefined = undefined): Promise<void> {
@@ -81,11 +212,11 @@ export class TestAPI {
         }
 
         let report = this.report;
-        let engine = this.engine;
-        let credential = this.credential;
 
         await this.checkCredentialFor(
             useOnlyEnterButton ? EReportTest.saveWithoutButtons : EReportTest.saveWithButtons,
+            engine,
+            credential,
 
             async function (loginForm: LoginForm, test: EReportTest): Promise<ECheck> {
 
@@ -182,14 +313,18 @@ export class TestAPI {
         return Promise.resolve();
     }
 
-    public async checkReadCredential(): Promise<void> {
+    protected async checkReadCredential(
+            engine: IEngine,
+            credential: ICredential): Promise<void> {
+
         L.info("checkReadCredential");
 
         let report = this.report;
-        let credential = this.credential;
 
         await this.checkCredentialFor(
             EReportTest.load,
+            engine,
+            credential,
 
             async function (loginForm: LoginForm, test: EReportTest): Promise<ECheck> {
 
@@ -258,9 +393,11 @@ export class TestAPI {
 
         return Promise.resolve();
     }
-    
+
     protected async checkCredentialFor(
         test: EReportTest,
+        engine: IEngine,
+        credential: ICredential,
         hasFullLoginForm: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
         hasFirstStepLoginForm: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
         hasSecondStepLoginForm: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
@@ -270,13 +407,13 @@ export class TestAPI {
 
         L.info("checkWriteCredential");
 
-        let driver = await this.engine.getDriver();
-        let extDriver = await this.engine.getExtDriver();
-        let parser = new Parser(this.engine);
+        let driver = await engine.getDriver();
+        let extDriver = await engine.getExtDriver();
+        let parser = new Parser(engine);
 
         try {
-            L.debug(`open new tab with: ${this.credential.url}`);
-            await extDriver.openUrlOnNewTab(this.credential.url);
+            L.debug(`open new tab with: ${credential.url}`);
+            await extDriver.openUrlOnNewTab(credential.url);
 
             let state = EState.init;
 
@@ -293,13 +430,13 @@ export class TestAPI {
             while (true) {
 
                 L.debug("parse page");
-                let page = await parser.parsePage(ParseSearchMap[state], this.credential.timeout);
+                let page = await parser.parsePage(ParseSearchMap[state], credential.timeout);
 
                 L.debug("check page structure");
                 if (page.singinButton !== undefined && page.loginForm === undefined) {
                     L.debug("page has singin button and hasn't login form");
 
-                    await this.report.setParsePart(this.credential.url, EReportParsePart.singInButton);
+                    await this.report.setParsePart(credential.url, EReportParsePart.singInButton);
                     await page.singinButton.press();
 
                     state = EState.waitLoginForm;
@@ -308,12 +445,12 @@ export class TestAPI {
                     if (page.loginForm.loginInput !== undefined && page.loginForm.passwordInput !== undefined) {
                         L.debug("login form has login and password inputs");
 
-                        await this.report.setParsePart(this.credential.url, EReportParsePart.fullLoginForm);
+                        await this.report.setParsePart(credential.url, EReportParsePart.fullLoginForm);
                         if (await hasFullLoginForm(page.loginForm, test) == ECheck.break) break;
                     } else if (page.loginForm.loginInput !== undefined) {
                         L.debug("login form has only login input");
 
-                        await this.report.setParsePart(this.credential.url, EReportParsePart.firstStepLoginForm);
+                        await this.report.setParsePart(credential.url, EReportParsePart.firstStepLoginForm);
                         if (await hasFirstStepLoginForm(page.loginForm, test) == ECheck.break) break;
 
                         state = EState.waitSecondLoginForm;
@@ -321,12 +458,12 @@ export class TestAPI {
                     } else if (page.loginForm.passwordInput !== undefined) {
                         L.debug("login form has only password input");
 
-                        await this.report.setParsePart(this.credential.url, EReportParsePart.secondStepLoginForm);
+                        await this.report.setParsePart(credential.url, EReportParsePart.secondStepLoginForm);
                         if (await hasSecondStepLoginForm(page.loginForm, test) == ECheck.break) break;
                     } else {
                         L.debug("login form did not have login or password inputs");
 
-                        await this.report.setFail(this.credential.url, "login form did not have login or password inputs", test);
+                        await this.report.setFail(credential.url, "login form did not have login or password inputs", test);
                         break;
                     }
 
@@ -337,20 +474,20 @@ export class TestAPI {
                 } else if (page.isLoggedIn) {
                     L.debug("page is logged in");
 
-                    await this.report.setParsePart(this.credential.url, EReportParsePart.loggedIn);
+                    await this.report.setParsePart(credential.url, EReportParsePart.loggedIn);
 
                     if (await hasIsLoggedIn(test) == ECheck.break) break;
                 } else if (page.didNotParse) {
                     L.debug("page did not parsed");
 
-                    await this.report.setParsePart(this.credential.url, EReportParsePart.notParsed);
+                    await this.report.setParsePart(credential.url, EReportParsePart.notParsed);
                 }
 
                 break;
             }
         } catch (e) {
             L.warn(`fail: ${e}`);
-            await this.report.setFail(this.credential.url, failMessage(e), test);
+            await this.report.setFail(credential.url, failMessage(e), test);
         }
 
         L.debug("close current tab");

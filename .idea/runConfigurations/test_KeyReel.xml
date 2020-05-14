@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Tester" type="js.build_tools.grunt">
+  <configuration default="false" name="test KeyReel" type="js.build_tools.grunt">
     <node-interpreter value="project" />
     <gruntfile value="$PROJECT_DIR$/Gruntfile.js" />
     <tasks>
-      <task value="tester" />
+      <task value="keyreel" />
     </tasks>
     <envs />
     <method v="2" />

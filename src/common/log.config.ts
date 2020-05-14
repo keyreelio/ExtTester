@@ -24,7 +24,7 @@ export let reportLogger = new Category("report");
 
 export let serviceJSLogger = new Category("servicejs");
 
-export let loggingServiceJSLogger = new Category("logservice");
+export let loggingServiceJSLogger = new Category("ext");
 export let hostServiceJSLogger = new Category("hostservice");
 
 

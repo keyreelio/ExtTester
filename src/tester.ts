@@ -48,6 +48,8 @@ class Tester {
         let threadCount = Args.parseNumValueArg(args, "--count", 1)
         let engineName = Args.parseStrValueArg(args, "--engine", "keyreel")
 
+        if (engineName === undefined) engineName = "keyreel";
+
         failWriteDisable = true;
         if (domainDB) {
             writeDisable = true;

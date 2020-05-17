@@ -8,6 +8,8 @@ import fs from "fs";
 import {LoginForm, Parser} from "./parser";
 import {Input} from "../common/input";
 import UnsupportedOperationError = error.UnsupportedOperationError;
+import TimeoutError = error.TimeoutError;
+import {Timeouts} from "../common/timeouts";
 
 let search_buttons_module = fs.readFileSync("./src/browser/searchButtons.js", "utf8");
 
@@ -151,6 +153,7 @@ export class TestAPI {
         await engine.startup(true);
 
         let driver = await engine.getDriver();
+        let extDriver = await engine.getExtDriver();
 
         let credential = await credentials.shift();
         while (credential !== undefined) {
@@ -168,11 +171,22 @@ export class TestAPI {
             await engine.start(credential, test == EReportTest.load);
 
             try {
-                L.debug("check write credential");
-                let checkCredential = getCheckCredential(credential);
-                await checkCredential.then().catch(e => { throw e; });
+                L.debug("check credential");
+                await Promise.race([
+                    getCheckCredential(credential),
+                    Timeouts.createPromiseTimer(Timeouts.WaitCheckCredential, new TimeoutError())
+                ]);
             } catch (e) {
-                L.warn(`write credential filed with: '${e}'`);
+                if (e as TimeoutError) {
+                    L.debug("check credential timeout");
+
+                    await this.report.setFail(credential.url, "check credential timeout", test);
+
+                    L.debug("close current tab");
+                    await extDriver.closeCurrentTab();
+                } else {
+                    L.warn(`write credential filed with: '${e}'`);
+                }
             }
 
             L.debug("engine finish");
@@ -180,8 +194,6 @@ export class TestAPI {
 
             L.debug("report finish");
             await this.report.finish(credential.url, test);
-
-            // await driver.sleep(500);
 
             credential = await credentials.shift();
         }

@@ -1,13 +1,11 @@
 
-
-
 export class Args {
 
     public static parseArg(args: string[], arg: string): boolean {
         return args.includes(arg);
     }
 
-    public static parseStrValueArg(args: string[], arg: string, defValue: string = ""): string {
+    public static parseStrValueArg(args: string[], arg: string, defValue: string | undefined = undefined): string | undefined {
         if (!args.includes(arg)) return defValue;
         let index = args.indexOf(arg);
         if (index < 0 || index === (args.length - 1)) return defValue;

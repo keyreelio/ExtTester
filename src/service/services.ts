@@ -9,27 +9,27 @@ import * as thrift from "@creditkarma/thrift-server-core";
 export class LoggingServiceImpl implements kr.LoggingService.IHandler<express.Request> {
     public sendLog(logMessage: kr.ILogMessage, context?: express.Request): void | Promise<void> {
 
-        if (logMessage.message === undefined) return;
-        let message = Buffer.from(logMessage.message, 'base64').toString();
-        let tags = logMessage.tags === undefined ? "" : logMessage.tags;
-        let contextName = logMessage.contextName === undefined ? "" : logMessage.contextName;
-        switch (logMessage.level) {
-            case kr.LogLevel.VERBOSE:
-                Ll.trace(`${contextName}: [${tags}] ${message}`);
-                break;
-            case kr.LogLevel.DEBUG:
-                Ll.debug(`${contextName}: [${tags}] ${message}`);
-                break;
-            case kr.LogLevel.INFO:
-                Ll.info(`${contextName}: [${tags}] ${message}`);
-                break;
-            case kr.LogLevel.WARNING:
-                Ll.warn(`${contextName}: [${tags}] ${message}`);
-                break;
-            case kr.LogLevel.ERROR:
-                Ll.warn(`${contextName}: [${tags}] ${message}`);
-                break;
-        }
+        // if (logMessage.message === undefined) return;
+        // let message = Buffer.from(logMessage.message, 'base64').toString();
+        // let tags = logMessage.tags === undefined ? "" : logMessage.tags;
+        // let contextName = logMessage.contextName === undefined ? "" : logMessage.contextName;
+        // switch (logMessage.level) {
+        //     case kr.LogLevel.VERBOSE:
+        //         Ll.trace(`${contextName}: [${tags}] ${message}`);
+        //         break;
+        //     case kr.LogLevel.DEBUG:
+        //         Ll.debug(`${contextName}: [${tags}] ${message}`);
+        //         break;
+        //     case kr.LogLevel.INFO:
+        //         Ll.info(`${contextName}: [${tags}] ${message}`);
+        //         break;
+        //     case kr.LogLevel.WARNING:
+        //         Ll.warn(`${contextName}: [${tags}] ${message}`);
+        //         break;
+        //     case kr.LogLevel.ERROR:
+        //         Ll.warn(`${contextName}: [${tags}] ${message}`);
+        //         break;
+        // }
     }
 }
 

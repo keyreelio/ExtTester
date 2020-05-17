@@ -17,12 +17,14 @@ interface IParseParts {
 
 class ReportItem {
     url: string;
+    createTime: number = 0;
     results: IResults = {};
     parseParts: IParseParts = {};
     failMessages: string[] = [];
 
     public constructor(url: string) {
         this.url = url;
+        this.createTime = Date.now();
         this.results[EReportTest.saveWithButtons] = EReportResult.unknown;
         this.results[EReportTest.saveWithoutButtons] = EReportResult.unknown;
         this.results[EReportTest.load] = EReportResult.unknown;
@@ -137,7 +139,7 @@ export class Report {
         return await this.mutex.dispatch(async () => {
             let u = new URL(url);
             let report = this.reports[u.host];
-            if (report === undefined) return Promise.resolve();
+            if (report === undefined || report.results[test] != EReportResult.unknown) return Promise.resolve();
             report.results[test] = result;
         });
     }
@@ -154,16 +156,16 @@ export class Report {
     public async setFail(url: string, failMessage: string, test: EReportTest): Promise<void> {
         let getPrefix = function (test: EReportTest): string {
             switch (test) {
-                case EReportTest.saveWithButtons: return "SaveWithButtons";
-                case EReportTest.saveWithoutButtons: return "SaveWithoutButtons";
-                case EReportTest.load: return "Load";
+                case EReportTest.saveWithButtons: return "SWB";
+                case EReportTest.saveWithoutButtons: return "SWOB";
+                case EReportTest.load: return "LOAD";
             }
         }
 
         return await this.mutex.dispatch(async () => {
             let u = new URL(url);
             let report = this.reports[u.host];
-            if (report === undefined) return Promise.resolve();
+            if (report === undefined || report.results[test] != EReportResult.unknown) return Promise.resolve();
             report.results[test] = EReportResult.fail;
             report.failMessages.push(`[${getPrefix(test)}] ${failMessage}`);
         });
@@ -231,9 +233,16 @@ export class ReportExport extends Report {
     protected async exportReports(): Promise<void> {
         let count = 0;
         let map = new Map(Object.entries(this.reports));
+        let reports: ReportItem[] = [];
         map.forEach((report: ReportItem, u: string) => {
-            this.exportReport(count++, report).then();
+            reports.push(report);
         });
+        reports.sort(function(r1, r2) {
+            return r1.createTime - r2.createTime;
+        });
+        for (let report of reports) {
+            this.exportReport(count++, report).then();
+        }
     }
 
     protected async exportReport(index: number, report: ReportItem): Promise<void> {

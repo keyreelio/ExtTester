@@ -3,6 +3,7 @@
 
 // times in milliseconds
 export class Timeouts {
+
     // WebElementExt
     static BeforeClick = 200;
     static BeforeEnter = 200;
@@ -19,6 +20,7 @@ export class Timeouts {
     // tester
     static WaitParsedPage = 500;
     static WaitParsedPageMin = 50;
+    static WaitCheckCredential = 60000;
 
     //
     static WaitToAutosaveAccount = 10000;
@@ -38,5 +40,11 @@ export class Timeouts {
     static end(begin: [number, number]): number {
       let endTime = process.hrtime(begin);
       return Math.round(endTime[0] * 1000 + endTime[1] / 1000000);
+    }
+
+    static createPromiseTimer(timeout: number, error: Error): Promise<void> {
+        return new Promise(function(resolve, reject) {
+            setTimeout(function () { reject(error); }, timeout);
+        });
     }
 }

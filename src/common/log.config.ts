@@ -1,12 +1,31 @@
 import {Category, CategoryConfiguration, CategoryServiceFactory, LogLevel} from "typescript-logging";
-import exp from "constants";
+import fs from "fs";
 
 
 CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Debug));
 
 
+export let extLogFolder = "";
+
+export let ConfigureLoggerForRelease = function() {
+    CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Debug));
+    createLogFolder("logs");
+}
+
 export let ConfigureLoggerForDebug = function() {
     CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Trace));
+    createLogFolder("logs-debug");
+}
+
+let createLogFolder = function (rootFolder: string) {
+    if (!fs.existsSync(`./${rootFolder}/`)){
+        fs.mkdirSync(`./${rootFolder}/`);
+    }
+    let logFolder = `./${rootFolder}/${Date.now()}/`;
+    if (!fs.existsSync(logFolder)){
+        fs.mkdirSync(logFolder);
+    }
+    extLogFolder = logFolder;
 }
 
 

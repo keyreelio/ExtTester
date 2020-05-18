@@ -95,6 +95,7 @@ export class Parser {
                     page.loginForm.passwordInput = undefined;
                 }
             }
+            page.duration = await this.getParserDuration();
 
             if (!done) {
                 if (this.checkFlag(searchFlag, Parser.SearchFlagSingInButton)) {
@@ -226,6 +227,24 @@ export class Parser {
         return Promise.resolve(result);
     }
 
+    protected async getParserDuration(): Promise<number> {
+        let driver = await this.engine.getDriver();
+
+        let result: number = -1;
+        try {
+            let body = await driver.findElement(By.xpath("//body[@axt-parser-timing]"));
+            let duration = await body.getAttribute("axt-parser-timing");
+            if (duration !== undefined) {
+                let res = Number(duration);
+                if (!isNaN(res)) {
+                    result = res;
+                }
+            }
+        } catch (e) {
+        }
+
+        return Promise.resolve(result);
+    }
 
     protected checkFlag(flags: number, flag: number): boolean {
         return (flags & flag) === flag;

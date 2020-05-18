@@ -1,5 +1,5 @@
 import {Engine, IEngine, IEngineFactory} from './engine'
-import {keyreelEngineLogger as L} from "../common/log.config";
+import {extLogFolder, keyreelEngineLogger as L} from "../common/log.config";
 import {Server} from "../service/server";
 import {ICredential} from "../credentials/credentials";
 import {Timeouts} from "../common/timeouts";
@@ -75,6 +75,9 @@ export class KeyReelEngine extends Engine {
                 await this.save(account);
             });
         }
+
+        let u = new URL(credential.url);
+        this.mockServer.setExtLogFilePath(`${extLogFolder}/${u.host}.log.txt`);
     }
 
     public async checkSaved(url: string, credential: ICredential): Promise<void> {

@@ -1,3 +1,4 @@
+import fs from "fs";
 import * as express from 'express'
 import * as kr from "../thrift/gencode/AuxoftKeyReel";
 
@@ -7,29 +8,39 @@ import * as thrift from "@creditkarma/thrift-server-core";
 
 
 export class LoggingServiceImpl implements kr.LoggingService.IHandler<express.Request> {
+
+    public setExtLogFilePath: string | undefined = undefined;
+
+
     public sendLog(logMessage: kr.ILogMessage, context?: express.Request): void | Promise<void> {
 
-        // if (logMessage.message === undefined) return;
-        // let message = Buffer.from(logMessage.message, 'base64').toString();
-        // let tags = logMessage.tags === undefined ? "" : logMessage.tags;
-        // let contextName = logMessage.contextName === undefined ? "" : logMessage.contextName;
-        // switch (logMessage.level) {
-        //     case kr.LogLevel.VERBOSE:
-        //         Ll.trace(`${contextName}: [${tags}] ${message}`);
-        //         break;
-        //     case kr.LogLevel.DEBUG:
-        //         Ll.debug(`${contextName}: [${tags}] ${message}`);
-        //         break;
-        //     case kr.LogLevel.INFO:
-        //         Ll.info(`${contextName}: [${tags}] ${message}`);
-        //         break;
-        //     case kr.LogLevel.WARNING:
-        //         Ll.warn(`${contextName}: [${tags}] ${message}`);
-        //         break;
-        //     case kr.LogLevel.ERROR:
-        //         Ll.warn(`${contextName}: [${tags}] ${message}`);
-        //         break;
-        // }
+        if (logMessage.message === undefined) return;
+        let message = Buffer.from(logMessage.message, 'base64').toString();
+        let tags = logMessage.tags === undefined ? "" : logMessage.tags;
+        let contextName = logMessage.contextName === undefined ? "" : logMessage.contextName;
+        switch (logMessage.level) {
+            case kr.LogLevel.VERBOSE:
+                this.log(`| VERB | ${contextName}: [${tags}] ${message}`);
+                break;
+            case kr.LogLevel.DEBUG:
+                this.log(`| DEBG | ${contextName}: [${tags}] ${message}`);
+                break;
+            case kr.LogLevel.INFO:
+                this.log(`| INFO | ${contextName}: [${tags}] ${message}`);
+                break;
+            case kr.LogLevel.WARNING:
+                this.log(`| WARN | ${contextName}: [${tags}] ${message}`);
+                break;
+            case kr.LogLevel.ERROR:
+                this.log(`| ERRR | ${contextName}: [${tags}] ${message}`);
+                break;
+        }
+    }
+
+    protected log(message: string) {
+        if (this.setExtLogFilePath === undefined) return;
+        let date = `${(new Date()).toLocaleTimeString()}`;
+        fs.writeFileSync(this.setExtLogFilePath, `${date}${message}\n`, {flag: "a"});
     }
 }
 

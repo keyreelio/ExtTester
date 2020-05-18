@@ -111,4 +111,8 @@ export class Server {
         await this.stop();
         await this.start();
     }
+
+    public setExtLogFilePath(filePath: string | undefined) {
+        this.loggingService.setExtLogFilePath = filePath;
+    };
 }

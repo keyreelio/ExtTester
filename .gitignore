@@ -10,3 +10,4 @@
 *.orig
 
 /tmp/
+/logs-debug/

@@ -1,5 +1,5 @@
 import {IEngineFactory} from './engine/engine'
-import {ConfigureLoggerForDebug, testerLogger as L} from "./common/log.config";
+import {ConfigureLoggerForDebug, ConfigureLoggerForRelease, testerLogger as L} from "./common/log.config";
 import {ICredentialsFactory} from "./credentials/credentials";
 import {Report, ReportExport} from "./report/report";
 import {KeyReelEngineFactory} from './engine/keyreel';
@@ -59,6 +59,8 @@ class Tester {
 
         if (debug) {
             ConfigureLoggerForDebug();
+        } else {
+            ConfigureLoggerForRelease();
         }
 
         L.debug(`args:`);

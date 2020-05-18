@@ -2,6 +2,7 @@ window.isVisible = function (element, cached) {
   let RTL = (document?.dir == 'rtl');
   let SAFARI = false;
 
+
   function getStyle(htmlElement, cached) {
     var style;
     if (cached == null) {
@@ -272,6 +273,9 @@ let ANCHOR_SELECTORS = [
   "div[class*=butt]", //:not([class*=buttons])",
   "div[class*=Butt]", //:not([class*=Buttons])",
   "div[role*=button]",
+  "div[class^=Responsive]",
+  "div[class^=responsive]",
+  "div[class*=mode-switch]",
   //"div[pb-role=submit]",
   //"div[class*=submit]",
   //"div[data-action=submit]",
@@ -281,13 +285,17 @@ let ANCHOR_SELECTORS = [
   "span[id*=Btn]:not([id*=text])",
   "span[id*=button]:not([id*=text])",
   "span[id*=Button]:not([id*=text])",
-  "span[id*=submit]:not([id*=text])",
-  "span[id*=Submit]:not([id*=text])",
+  //"span[id*=submit]:not([id*=text])",
+  //"span[id*=Submit]:not([id*=text])",
   "span[class*=btn]:not([class*=text])",
   "span[class*=Btn]:not([class*=text])",
   "span[class*=butt]:not([class*=text])",
   "span[class*=Butt]:not([class*=text])",
-  "span[role*=butt]",
+  "span[role*=butt]:not([class*=text])",
+  "li[role=link]",
+  "li[role*=button]",
+  "svg[data-type*=button]",
+  "div[class*=Dropdown__sectionMenu]"
   //"span[pb-role=submit]",
   //"span[class*=submit]:not([class*=text])",
   //"span[data-action=submit]",
@@ -322,20 +330,29 @@ let ALL_BUTTON_SELECTORS = [ BUTTON_SELECTORS, ANCHOR_SELECTORS ].join(',');
 /* * - any one world; = - entire string */
 let tokens = {
   'loginButton': [
-    '=log in', '=login', '=вхід', '=вход', '=увійти', '=ввойти', '=登录', 'signin',
-    '=sign in', '=sign up in'
+    '=log in', '=login', '=вхід', '=вход', '=увійти', '=ввойти', '=войти',
+    '=登录', 'signin', '=sign in', '=sign up in', '=авторизация', '=логін',
+    'connect ** burner account', 'есть аккаунт', 'possuo uma conta', 'tengo ** cuenta',
+    'join / sign in', 'sign up or log in', 'sign in/up', 'login/register',
+    'log in/sign up', '快速登录', 'sign in to **', 'login / join', 'sign in or register',
+    '=account login', 'sign in or create account', '登录/注册', '로그인', 'log in to *',
+    '=login to your account', 'log in register', 'sign in / register', '=login page',
+    '=страница входа'
   ],
 
   'registerButton': [
     '=sign up', '=sign up * *', 'signup', '=sign on', 'signon', '=sign up in',
     '=register', '=реєстрація', '=регистрация', '=зареєструватися', '=зарегистрироваться',
-    '=注册', '=create a free account', '=create account', '=get started',
-    '=open an account', 'open account', 'join / sign in', 'join for free', 'try it free',
-    '=try * free', '=try premium', 'join now for free'
+    '=注册', '=create a free account', '=create account', '=get started', 'registration',
+    '=open an account', 'open account', 'join for free', 'try it free',
+    '=try * free', '=try premium', 'join now for free', '=регистрация',
+    '=создать аккаунт', '=registrar se', '=kayit ol', '=registrarse', '=crear cuenta'
   ],
 
   'accountButton': [
-    'hamburger', 'nav button', 'menu button', '=account', '=my account', '=your account'
+    'hamburger', 'nav button', 'menu button', '=account', '=my account', '=my account **',
+    '=your account', "=мой профиль", 'profile', 'login account', '=личный кабинет',
+    'hesabim'
   ]
 };
 
@@ -343,31 +360,53 @@ let buttons = Array.from(document.querySelectorAll(ALL_BUTTON_SELECTORS)).filter
   (button) => isVisible(button) && !button.classList.contains('axt-element')
 );
 
+function checkPage(message) {
+  return !!document.evaluate(
+    `//*[contains(., "${message}")]`,
+    document,
+    null,
+    XPathResult.FIRST_ORDERED_NODE_TYPE,
+    null
+  ).singleNodeValue
+}
+
 
 function equalsLabel(text, label) {
-  let t =  text.toLowerCase().trim().replace(/[_\-\s]+/g, ' ');
+  let t =  text
+      ?.toLowerCase()
+      ?.trim()
+      ?.replace(/[_.!:\-\n\s]+/g, ' ')
+      ?.trim()
+  ;
 
   if (label.includes('*')) {
     if (label[0] === '=') {
-      return RegExp(`^${label.substring(1).replace(/\*/g, '\\w+')}$`).test(t);
+      return RegExp(`^${label.substring(1).replace(/\*\*/g, '.+').replace(/\*/g, '\\w+')}$`).test(t);
     } else {
-      return RegExp(label.replace(/\*/g, '\\w+')).test(t);
+      return RegExp(label.replace(/\*\*/g, '.+').replace(/\*/g, '\\w+')).test(t);
     }
   } else if (label[0] === '=') {
     return t === label.substring(1);
   } else {
-    return t.includes(label);
+    return !!t?.includes(label);
   }
 }
 
 let res = Object.keys(tokens).reduce( (acc, token) => {
   let btns  = buttons.filter((button) => {
-    console.log(`button.id = ${button.id}`);
+    console.log(`button: id = '${button.id}' class = '${button.class}' title = '${button.title}'`);
+    //console.log(`button.aria-label = ${button.getAttribute('aria-label')}`);
 
     return tokens[token].some((label) =>
       equalsLabel(button.innerText, label) ||
       equalsLabel(button.id, label) ||
-      Array.from(button.classList).some((c) => equalsLabel(c, label)))
+      equalsLabel(button.title, label) ||
+      equalsLabel(button.getAttribute("aria-label"), label) ||
+      Array.from(button.classList).some((c) => equalsLabel(c, label)) ||
+      Array.from(button.children)
+        .filter( (c) => c.tagName.toUpperCase() === 'IMG')
+        .some((c) => equalsLabel(c.alt, label))
+    )
   });
   if (btns.length > 0) {
     console.info(`${token}: ${btns}`);
@@ -376,6 +415,104 @@ let res = Object.keys(tokens).reduce( (acc, token) => {
   return acc;
 }, {});
 
+// custom raters:
+function addCustomButton(tag, selector, has) {
+  let butt;
+  if (has != null) {
+    butt = Array.from(document.querySelectorAll(selector)).filter((i) =>
+        i.querySelector(has) != null
+    )[0];
+  } else {
+    butt = document.querySelector(selector);
+  }
+  if (butt != null)  {
+    if (res[tag] == null) {
+      res[tag] = []
+    }
+    res[tag].push(butt)
+  }
+}
+
+switch (document.location.host) {
+  case "www.hgtv.com":
+  case "www.foodnetwork.com":
+    addCustomButton("accountButton","svg[data-type=button-header-nav]");
+    break;
+
+  case "www.bhphotovideo.com":
+    addCustomButton("accountButton", "div[class*=login-account]");
+    break;
+
+  case "gizmodo.com" :
+    addCustomButton("accountButton", "a[class*=header-userbutton]");
+    break;
+
+  case "www.bet365.com":
+    addCustomButton("loginButton", "div[class*=LoginContainer]");
+    addCustomButton("registerButton", "div[class*=JoinContainer]");
+    break;
+
+  case "www.airasia.com":
+    addCustomButton("loginButton", "div[class~=login]");
+    break;
+
+  case "amfam.com":
+    addCustomButton("loginButton", "li[data-selected-on=MyAccount]");
+    break;
+
+  case "www.apple.com":
+    addCustomButton("accountButton", "a[aria-label='Shopping Bag']");
+    break;
+
+  case "www.cbsnews.com":
+    addCustomButton("accountButton", "li[class*='site-nav__item--more']");
+    break;
+
+  case "www.cctv.com":
+    addCustomButton("accountButton", "div[class*='navli icon user_icon']");
+    break;
+
+  case "cellufun.com":
+    addCustomButton("loginButton", "a", "img[alt=Login]");
+    addCustomButton("registerButton", "a", "img[alt=Join]");
+    break;
+
+  case "www.christcenteredgamer.com":
+    addCustomButton("loginButton", 'div[id*=loginreg] div[id*=login]');
+    break;
+
+  case "www.fandom.com":
+    addCustomButton("accountButton", "div[class*=account-menu][class~=wds-dropdown]");
+    break;
+}
+
+if (Object.keys(res).length == 0) {
+  if (checkPage('Your connection is not private')) {
+    res['suspiciousSiteError'] = [];
+  }
+
+  if (checkPage('This site can’t be reached')) {
+    res['siteNotFoundError'] = [];
+  }
+
+  if (checkPage('temporarily unavailable')) {
+    res['temporarilyUnavailableError'] = [];
+  }
+
+  if (
+    checkPage('Application Blocked') ||
+    checkPage('Access Denied') ||
+    checkPage('is not available in your country') // (grubhub.com)
+  ) {
+     res['accessDeniedError'] = [];
+  }
+
+  if (checkPage('Gateway Timeout')) {
+    res['gatewayTimeoutError'] = [];
+  }
+}
+
+
 if ("loginButton" in res) {
   res["loginButton"].forEach( (btn) => btn.setAttribute('axt-button', 'login'));
 }
@@ -383,6 +520,11 @@ if ("loginButton" in res) {
 if ("accountButton" in res) {
   res["accountButton"].forEach( (btn) => btn.setAttribute('axt-button', 'account'));
 }
+
+if ("registerButton" in res) {
+  res["registerButton"].forEach( (btn) => btn.setAttribute('axt-button', 'register'));
+}
+
 
 let result = Array.from(Object.keys(res));
 console.info("found buttons:", result);

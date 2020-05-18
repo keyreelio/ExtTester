@@ -8,6 +8,7 @@
 *.old
 *.new
 *.orig
-
+*~
+.DS_Store
 /tmp/
 /logs-debug/

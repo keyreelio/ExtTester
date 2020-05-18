@@ -91,7 +91,8 @@ export class WebDriverExt {
         await this.webDriver.sleep(Timeouts.AfterOpenUrl);
         let webDriver = this.webDriver;
         await this.webDriver.wait(function() {
-            return webDriver.executeScript('return document.readyState').then(readyState => readyState === 'complete');
+            return webDriver.executeScript('return document.readyState')
+                .then(readyState => readyState === 'complete');
         }, timeout);
     }
 }

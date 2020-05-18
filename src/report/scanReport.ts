@@ -8,6 +8,7 @@ export enum EResultType {
     accessDeniedError,
     siteNotFoundError,
     suspiciousSiteError,
+    gatewayTimeoutError,
     loginButton,
     registerButton,
     accountButton
@@ -62,14 +63,25 @@ export class ScanReportLogger implements IScanReport {
         if (this.reports === undefined) return;
         this.line(this.date.toString());
         this.line(`--------------------------------------------------------------------------------------------------------------`);
-        this.line( ` No : domain                                                  : login :registr:account:` );
+        this.line(` No : domain                                                  : login :registr:account: error` );
         this.line(`--------------------------------------------------------------------------------------------------------------`);
         var idx = 0;
         for (let line of this.reports) {
             idx += 1;
             let url = " ".concat(line[0]).padEnd(56, ' ');
             let no = idx.toString().padStart(4, ' ');
-            this.line(`${no}:${url} :${line[1].get(EResultType.loginButton) ? "   X   " : "       "}:${line[1].get(EResultType.registerButton) ? "   X   " : "       "}:${line[1].get(EResultType.accountButton) ? "   X   " : "       "}:` );
+            let l: Map<EResultType, boolean> = line[1];
+            let errors = Array.from(l.keys())
+                .map( (k) => EResultType[k] )
+                .filter( (k) => k.endsWith('Error') );
+
+            this.line(
+              `${no}:${url} :` +
+              `${l.get(EResultType.loginButton)    ? "   X   " : "       "}:`+
+              `${l.get(EResultType.registerButton) ? "   X   " : "       "}:`+
+              `${l.get(EResultType.accountButton)  ? "   X   " : "       "}:`+
+              `${errors.length>0 ? ' ' + errors.join(', ') : ""}`
+            );
         }
         this.line(`--------------------------------------------------------------------------------------------------------------`);
         if (this.fLog != null) {

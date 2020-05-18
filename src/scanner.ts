@@ -15,7 +15,10 @@ class Scanner {
             './resources/domains.json',
             {encoding: 'UTF-8'}
         )
-    );
+    ).map( (str: string) => {
+        // use '#' as a comment (e.g. '#apple.com': skip apple.com)
+        return str.split('#')[0].trim()
+    }).filter( (str: string) => str.length > 0 );
 
     public static run() {
         L.info("*** run scanner ***");
@@ -31,14 +34,14 @@ class Scanner {
         }
     }
 
-
     protected static async scan(engine: IEngine): Promise<void> {
         L.info("start scanning");
 
         L.debug("startup engine");
         await engine.startup(false);
 
-        let domains100 = Scanner.domains; //.slice(0, 10);
+        let domains100 = Scanner.domains; //.slice(0, 1);
+        L.debug(`domains100: ${domains100.join(',')}`);
         let driver = await engine.getDriver();
         let extDriver = await engine.getExtDriver();
 
@@ -50,9 +53,10 @@ class Scanner {
                 let url = URL.parse("http://" + domain);
                 L.info(`${+idx+1}: ${domain} [${url.href}]`);
                 let time = Timeouts.begin();
-                await extDriver.openUrlOnCurrentTab(url.href, 15000);
+                await extDriver.openUrlOnCurrentTab(url.href, 30000);
                 L.info(`Page is loaded in ${Timeouts.end(time)}ms. Process it...`);
 
+                await extDriver.webDriver.sleep(300);
                 await driver.manage().setTimeouts({ script: 3000 });
                 let r: Array<string> = await driver.executeScript(search_buttons_module) as Array<string>;
 

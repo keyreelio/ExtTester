@@ -22,18 +22,18 @@ export class CredentialsFactoryDebug implements ICredentialsFactory {
             password: "5lKZfBc@L^PG",
             timeout: 2000
         },
-        {
-            url: "https://adobe.com/",
-            login: "donna.simple.oluso@gmail.com",
-            password: "h+58t7WDXd6$Hp?$yrPS",
-            timeout: 2000
-        },
-        {
-            url: "https://www.facebook.com/",
-            login: "donna.simple.oluso@gmail.com",
-            password: "0dWX6iaRuRz9377PW45d",
-            timeout: 2000
-        },
+        // {
+        //     url: "https://adobe.com/",
+        //     login: "donna.simple.oluso@gmail.com",
+        //     password: "h+58t7WDXd6$Hp?$yrPS",
+        //     timeout: 2000
+        // },
+        // {
+        //     url: "https://www.facebook.com/",
+        //     login: "donna.simple.oluso@gmail.com",
+        //     password: "0dWX6iaRuRz9377PW45d",
+        //     timeout: 2000
+        // },
         // {
         //     url: "https://appstoreconnect.apple.com/login",
         //     login: "hdayfg6wq5sq@gmail.com",

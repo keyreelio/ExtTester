@@ -3,13 +3,13 @@ import {error} from "selenium-webdriver";
 import {Credentials, ICredential, ICredentialsFactory} from "../credentials/credentials";
 
 import {testapiLogger as L} from "../common/log.config";
-import {EReportParsePart, EReportResult, EReportTest, Report} from "../report/report";
+import {EReportParsePart, EReportResult, EReportTest, ETimer, Report} from "../report/report";
 import fs from "fs";
 import {LoginForm, Parser} from "./parser";
 import {Input} from "../common/input";
+import {Timeouts} from "../common/timeouts";
 import UnsupportedOperationError = error.UnsupportedOperationError;
 import TimeoutError = error.TimeoutError;
-import {Timeouts} from "../common/timeouts";
 
 let search_buttons_module = fs.readFileSync("./src/browser/searchButtons.js", "utf8");
 
@@ -104,7 +104,10 @@ export class TestAPI {
             });
     }
 
-    protected async checkTests(testName: string, getTest: ((engine: IEngine, credentials: Credentials) => Promise<void>)) {
+    protected async checkTests(
+            testName: string,
+            getTest: ((engine: IEngine, credentials: Credentials) => Promise<void>)) {
+
         L.debug("start engine factory");
         await this.engineFactory.start();
 
@@ -128,7 +131,10 @@ export class TestAPI {
             engine,
             credentials,
             (credential: ICredential) => {
-                return this.checkWriteCredential(engine, credential, { useOnlyEnterButton: useOnlyEnterButton });
+                return this.checkWriteCredential(
+                    engine,
+                    credential,
+                    { useOnlyEnterButton: useOnlyEnterButton });
             });
     }
 
@@ -165,7 +171,7 @@ export class TestAPI {
             }
 
             L.debug(`report start: ${credential.url}`);
-            await this.report.start(credential.url);
+            await this.report.start(credential.url, test);
 
             L.debug(`engine start`);
             await engine.start(credential, test == EReportTest.load);
@@ -180,7 +186,7 @@ export class TestAPI {
                 if (e as TimeoutError) {
                     L.debug("check credential timeout");
 
-                    await this.report.setFail(credential.url, "check credential timeout", test);
+                    await this.report.setFail(credential.url, test, "check credential timeout");
 
                     L.debug("close current tab");
                     await extDriver.closeCurrentTab();
@@ -230,7 +236,9 @@ export class TestAPI {
 
             async function (loginForm: LoginForm, test: EReportTest): Promise<ECheck> {
 
-                if (loginForm.loginInput === undefined || loginForm.passwordInput === undefined) return Promise.reject();
+                if (loginForm.loginInput === undefined || loginForm.passwordInput === undefined) {
+                    return Promise.reject();
+                }
                 await loginForm.loginInput.enterValue(credential.login);
                 await loginForm.passwordInput.enterValue(credential.password);
                 return Promise.resolve(ECheck.nextStep);
@@ -258,8 +266,8 @@ export class TestAPI {
                     await engine.processBeforeLogin();
 
                     L.info("!!!!  credential SAVED as MANUAL before logged in");
-                    await report.setResult(credential.url, EReportResult.waitApprove, EReportTest.load);
-                    await report.setResult(credential.url, EReportResult.manualBeforeLoggedIn, test);
+                    await report.setResult(credential.url, EReportTest.load, EReportResult.waitApprove);
+                    await report.setResult(credential.url, test, EReportResult.manualBeforeLoggedIn);
                 } catch (e) {
                     if (e as UnsupportedOperationError) {
                         L.debug("engine process before login not supported");
@@ -271,7 +279,10 @@ export class TestAPI {
 
                     L.debug("engine process before login is failed");
                     L.info("!!!!  credential FAILED SAVE as MANUAL before logged in");
-                    await report.setFail(credential.url, `credential fail save before logged in with: ${failMessage(e)}`, test);
+                    await report.setFail(
+                        credential.url,
+                        test,
+                        `credential fail save before logged in with: ${failMessage(e)}`);
                 }
 
                 return Promise.resolve(ECheck.break);
@@ -283,8 +294,8 @@ export class TestAPI {
                     await engine.processAfterLogin();
 
                     L.info("!!!!  credential SAVED as MANUAL after logged in");
-                    await report.setResult(credential.url, EReportResult.waitApprove, EReportTest.load);
-                    await report.setResult(credential.url, EReportResult.manualAfterLoggedIn, test);
+                    await report.setResult(credential.url, EReportTest.load, EReportResult.waitApprove);
+                    await report.setResult(credential.url, test, EReportResult.manualAfterLoggedIn);
 
                     return Promise.resolve(ECheck.break);
                 } catch (e) {
@@ -292,7 +303,9 @@ export class TestAPI {
 
                         L.debug("engine process after login is failed");
                         L.info("!!!!  credential FAILED SAVE as MANUAL after logged in");
-                        await report.setFail(credential.url, `credential fail save after logged in with: ${failMessage(e)}`, test);
+                        await report.setFail(
+                            credential.url, test,
+                            `credential fail save after logged in with: ${failMessage(e)}`);
                         return Promise.resolve(ECheck.break);
                     }
                 }
@@ -303,17 +316,20 @@ export class TestAPI {
                     await engine.checkSaved(credential.url, credential);
 
                     L.info("!!!!  credential SAVED as AUTO after logged in");
-                    await report.setResult(credential.url, EReportResult.auto, test);
+                    await report.setResult(credential.url, test, EReportResult.auto);
                 } catch (e) {
                     if (e instanceof UnsupportedOperationError) {
                         L.debug("engine engine check saved not supported");
 
                         L.info("!!!! credential MAYBE SAVED as auto after logged in");
-                        await report.setResult(credential.url, EReportResult.waitApprove, test);
+                        await report.setResult(credential.url, test, EReportResult.waitApprove);
                     } else {
                         L.debug("engine process after login is failed");
                         L.info("!!!!  credential FAILED SAVE as AUTO after logged in");
-                        await report.setFail(credential.url, `credential fail autosave: ${failMessage(e)}`, test);
+                        await report.setFail(
+                            credential.url,
+                            test,
+                            `credential fail autosave: ${failMessage(e)}`);
                     }
                 }
 
@@ -338,7 +354,9 @@ export class TestAPI {
 
             async function (loginForm: LoginForm, test: EReportTest): Promise<ECheck> {
 
-                if (loginForm.loginInput === undefined || loginForm.passwordInput === undefined) return Promise.reject();
+                if (loginForm.loginInput === undefined || loginForm.passwordInput === undefined) {
+                    return Promise.reject();
+                }
 
                 //TODO: add check manual fill
                 L.debug("check auto fill login and password inputs")
@@ -346,12 +364,12 @@ export class TestAPI {
                 let password = await loginForm.passwordInput.getInputValue();
                 if (login === credential.login && password === credential.password) {
                     L.debug("!!!!  credential AUTO LOAD");
-                    await report.setResult(credential.url, EReportResult.auto, test);
+                    await report.setResult(credential.url, test, EReportResult.auto);
                 } else {
                     L.debug("credential AUTO LOAD failed");
                     L.trace(`  real login: '${credential.login}'  stored: '${login}'`);
                     L.trace(`  real password: '${credential.password}'  stored: '${password}'`);
-                    await report.setFail(credential.url, "login and/or password is not equal with ", test);
+                    await report.setFail(credential.url, test, "login and/or password is not equal with ");
                 }
                 return Promise.resolve(ECheck.break);
             },
@@ -366,7 +384,7 @@ export class TestAPI {
 
                     L.debug("credential AUTO LOAD failed");
                     L.trace(`  real login: '${credential.login}'  stored: '${login}'`);
-                    await report.setFail(credential.url, "login is not equal with ", test);
+                    await report.setFail(credential.url, test, "login is not equal with ");
                     return Promise.resolve(ECheck.break);
                 }
 
@@ -384,11 +402,11 @@ export class TestAPI {
                 if (password === credential.password) {
 
                     L.debug("!!!!  credential AUTO LOAD");
-                    await report.setResult(credential.url, EReportResult.auto, test);
+                    await report.setResult(credential.url, test, EReportResult.auto);
                 } else {
                     L.debug("credential AUTO LOAD failed");
                     L.trace(`  real password: '${credential.password}'  stored: '${password}'`);
-                    await report.setFail(credential.url, "password is not equal with ", test);
+                    await report.setFail(credential.url, test, "password is not equal with ");
                 }
                 return Promise.resolve(ECheck.break);
             },
@@ -431,7 +449,9 @@ export class TestAPI {
 
             try {
                 L.debug("run scanner");
+                let start = Date.now();
                 let r: Array<string> = await driver.executeScript(search_buttons_module) as Array<string>;
+                await this.report.setTimer(credential.url, test, ETimer.scanner, Date.now() - start);
                 L.info(`Search buttons result: ${r}`);
             } catch (e) {
                 L.info(`Search buttons error: ${e}`);
@@ -441,12 +461,13 @@ export class TestAPI {
 
                 L.debug("parse page");
                 let page = await parser.parsePage(ParseSearchMap[state], credential.timeout);
+                await this.report.setTimer(credential.url, test, ETimer.parser, page.duration);
 
                 L.debug("check page structure");
                 if (page.singinButton !== undefined && page.loginForm === undefined) {
                     L.debug("page has singin button and hasn't login form");
 
-                    await this.report.setParsePart(credential.url, EReportParsePart.singInButton);
+                    await this.report.setParsePart(credential.url, test, EReportParsePart.singInButton);
                     await page.singinButton.press();
 
                     state = EState.waitLoginForm;
@@ -455,12 +476,12 @@ export class TestAPI {
                     if (page.loginForm.loginInput !== undefined && page.loginForm.passwordInput !== undefined) {
                         L.debug("login form has login and password inputs");
 
-                        await this.report.setParsePart(credential.url, EReportParsePart.fullLoginForm);
+                        await this.report.setParsePart(credential.url, test, EReportParsePart.fullLoginForm);
                         if (await hasFullLoginForm(page.loginForm, test) == ECheck.break) break;
                     } else if (page.loginForm.loginInput !== undefined) {
                         L.debug("login form has only login input");
 
-                        await this.report.setParsePart(credential.url, EReportParsePart.firstStepLoginForm);
+                        await this.report.setParsePart(credential.url, test, EReportParsePart.firstStepLoginForm);
                         if (await hasFirstStepLoginForm(page.loginForm, test) == ECheck.break) break;
 
                         state = EState.waitSecondLoginForm;
@@ -468,12 +489,15 @@ export class TestAPI {
                     } else if (page.loginForm.passwordInput !== undefined) {
                         L.debug("login form has only password input");
 
-                        await this.report.setParsePart(credential.url, EReportParsePart.secondStepLoginForm);
+                        await this.report.setParsePart(credential.url, test, EReportParsePart.secondStepLoginForm);
                         if (await hasSecondStepLoginForm(page.loginForm, test) == ECheck.break) break;
                     } else {
                         L.debug("login form did not have login or password inputs");
 
-                        await this.report.setFail(credential.url, "login form did not have login or password inputs", test);
+                        await this.report.setFail(
+                            credential.url,
+                            test,
+                            "login form did not have login or password inputs");
                         break;
                     }
 
@@ -484,20 +508,20 @@ export class TestAPI {
                 } else if (page.isLoggedIn) {
                     L.debug("page is logged in");
 
-                    await this.report.setParsePart(credential.url, EReportParsePart.loggedIn);
+                    await this.report.setParsePart(credential.url, test, EReportParsePart.loggedIn);
 
                     if (await hasIsLoggedIn(test) == ECheck.break) break;
                 } else if (page.didNotParse) {
                     L.debug("page did not parsed");
 
-                    await this.report.setParsePart(credential.url, EReportParsePart.notParsed);
+                    await this.report.setParsePart(credential.url, test, EReportParsePart.notParsed);
                 }
 
                 break;
             }
         } catch (e) {
             L.warn(`fail: ${e}`);
-            await this.report.setFail(credential.url, failMessage(e), test);
+            await this.report.setFail(credential.url, test, failMessage(e));
         }
 
         L.debug("close current tab");

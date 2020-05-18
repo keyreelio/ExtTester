@@ -25,8 +25,6 @@ class Reporter {
 
     public static async run(args: string[]) {
 
-        console.log(args);
-
         let dumpFile = Args.parseStrValueArg(args, "--dump");
         if (dumpFile === undefined) {
             console.warn("need --dump <file_path>");

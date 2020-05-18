@@ -14,6 +14,7 @@ export class LoginForm {
 }
 
 export class Page {
+    duration: number = 0;
     didNotParse: boolean = false;
     singinButton: Button | undefined = undefined;
     loginForm: LoginForm | undefined = undefined;

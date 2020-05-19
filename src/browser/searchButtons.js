@@ -337,7 +337,7 @@ let tokens = {
     'log in/sign up', '快速登录', 'sign in to **', 'login / join', 'sign in or register',
     '=account login', 'sign in or create account', '登录/注册', '로그인', 'log in to *',
     '=login to your account', 'log in register', 'sign in / register', '=login page',
-    '=страница входа'
+    '=страница входа', 'user portal log in', 'log in now'
   ],
 
   'registerButton': [
@@ -346,7 +346,8 @@ let tokens = {
     '=注册', '=create a free account', '=create account', '=get started', 'registration',
     '=open an account', 'open account', 'join for free', 'try it free',
     '=try * free', '=try premium', 'join now for free', '=регистрация',
-    '=создать аккаунт', '=registrar se', '=kayit ol', '=registrarse', '=crear cuenta'
+    '=создать аккаунт', '=registrar se', '=kayit ol', '=registrarse', '=crear cuenta',
+    'sign up & pricing', 'sign up now'
   ],
 
   'accountButton': [

@@ -72,7 +72,7 @@ export class ScanReportLogger implements IScanReport {
             let no = idx.toString().padStart(4, ' ');
             let l: Map<EResultType, boolean> = line[1];
             let errors = Array.from(l.keys())
-                .map( (k) => EResultType[k] )
+                .map( (k) => EResultType[k] || `unknownError(${k})` )
                 .filter( (k) => k.endsWith('Error') );
 
             this.line(

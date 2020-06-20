@@ -11,7 +11,8 @@ export enum EResultType {
     gatewayTimeoutError,
     loginButton,
     registerButton,
-    accountButton
+    accountButton,
+    captchaError
 }
 
 export interface IScanReport {

@@ -12,7 +12,7 @@ let search_buttons_module = fs.readFileSync("./src/browser/searchButtons.js", "u
 class Scanner {
     private static readonly domains: Array<string> = JSON.parse(
         fs.readFileSync(
-            './resources/domains.json',
+            './resources/error-domains7.json',
             {encoding: 'UTF-8'}
         )
     ).map( (str: string) => {
@@ -53,12 +53,21 @@ class Scanner {
                 let url = URL.parse("http://" + domain);
                 L.info(`${+idx+1}: ${domain} [${url.href}]`);
                 let time = Timeouts.begin();
-                await extDriver.openUrlOnCurrentTab(url.href, 30000);
+                await extDriver.openUrlOnCurrentTab(url.href, 120000);
                 L.info(`Page is loaded in ${Timeouts.end(time)}ms. Process it...`);
 
-                await extDriver.webDriver.sleep(300);
-                await driver.manage().setTimeouts({ script: 3000 });
-                let r: Array<string> = await driver.executeScript(search_buttons_module) as Array<string>;
+                //await driver.manage().setTimeouts({ script: 6000 });
+                await extDriver.webDriver.sleep(200);
+                var r: Array<string> = await driver.executeScript(search_buttons_module) as Array<string>;
+
+                if (r.length === 0) {
+                    await extDriver.webDriver.sleep(1000);
+                    r = await driver.executeScript(search_buttons_module) as Array<string>;
+                }
+                if (r.length === 0) {
+                    await extDriver.webDriver.sleep(5000);
+                    r = await driver.executeScript(search_buttons_module) as Array<string>;
+                }
 
                 L.info(`Search buttons result: ${r}`);
                 report.setResult(domain, EResultType.registerButton, false);
@@ -68,7 +77,10 @@ class Scanner {
                     report.setResult(domain, resultType, true);
                 });
             } catch (error) {
-                if (error instanceof webDriverErrors.TimeoutError) {
+                if (
+                    error instanceof webDriverErrors.TimeoutError ||
+                    error instanceof webDriverErrors.ScriptTimeoutError
+                ) {
                     report.setResult(domain, EResultType.timeoutError, true);
                     L.error(`TimeoutError! Skip ${domain}`, error);
                 } else {
@@ -79,10 +91,10 @@ class Scanner {
         }
 
         report.finish();
-        await driver.close();
+        //await driver.close();
 
         L.info("finish scanning");
-        await driver.quit();
+        //await driver.quit();
     }
 }
 

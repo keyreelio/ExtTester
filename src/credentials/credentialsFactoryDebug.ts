@@ -10,18 +10,18 @@ export class CredentialsFactoryDebug implements ICredentialsFactory {
             password: "g8MYA5wnLx8AfBKz3F5v",
             timeout: 2000
         },
-        {
-            url: "https://www.dropbox.com/",
-            login: "donna.simple.oluso@gmail.com",
-            password: "CWxm66RzW3cNnGjKMHz2",
-            timeout: 2000
-        },
-        {
-            url: "https://twitter.com/login",
-            login: "hdayfg6wq5sq@gmail.com",
-            password: "5lKZfBc@L^PG",
-            timeout: 2000
-        },
+//        {
+//            url: "https://www.dropbox.com/",
+//            login: "donna.simple.oluso@gmail.com",
+//            password: "CWxm66RzW3cNnGjKMHz2",
+//            timeout: 2000
+//        },
+//        {
+//            url: "https://twitter.com/login",
+//            login: "hdayfg6wq5sq@gmail.com",
+//            password: "5lKZfBc@L^PG",
+//            timeout: 2000
+//        },
         // {
         //     url: "https://adobe.com/",
         //     login: "donna.simple.oluso@gmail.com",

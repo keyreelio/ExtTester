@@ -27,13 +27,13 @@ export class TestResult {
 
     constructor() {
         this.startTime = Date.now();
-        this.flags[EReportParsePart.singInButton] = false;
+        this.flags[EReportParsePart.signInButton] = false;
         this.flags[EReportParsePart.fullLoginForm] = false;
         this.flags[EReportParsePart.firstStepLoginForm] = false;
         this.flags[EReportParsePart.secondStepLoginForm] = false;
-        this.flags[EReportParsePart.notParsed] = false;
+        //this.flags[EReportParsePart.notParsed] = false;
         this.timers[ETimer.check] = -1;
-        this.timers[ETimer.scanner] = -1;
+        //this.timers[ETimer.scanner] = -1;
         this.timers[ETimer.parser] = -1;
     }
 }
@@ -61,23 +61,26 @@ export enum EReportResult {
 }
 
 export enum EReportTest {
-    saveWithButtons,
+    saveUsingButtons,
     saveWithoutButtons,
-    load
+    load,
+    falseSaveUsingButtons,
+    falseSaveWithoutButtons
 }
 
 export enum EReportParsePart {
-    singInButton,
+    signInButton,
     fullLoginForm,
     firstStepLoginForm,
     secondStepLoginForm,
     loggedIn,
+    noLoggedIn,
     notParsed
 }
 
 export enum ETimer {
     check,
-    scanner,
+    //scanner,
     parser
 }
 
@@ -111,25 +114,26 @@ export class Report {
     }
 
     public async shutdown(): Promise<void> {
-        return await this.mutex.dispatch(async () => {
-            for (let host in this.reports) {
-                let results = this.reports[host];
-                if (results === undefined) continue;
-                let load = results.results[EReportTest.load];
-                if (load.result === EReportResult.waitApprove) {
-                    let saveWithButtons = results.results[EReportTest.saveWithButtons];
-                    if (saveWithButtons !== undefined && saveWithButtons.result === EReportResult.manualAfterLoggedIn) {
-                        load.result = EReportResult.manual;
-                        continue;
-                    }
-                    let saveWithoutButtons = results.results[EReportTest.saveWithoutButtons];
-                    if (saveWithoutButtons !== undefined && saveWithoutButtons.result === EReportResult.manualAfterLoggedIn) {
-                        load.result = EReportResult.manual;
-                        continue;
-                    }
-                }
-            }
-        });
+        return Promise.resolve()
+        //await this.mutex.dispatch(async () => {
+            // for (let host in this.reports) {
+            //     let results = this.reports[host];
+            //     if (results === undefined) continue;
+            //     let load = results.results[EReportTest.load];
+            //     if (load?.result === EReportResult.waitApprove) {
+            //         let saveUsingButtons = results.results[EReportTest.saveUsingButtons];
+            //         if (saveUsingButtons !== undefined && saveUsingButtons.result === EReportResult.manualAfterLoggedIn) {
+            //             load.result = EReportResult.manual;
+            //             continue;
+            //         }
+            //         let saveWithoutButtons = results.results[EReportTest.saveWithoutButtons];
+            //         if (saveWithoutButtons !== undefined && saveWithoutButtons.result === EReportResult.manualAfterLoggedIn) {
+            //             load.result = EReportResult.manual;
+            //             continue;
+            //         }
+            //     }
+            //}
+        //});
     }
 
     public async getResult(url: string, test: EReportTest): Promise<EReportResult | undefined> {
@@ -180,12 +184,17 @@ export class Report {
         });
     }
 
-    public async setFail(url: string, test: EReportTest, failMessage: string): Promise<void> {
+    public async setFail(
+        url: string,
+        test: EReportTest,
+        failMessage: string,
+        reportResult: EReportResult = EReportResult.fail
+    ): Promise<void> {
         return await this.mutex.dispatch(async () => {
             let res = this.result(url, test);
             if (res === undefined) return Promise.resolve();
             if (res.result != EReportResult.unknown) return Promise.resolve();
-            res.result = EReportResult.fail;
+            res.result = reportResult;
             res.failMessage = failMessage;
         });
     }
@@ -290,12 +299,13 @@ export class ReportExport extends Report {
     protected flagsToString(flags: IFlags): string {
         let part: string[] = [];
 
-        part.push(this.flagToString(flags[EReportParsePart.singInButton]));
+        part.push(this.flagToString(flags[EReportParsePart.signInButton]));
         part.push(this.flagToString(flags[EReportParsePart.fullLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.firstStepLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.secondStepLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.loggedIn]));
-        part.push(this.flagToString(flags[EReportParsePart.notParsed]));
+        part.push(this.flagToString(flags[EReportParsePart.noLoggedIn]));
+        //part.push(this.flagToString(flags[EReportParsePart.notParsed]));
 
         return part.join(this.separator());
     }
@@ -308,11 +318,13 @@ export class ReportExport extends Report {
         return `${(Math.round((time / 1000) * 100) / 100).toFixed(2)}`;
     }
 
-    protected testName(test: EReportTest): string {
+    public static testName(test: EReportTest): string {
         switch (test) {
-            case EReportTest.saveWithButtons: return " SWHB ";
-            case EReportTest.saveWithoutButtons: return " SWOB ";
+            case EReportTest.saveUsingButtons: return " SUB  ";
+            case EReportTest.saveWithoutButtons: return " SWB  ";
             case EReportTest.load: return " LOAD ";
+            case EReportTest.falseSaveUsingButtons: return " FSUB ";
+            case EReportTest.falseSaveWithoutButtons: return " FSWB ";
         }
         return "      ";
     }

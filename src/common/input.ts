@@ -2,6 +2,8 @@ import {WebElement} from "selenium-webdriver";
 import {WebElementExt} from "./webElementExt";
 import {Timeouts} from "./timeouts";
 import {WebDriverExt} from "./webDriverExt";
+import {IEngine} from "../engine/engine";
+import {EReportTest, ReportExport} from "../report/report";
 
 
 export class Input {
@@ -19,7 +21,8 @@ export class Input {
             { attach: boolean } |
             { replace: boolean} |
             { attach: boolean, replace: boolean } |
-            undefined = undefined): Promise<void> {
+            undefined = undefined
+    ): Promise<void> {
 
         let attach = false;
         let replace = false;
@@ -54,8 +57,8 @@ export class Input {
             await extInput.sendKeys(value);
 
             return Promise.resolve();
-        } catch (UnhandledPromiseRejectionWarning) {
-            return Promise.reject();
+        } catch (e) { //: UnhandledPromiseRejectionWarning) {
+            return Promise.reject(e);
         }
     }
 
@@ -65,18 +68,22 @@ export class Input {
             let extDriver = new WebDriverExt(driver);
 
             await extDriver.switchToRootFrame();
-            if (this.iframe !== undefined) {
+            if (this.iframe != null) {
                 await driver.switchTo().frame(this.iframe);
             }
 
             let extInput = new WebElementExt(this.input);
             return await extInput.getValue(Timeouts.WaitExistValue);
-        } catch (UnhandledPromiseRejectionWarning) {
-            return Promise.reject();
+        } catch (e) { //: UnhandledPromiseRejectionWarning) {
+            return Promise.reject(e);
         }
     }
 
-    public async pressEnter(): Promise<void> {
+    public async pressEnter(
+        engine: IEngine | undefined = undefined,
+        test: EReportTest,
+        remark: string = ""
+    ): Promise<void> {
         try {
             let driver = await this.input.getDriver();
             let extDriver = new WebDriverExt(driver);
@@ -87,6 +94,25 @@ export class Input {
             }
 
             let extInput = new WebElementExt(this.input);
+
+            // mark selected button with a contrast red frame
+            let prevStyle = await driver.executeScript(
+                "let prev_style = arguments[0].style.border;" +
+                         "arguments[0].style.border='3px solid red';" +
+                         "return prev_style;",
+                extInput.webElement
+            ) as string | undefined;
+
+            // save screenshot here
+            if (engine != null) {
+                await engine.writeScreenshot(test, remark);
+            }
+
+            await driver.executeScript(
+                `arguments[0].style.border='${prevStyle || ''}'`,
+                extInput.webElement
+            );
+
             await extInput.pressEnter();
 
             return Promise.resolve();

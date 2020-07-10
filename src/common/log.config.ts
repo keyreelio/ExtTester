@@ -1,5 +1,7 @@
 import {Category, CategoryConfiguration, CategoryServiceFactory, LogLevel} from "typescript-logging";
+import dateFormat from "dateformat";
 import fs from "fs";
+
 
 
 CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Debug));
@@ -21,7 +23,9 @@ let createLogFolder = function (rootFolder: string) {
     if (!fs.existsSync(`./${rootFolder}/`)){
         fs.mkdirSync(`./${rootFolder}/`);
     }
-    let logFolder = `./${rootFolder}/${Date.now()}/`;
+    let now = new Date();
+    let dirname = dateFormat(now, "yyyy.mm.dd-h.MM.ss")
+    let logFolder = `./${rootFolder}/${dirname}/`;
     if (!fs.existsSync(logFolder)){
         fs.mkdirSync(logFolder);
     }
@@ -48,3 +52,5 @@ export let hostServiceJSLogger = new Category("hostservice");
 
 
 export let scannerLogger = new Category("scanner");
+
+

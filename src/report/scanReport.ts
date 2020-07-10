@@ -1,19 +1,7 @@
 import {reportLogger as L} from "../common/log.config";
 import * as fs from "fs";
 import {WriteStream} from "fs";
-
-export enum EResultType {
-    unknownError,
-    timeoutError,
-    accessDeniedError,
-    siteNotFoundError,
-    suspiciousSiteError,
-    gatewayTimeoutError,
-    loginButton,
-    registerButton,
-    accountButton,
-    captchaError
-}
+import {EResultType} from "../core/EResultType";
 
 export interface IScanReport {
     start(): void;

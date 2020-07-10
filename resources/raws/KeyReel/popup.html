@@ -4,24 +4,25 @@
     <meta charset="utf-8"/>
     <link rel="stylesheet" href="css/accordionmenu.css" type="text/css" media="screen"/>
   </head>
-  <body>
+  <body style="width: 310px">
     <div id="wrapper-200a">
       <ul class="accordion">
-        <li id="zero" class="sep nowarn">
+        <li class="sep nowarn" id="zero">
           <div>
             <h1>!!! WARNING !!!</h1>
             <p></p>
           </div>
         </li>
-        <li id="one" class="logins gray"><a>Type in credentials for ...
+        <li class="logins gray" id="one"><a>Type in credentials for ...
             <!-- span 0--></a></li>
-        <li id="five" class="gray"><a>Save credentials for current site</a></li>
+        <li class="gray" id="five"><a>Save credentials for current site</a></li>
         <li id="four"><a>Block auto-filling on this page</a></li>
         <li id="three"><a>Block auto-filling on this site</a></li>
         <li id="six"><a>Form Auto-submitting is OFF</a></li>
         <li id="seven"><a>Auto-logout is OFF</a></li>
       </ul>
     </div>
+    <script src="js/browser-polyfill.min.js"></script>
     <script src="js/popup.min.js"></script>
   </body>
 </html>

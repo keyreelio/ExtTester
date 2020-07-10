@@ -1,11 +1,20 @@
 {
+  "manifest_version": 2,
   "name": "KeyReel - Smart Security Assistant",
   "short_name": "KeyReel",
   "author": "Auxoft LLC",
-  "description": "KeyReel - Smart Security Assistant, manages password on your phone and automatically fills on paired computers.",
-  "version": "20.5.12.0",
-  "version_name": "20.5.12.0",
-  "manifest_version": 2,
+  "description": "KeyReel - the most convenient and secure password manager, saves passwords on your phone and automatically fills them on your computer.",
+  "version": "20.7.5.0",
+
+  "homepage_url": "https://www.keyreel.io",
+  "default_locale": "en",
+
+  "applications": {
+    "gecko": {
+    	"id": "keyreel@keyreel.io",
+    	"strict_min_version": "57.0"
+    }
+  },
 
   "icons": {
     "16": "img/icon_16.png",
@@ -14,28 +23,40 @@
   },
 
   "background": {
-    "scripts": ["js/background.min.js"],
+    "scripts": [
+      "js/browser-polyfill.min.js",
+      "js/background.min.js"
+    ],
     "persistent": true
   },
 
   "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": ["js/content.min.js"],
-    "run_at": "document_start",
     "all_frames": true,
-    "match_about_blank": true
+    "match_about_blank": true,
+    "run_at": "document_start",
+    "js": [
+      "js/browser-polyfill.min.js",
+      "js/content.min.js"
+    ],
+    "matches": [
+      "http://*/*",
+      "https://*/*",
+      "file:///*"
+    ]
   }],
 
   "permissions": [
     "storage",
-    "background",
     "webNavigation",
-    "privacy",
     "activeTab",
+    "privacy",
     "http://*/*",
     "https://*/*",
-    "file://*",
-    "<all_urls>"
+    "file://*/*",
+    "tabs",
+    "webRequest",
+    "webRequestBlocking",
+    "nativeMessaging"
   ],
 
   "browser_action": {

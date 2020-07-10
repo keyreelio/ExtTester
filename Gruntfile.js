@@ -74,8 +74,9 @@ module.exports = function(grunt) {
             },
 
             thrift: {
-                cmd: './node_modules/@creditkarma/thrift-typescript/dist/main/bin/index.js',
+                cmd: 'node',
                 args: [
+                    './node_modules/@creditkarma/thrift-typescript/dist/main/bin/index.js',
                     '--target',
                     'thrift-server',
                     '--sourceDir',

@@ -24,7 +24,7 @@ import {onePasswordEngineLogger as L} from "../common/log.config";
 //             await driver.wait(until.elementLocated(By.id("email")), 2000).sendKeys("hdayfg6wq5sq@gmail.com");
 //             await driver.findElement(By.id("account-key")).sendKeys("A3-4J9LQG-APXJD3-KYXNL-ARBGG-TLKV3-YVMYQ");
 //             await driver.findElement(By.id("master-password")).sendKeys("hrfW-Y1q3_4%");
-//             await driver.findElement(By.className("signin-actions")).findElement(By.xpath("button")).click();
+//             await driver.findElement(By.className("signin-actions")).findElement(By.css("button")).click();
 //
 //             welcome = true;
 //         } catch (UnhandledPromiseRejectionWarning) {

@@ -15,7 +15,7 @@ export class Timeouts {
     static AfterOpenUrl = 200;
     static WaitOpenedUrl = 5000;
     static WaitLocatedElement = 200;
-    static WaitLocatedAnimationElement = 2000;
+    static waitLocatedAnimatedElement = 2000;
 
     // tester
     static WaitParsedPage = 500;

@@ -5,7 +5,9 @@
     <tasks>
       <task value="keyreel" />
     </tasks>
-    <envs />
+    <envs>
+      <env name="PATH" value="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:" />
+    </envs>
     <method v="2" />
   </configuration>
 </component>

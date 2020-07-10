@@ -1,7 +1,7 @@
-function isVisible(element, cached) {
+function isVisible(win, element, cached) {
   //console.log ("isVisible START", element);
 
-  let RTL = (document?.dir == 'rtl');
+  let RTL = (win.document?.dir == 'rtl');
   let SAFARI = false;
 
   function getStyle(htmlElement, cached) {
@@ -9,15 +9,23 @@ function isVisible(element, cached) {
     if (cached == null) {
       cached = true;
     }
-    if (cached && document.body.axt_stamp <= htmlElement.axt_styleStamp && (htmlElement.axt_style != null)) {
+    if (
+      cached && win.document.body.axt_stamp <= htmlElement.axt_styleStamp &&
+      (htmlElement.axt_style != null)
+    ) {
       style = htmlElement.axt_style;
     } else {
-      style = htmlElement.axt_style = window.getComputedStyle(htmlElement);
-      htmlElement.axt_styleStamp = document.body.axt_stamp;
+      style = htmlElement.axt_style = win.getComputedStyle(htmlElement);
+      htmlElement.axt_styleStamp = win.document.body.axt_stamp;
     }
     style.px = function(name) {
       var _ref, _ref1, _ref2;
-      return (_ref = +((_ref1 = this[name]) != null ? (_ref2 = _ref1.split(' ')[0]) != null ? _ref2.split('px')[0] : void 0 : void 0)) != null ? _ref : 0;
+      return (_ref = +(
+        (_ref1 = this[name]) != null ?
+          (_ref2 = _ref1.split(' ')[0]) != null ?
+            _ref2.split('px')[0] : void 0 :
+          void 0
+      )) != null ? _ref : 0;
     };
     return style;
   };
@@ -47,15 +55,16 @@ function isVisible(element, cached) {
    * @param (w)       Element width number
    * @param (h)       Element height number
    */
-  if (window.axt_frameVisibility === false) {
+  if (win.axt_frameVisibility === false) {
     //console.log ("isVisible FINISH 1");
     return false;
   }
   _isVisible = function(el, offsp, absolute, t, r, b, lft, w, h) {
-    var SAFARI, box, element_type, height, horScroll, isOffsetParent, m, pBorderLeftWidth,
-        pBorderRightWidth, pBorderTopWidth, pOffsetLeft, pOffsetTop, pOverflowX, pOverflowXScrolled,
-        pOverflowY, pOverflowYScrolled, pPosition, parent, parent_style, pb, pl, pr, pt, result,
-        sTransform, style, tag_name, transformOffsetX, transformOffsetY, vertScroll, width, _ref;
+    var SAFARI, box, element_type, height, horScroll, isOffsetParent, m,
+        pBorderLeftWidth, pBorderRightWidth, pBorderTopWidth, pOffsetLeft, pOffsetTop,
+        pOverflowX, pOverflowXScrolled, pOverflowY, pOverflowYScrolled, pPosition,
+        parent, parent_style, pb, pl, pr, pt, result, sTransform, style, tag_name,
+        transformOffsetX, transformOffsetY, vertScroll, width, _ref;
     element_type = el.type;
     if (typeof element_type === 'string') {
       element_type = element_type.toLowerCase();
@@ -74,7 +83,7 @@ function isVisible(element, cached) {
       absolute = (_ref = style['position']) === 'fixed' || _ref === 'absolute';
     }
     isOffsetParent = offsp === parent;
-    if (1 === (1 & element.compareDocumentPosition(document))) {
+    if (1 === (1 & element.compareDocumentPosition(win.document))) {
       //console.log ("isVisible FINISH 3");
       return false;
     }
@@ -152,14 +161,19 @@ function isVisible(element, cached) {
         sTransform = style.transform;
         if (sTransform.startsWith('matrix')) {
           m = sTransform.match(/matrix\(\s*(-?[.\d]+)\s*,\s*(-?[.\d]+)\s*,\s*(-?[.\d]+)\s*,\s*(-?[.\d]+)\s*,\s*(-?[.\d]+)\s*,\s*(-?[.\d]+)\s*\)/);
-          if ((m != null ? m[1] : void 0) === "1" && m[2] === "0" && m[3] === "0" && m[4] === "1") {
+          if (
+            (m != null ? m[1] : void 0) === "1" &&
+            m[2] === "0" &&
+            m[3] === "0" &&
+            m[4] === "1"
+          ) {
             transformOffsetX = +m[5];
             transformOffsetY = +m[6];
           }
         }
-        if (el === document.body && typeof window.innerWidth === 'number') {
-          pOverflowYScrolled = window.innerWidth > document.documentElement.clientWidth;
-          pOverflowXScrolled = window.innerHeight > document.documentElement.clientHeight;
+        if (el === win.document.body && typeof win.innerWidth === 'number') {
+          pOverflowYScrolled = win.innerWidth > win.document.documentElement.clientWidth;
+          pOverflowXScrolled = win.innerHeight > win.document.documentElement.clientHeight;
         } else {
           pOverflowY = parent_style['overflow-y'];
           pOverflowX = parent_style['overflow-x'];
@@ -243,12 +257,15 @@ function isVisible(element, cached) {
 
   visible = false;
   if (element != null) {
-    if (cached && document.body.axt_stamp <= element.axt_vStamp && (element.axt_vCache != null)) {
+    if (
+      cached && win.document.body.axt_stamp <= element.axt_vStamp &&
+      (element.axt_vCache != null)
+    ) {
       visible = element.axt_vCache;
     } else {
       visible = _isVisible(element, element);
       element.axt_vCache = visible;
-      element.axt_vStamp = document.body.axt_stamp;
+      element.axt_vStamp = win.document.body.axt_stamp;
     }
   }
   //console.log ("isVisible FINISH 13");
@@ -257,8 +274,8 @@ function isVisible(element, cached) {
 
 
 
-let BUTTON_SELECTORS = "button,input[type='button']," + //input[type='submit']," +
-  "input[type='image']"; //",input[type='reset']";
+let BUTTON_SELECTORS = "button:not([type=submit]),input[type=button]," + //input[type=submit]," +
+  "input[type=image]"; //",input[type=reset]";
 
 let ANCHOR_SELECTORS = [
   "a",
@@ -348,9 +365,10 @@ let ALL_BUTTON_SELECTORS = [ BUTTON_SELECTORS, ANCHOR_SELECTORS ].join(',');
 let tokens = {
   'loginButton': [
     '=log in', '=login', '=login *', '=вхід', '=вход', '=увійти', '=ввойти', '=войти',
-    '=ログイン', '=登录', '=*登录', 'signin', '=sign in', '=sign up in', '=авторизация',
+    '=ログイン', '=登录', '=*登录', '=signin', '=sign in', '=sign up in', '=авторизация',
     '=логін', 'connect ** burner account', 'есть аккаунт', 'possuo uma conta',
     'tengo ** cuenta', 'join / sign in', '=sign up or log in', '=sign in/up',
+    '=account log in', '=continue with email', '=use your email',
     '=login/register', 'log in/sign up', '快速登录', 'sign in to **', 'login / join',
     'sign in or register', '=account login', 'sign in or create account', '登录/注册',
     '로그인', 'log in to *', '=login to your account', 'log in register', '=get in',
@@ -358,7 +376,7 @@ let tokens = {
     'log in now', 'sign in my account', '=logowanie', '=zaloguj się', 'ienākt',
     '=login/sign up', 'sign in your account', '=login / register', '=log on',
     '=sign in / sign up', '=kirjaudu', '=register / sign in', 'returning?',
-    '=sign in with *', 'login/register', 'belépés' /* HU */,
+    '=sign in with *', '=sign in with your email', 'login/register', 'belépés' /* HU */,
     '=* * login' /* "Payment Plan Login" (hugedomains.com) */,
     '=log in with ** id' /* "Log in with Saga Club ID" (icelandair.com) */,
     '=login to *' /* "Login to JewishGen" (jewishgen.org) */,
@@ -368,7 +386,9 @@ let tokens = {
     '=sign in treats & account' /* petsmart.com */,
     '=login to royal orchid frequent flyer link' /* thaiairways.com */,
     '=entrar com seu email' /* portuguese */,
-    '=sign in see your profile' /* aircanada.com */
+    '=sign in see your profile' /* aircanada.com */,
+    'select this button to login' /* gmu.joinhandshake.com */,
+    '=log in opens flyout' /* southwest.com */
   ],
 
   'registerButton': [
@@ -380,13 +400,14 @@ let tokens = {
     '=создать аккаунт', '=registrar se', '=kayit ol', '=registrarse', '=crear cuenta',
     '=sign up & pricing', '=sign up now', '=rejestracja', '=załóż konto', 'rekisteröidy',
     '=make new account', '=open new account', "=sign up it's free", "=sign up free",
-    '=regisztráció', '=create an account', '=enroll', '立即注册', '=create a profile'
+    '=regisztráció', '=create an account', '=enroll', '立即注册', '=create a profile',
+    '=sign up here'
   ],
 
   'accountButton': [
     'hamburger', 'nav button', 'menu button', '=account', '=my account', '=my account **',
     '=your account', "=мой профиль", '=profile', 'login account', '=личный кабинет',
-    'hesabim', 'conta uol', '=menu', 'open my account menu', 'manage account',
+    'hesabim', '=menu', 'open my account menu', 'manage account',
     '=conta uol' /* portuguese */,
     '=frequent flyer' /* icelandair.com */,
     '=my area' /* luisaviaroma.com */,
@@ -401,13 +422,40 @@ function sleep(m) {
 
 
 function checkPage(message) {
-  return !!document.evaluate(
-    `//*[name(.) != 'script' and contains(., "${message}")]`,
-    document.body,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
-  ).singleNodeValue
+  function search(win, msg) {
+    let founded = win.document.evaluate(
+      `//*[name(.) != 'script' and name(.) != 'style' and contains(., "${msg}")]`,
+      win.document.body,
+      null,
+      XPathResult.ANY_TYPE,
+      null
+    )
+    var elem = founded.iterateNext();
+    let elements = Array()
+    while (elem) {
+      if (
+        Array.from(elem.childNodes)
+        .some( (e) =>
+          e.nodeType == Node.TEXT_NODE &&
+          e.data.toString().includes(msg) &&
+          isVisible(win, elem)
+        )
+      ) {
+        elements.push(elem);
+      }
+      elem = founded.iterateNext();
+    }
+    return (elements.length > 0);
+  }
+
+  var found = false;
+  try {
+    found = search(window, message);
+    if (!found && window.frames.length === 1)  {
+       found = search(window.frames[0], message);
+    }
+  } catch(e) {}
+  return found
 }
 
 
@@ -419,7 +467,11 @@ function equalsLabel(text, label) {
 
   if (label.includes('*')) {
     if (label[0] === '=') {
-      return RegExp(`^${label.substring(1).replace(/\*\*/g, '.+').replace(/\*/g, '[^ \\t]+')}$`).test(t);
+      return RegExp(`^${
+        label.substring(1)
+        .replace(/\*\*/g, '.+')
+        .replace(/\*/g, '[^ \\t]+')
+      }$`).test(t);
     } else {
       return RegExp(label.replace(/\*\*/g, '.+').replace(/\*/g, '[^ \\t]+')).test(t);
     }
@@ -443,7 +495,7 @@ async function scanButtons() {
   let buttons = qbuttons.filter(
     (button) => {
       //console.log('e0', button);
-      let v = isVisible(button);
+      let v = isVisible(window, button);
       //console.log('e1');
       let e = button.classList.contains('axt-element');
       //console.log('e2');
@@ -709,17 +761,21 @@ async function scanButtons() {
     case "www.lowes.com":
       addCustomButton("accountButton", 'a.js-account[title=MyLowes]', 'svg');
       break
+
+    case "www.kbb.com":
+      addCustomButton("accountButton", 'div', 'input#mykbbToggle');
+      break
   }
 
   if (Object.keys(res).length === 0) {
     await sleep(1000);
 
     let inputs = Array.from(document.getElementsByTagName('input'))
-    .filter((e) => ['hidden', 'submit', 'checkbox'].indexOf(e.type) < 0)
+      .filter( (e) =>
+        ['hidden', 'submit', 'checkbox', 'radio'].indexOf(e.type) < 0
+      )
 
     if (inputs.length === 0) {
-
-
       if (
         checkPage('Your connection is not private') ||
         checkPage('ERR_CERT_DATE_INVALID')
@@ -727,7 +783,11 @@ async function scanButtons() {
         res['suspiciousSiteError'] = [];
       }
 
-      if (checkPage('This site can’t be reached')) {
+      if (
+        checkPage("This site can’t be reached") ||
+        checkPage("This page isn't working") ||
+        checkPage('ERR_EMPTY_RESPONSE')
+      ) {
         res['siteNotFoundError'] = [];
       }
 
@@ -745,29 +805,28 @@ async function scanButtons() {
         checkPage('Sorry for the Detour') ||
         checkPage('requested URL was rejected') ||
         checkPage("You've been blocked") ||
-        checkPage('is not available in your country') || // (grubhub.com)
-        checkPage('is not available to customers') || // (cvs.com)
-        checkPage('We Are Currently Unable to Provide a Shopping Experience for This Country') || // (jcpenney.com)
-        checkPage('Your access to this site has been limited') || // (marcos.com)
-        checkPage('is not available for you') || // (officedepot.com)
+        checkPage('is not available in your country') || // grubhub.com
+        checkPage('is not available to customers') || // cvs.com
+        checkPage('is currently not available in your country') || // officedepot.com, spotify.com
+        checkPage('We Are Currently Unable to Provide a Shopping Experience for This Country') || // jcpenney.com
+        checkPage('Your access to this site has been limited') || // marcos.com
+        checkPage('is not available for you') || // officedepot.com
         checkPage('we are unable to process international online transactions') || // pch.com
+        checkPage('is not available outside of the United States') || // goodrx.com
         document.querySelector('div.blockedCountrySplash') != null // hannaandersson.com
       ) {
-
         res['accessDeniedError'] = [];
       }
 
-      if (
-        checkPage("Error 522")
-      ) {
+      if (checkPage("Error 522")) {
         res['timeoutError'] = [];
       }
 
       if (
         checkPage("I am human") ||
         checkPage("I'm not a robot") ||
-        checkPage("reCAPTCHA") ||
-        checkPage("CAPTCHA")
+        checkPage("CAPTCHA") ||
+        checkPage("verify you are a human")
       ) {
         res['captchaError'] = [];
       }
@@ -789,4 +848,5 @@ async function scanButtons() {
 }
 let result = scanButtons();
 
+//noinspection JSAnnotator
 return result

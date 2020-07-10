@@ -1,4 +1,4 @@
-import {Key, WebElement} from "selenium-webdriver";
+import {Key, WebDriver, WebElement} from "selenium-webdriver";
 import {Timeouts} from "./timeouts";
 
 
@@ -8,6 +8,19 @@ export class WebElementExt {
 
     public constructor(wedElement: WebElement) {
         this.webElement = wedElement;
+    }
+
+    public async setAttribute(
+        attName: string,
+        attValue: string = ''
+    ) {
+        let driver = this.webElement.getDriver();
+        await driver.executeScript(
+            "arguments[0].setAttribute(arguments[1], arguments[2]);",
+            this.webElement,
+            attName,
+            attValue
+        );
     }
 
     public async sendKeys(...var_args: Array<string|number|Promise<string|number>>): Promise<void> {

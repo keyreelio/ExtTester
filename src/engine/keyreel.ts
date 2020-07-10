@@ -5,6 +5,7 @@ import {ICredential} from "../credentials/credentials";
 import {Timeouts} from "../common/timeouts";
 import {DBAccount} from "../service/dbaccount";
 import {Mutex} from "../common/mutex";
+import fs from "fs";
 
 
 export class KeyReelEngineFactory implements IEngineFactory {
@@ -25,12 +26,12 @@ export class KeyReelEngineFactory implements IEngineFactory {
         return Promise.resolve(new KeyReelEngine(this.server, this.options));
     }
 
-    public async start(): Promise<void> {
-        return await this.server.start();
+    public start(): Promise<void> {
+        return this.server.start();
     }
 
-    public async finish(): Promise<void> {
-        return await this.server.stop();
+    public finish(): Promise<void> {
+        return this.server.stop();
     }
 }
 
@@ -77,7 +78,12 @@ export class KeyReelEngine extends Engine {
         }
 
         let u = new URL(credential.url);
-        this.mockServer.setExtLogFilePath(`${extLogFolder}/${u.host}.log.txt`);
+        this.domainLogPath = `${extLogFolder}/${u.host}/`;
+        if (!fs.existsSync(this.domainLogPath)){
+            fs.mkdirSync(this.domainLogPath);
+        }
+        console.log(`Save logfile to ${this.domainLogPath}/log.txt`);
+        this.mockServer.setExtLogFilePath(`${this.domainLogPath}/log.txt`);
     }
 
     public async checkSaved(url: string, credential: ICredential): Promise<void> {
@@ -128,17 +134,25 @@ export class KeyReelEngine extends Engine {
         L.debug("add 'keyreel' extension");
         options.addArguments("load-extension=./resources/raws/KeyReel");
     }
-    
+
     protected async save(account: DBAccount): Promise<void> {
         return await this.mutex.dispatch(async () => {
             if (this.currentCredential === undefined) return;
             this.savedAccount = true;
             if (account.username !== this.currentCredential.login) {
-                this.savedError = new Error(`Fail saved: login not equal - stored '${account.username}'  real '${this.currentCredential.login}'`);
+                this.savedError = new Error(
+                    `Fail saved: login not equal - stored '${account.username}'  real ` +
+                    `'${this.currentCredential.login}'`
+                );
             } else if (account.password !== this.currentCredential.password) {
-                this.savedError = new Error(`Fail saved: login not equal - stored '${account.password}'  real '${this.currentCredential.password}'`);
+                this.savedError = new Error(
+                    `Fail saved: login not equal - stored ` + `'${account.password}'  ` +
+                    `real '${this.currentCredential.password}'`
+                );
             }
-            if (this.onSavedEvent !== undefined) return await this.onSavedEvent(this.savedError);
+            if (this.onSavedEvent !== undefined) {
+                return await this.onSavedEvent(this.savedError);
+            }
         });
     }
 

@@ -1,10 +1,11 @@
 import {Engine, IEngine} from './engine/engine'
 import {scannerLogger as L} from "./common/log.config";
-import {EResultType, ScanReportLogger} from "./report/scanReport";
+import {ScanReportLogger} from "./report/scanReport";
 import fs from "fs";
 import * as URL from "url";
 import {Timeouts} from "./common/timeouts";
 import {error as webDriverErrors} from "selenium-webdriver";
+import {EResultType} from "./core/EResultType";
 
 let search_buttons_module = fs.readFileSync("./src/browser/searchButtons.js", "utf8");
 

@@ -9,7 +9,7 @@
 //     }
 //
 //     protected async printHeader(): Promise<void> {
-//         this.printLine("url;save_with_button;save_without_button;load;has_singin_button;" +
+//         this.printLine("url;save_with_button;save_without_button;load;has_signin_button;" +
 //             "has_full_form;has_first_step_form;has_second_step_form;has_loggedin;did_not_parse;fail_messages");
 //     }
 //
@@ -36,10 +36,10 @@
 //             let part: string[] = [];
 //
 //             part.push(report.url);
-//             part.push(marker(report.results[EReportTest.saveWithButtons]));
+//             part.push(marker(report.results[EReportTest.saveUsingButtons]));
 //             part.push(marker(report.results[EReportTest.saveWithoutButtons]));
 //             part.push(marker(report.results[EReportTest.load]));
-//             part.push(formMarker(report.parseParts[EReportParsePart.singInButton]));
+//             part.push(formMarker(report.parseParts[EReportParsePart.signInButton]));
 //             part.push(formMarker(report.parseParts[EReportParsePart.fullLoginForm]));
 //             part.push(formMarker(report.parseParts[EReportParsePart.firstStepLoginForm]));
 //             part.push(formMarker(report.parseParts[EReportParsePart.secondStepLoginForm]));

@@ -10,6 +10,8 @@ import {TestAPI} from "./core/testapi";
 import {Args} from "./common/args";
 import {ReportExportLogger} from "./report/reportExportLogger";
 import {ReportExportTxt} from "./report/reportExportTxt";
+//import {DashlaneEngine} from "./engine/dashlane";
+import {DashlaneEngineFactory} from "./engine/dashlane";
 
 
 //TODO: add duration time to report (write/read, parser, scanner)
@@ -41,20 +43,20 @@ class Tester {
 
         let debug = Args.parseArg(args, "debug")
         let toContinue = Args.parseArg(args, "continue")
-        let domainDB = Args.parseArg(args, "--domains")
+        let domainDB = Args.parseArg(args, "--domains") || true
         let writeDisable = Args.parseArg(args, "--withoutWrite")            //|| true
         let failWriteDisable = Args.parseArg(args, "--withoutFailWrite")    //|| true
         let readDisable = Args.parseArg(args, "--withoutRead")              //|| true
         let threadCount = Args.parseNumValueArg(args, "--count", 1)
-        let engineName = Args.parseStrValueArg(args, "--engine", "keyreel")
+        let engineName = Args.parseStrValueArg(args, "--engine", "dashlane") //"keyreel")
 
-        if (engineName === undefined) engineName = "keyreel";
+        if (engineName === undefined) engineName = "dashlane"; //"keyreel";
 
         failWriteDisable = true;
         if (domainDB) {
             writeDisable = true;
             failWriteDisable = false;
-            readDisable = false;
+            readDisable = debug;
         }
 
         if (debug) {
@@ -88,15 +90,14 @@ class Tester {
             let report = new Report(engineName, dumpFilePath, reportFilePath, toContinue);
 
             if (domainDB) {
-                writeDisable = true;
-                failWriteDisable = false;
-                readDisable = false;
-                credentialsFactory = new CredentialsFactorDomains();
+                credentialsFactory = new CredentialsFactorDomains(debug);
             }
 
             let engineFactory: IEngineFactory;
             if (engineName === "keyreel") {
-                engineFactory = new KeyReelEngineFactory({ withoutProfile: true });
+                engineFactory = new KeyReelEngineFactory({withoutProfile: true});
+            } else if (engineName === "dashlane") {
+                engineFactory = new DashlaneEngineFactory({ withoutProfile: true });
             } else /* by default use KeyReel engine*/ {
                 engineFactory = new KeyReelEngineFactory({ withoutProfile: true });
             }
@@ -116,7 +117,10 @@ class Tester {
 
             if (!failWriteDisable) {
                 L.debug("testing fail write");
-                await test.checkFailWrites();
+                await test.checkFailWrites(false);
+
+                // L.debug("testing write without click on buttons (only sites which did not save) - withoutProfile: true");
+                // await test.checkFailWrites(true);
             }
 
             if (!readDisable) {

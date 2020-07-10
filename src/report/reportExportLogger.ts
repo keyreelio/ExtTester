@@ -12,29 +12,31 @@ export class ReportExportLogger extends ReportExport {
 
     protected async exportHeader(): Promise<void> {
         await this.exportLine(`  test:`);
-        await this.exportLine(`    SWHB - save with login button,  MBL - manual before logedin, MAL - manual after loggedin`);
-        await this.exportLine(`    SWOB - save with out login button (press 'Enter'),  MBL - manual before logedin, MAL - manual after loggedin`);
-        await this.exportLine(`    LOAD - load`);
-        await this.exportLine(`  result:`);
-        await this.exportLine(`    MBL - manual before logedin`);
-        await this.exportLine(`    MAL - manual after loggedin`);
-        await this.exportLine(`     A  - auto after loggedin`);
-        await this.exportLine(`     F  - failed`);
+        await this.exportLine(`    SUB  - save using login button`);
+        await this.exportLine(`    SWB  - save without login button (press 'Enter')`);
+        await this.exportLine(`    FSUB - false save using login button`);
+        await this.exportLine(`    FSWB - false save without login button (press 'Enter')`);
+        await this.exportLine(`    LOAD - insert credentials into login form`);
+        await this.exportLine(`  save credentials result:`);
+        await this.exportLine(`    MBL - manually before logged in`);
+        await this.exportLine(`    MAL - manually after logged in`);
+        await this.exportLine(`     A  - automatically after logged in`);
+        await this.exportLine(`     F  - failed (not saved)`);
         await this.exportLine(`     -  - skipped`);
         await this.exportLine(`  flags: SFLPIN`);
-        await this.exportLine(`    S - page has sing in button`);
-        await this.exportLine(`    F - page has full login form`);
-        await this.exportLine(`    L - page has first step of login form`);
-        await this.exportLine(`    P - page has second step of login form`);
+        await this.exportLine(`    S - page has a "Sign In" button`);
+        await this.exportLine(`    F - page has a full login form`);
+        await this.exportLine(`    L - page has a first step of login form`);
+        await this.exportLine(`    P - page has a second step of login form`);
         await this.exportLine(`    I - page is logged in`);
-        await this.exportLine(`    N - page did not parse`);
+        await this.exportLine(`    N - page is not logged in`); //page did not parse`);
         await this.exportLine(`  times:`);
         await this.exportLine(`    tchck - duration time of test (sec)`);
-        await this.exportLine(`    tscnr - duration time of run scanner (sec)`);
+        //await this.exportLine(`    tscnr - duration time of run scanner (sec)`);
         await this.exportLine(`    tprsr - duration time of run parser (sec)`);
-        await this.exportLine(`==============================================================================================================`);
-        await this.exportLine("  idx | url                                                    | test | res | SFLPIN | tchck | tscnr | tprsr |");
-        await this.exportLine(`--------------------------------------------------------------------------------------------------------------`);
+        await this.exportLine(`======================================================================================================`);
+        await this.exportLine("  idx | url                                                    | test | res | SFLPIN | tchck | tprsr |");
+        await this.exportLine(`------------------------------------------------------------------------------------------------------`);
     }
 
     protected async exportReport(index: number, report: ReportItem): Promise<void> {
@@ -47,18 +49,18 @@ export class ReportExportLogger extends ReportExport {
 
             part.push(firstline ? this.indexToString(index) : "".padEnd(6));
             part.push(firstline ? this.urlToString(report.url) : "".padEnd(56));
-            part.push(this.testName(Number(test)));
+            part.push(ReportExport.testName(Number(test)));
             part.push(this.resultToString(result.result));
             part.push(this.flagsToString(result.flags));
             part.push(this.timeToString(result.timers[ETimer.check]));
-            part.push(this.timeToString(result.timers[ETimer.scanner]));
+            //part.push(this.timeToString(result.timers[ETimer.scanner]));
             part.push(this.timeToString(result.timers[ETimer.parser]));
-            part.push(` ${result.failMessage}`);
+            part.push(` ${result.failMessage || "+"}`);
 
             this.exportLine(`${part.join(this.separator())}`);
             firstline = false;
         }
-        await this.exportLine(`--------------------------------------------------------------------------------------------------------------`);
+        await this.exportLine(`------------------------------------------------------------------------------------------------------`);
     }
 
     protected async exportLine(line: string): Promise<void> {
@@ -66,8 +68,8 @@ export class ReportExportLogger extends ReportExport {
     }
 
     protected async exportFooter(): Promise<void> {
-        await this.exportLine("  idx | url                                                    | test | res | SFLPIN | tchck | tscnr | tprsr |");
-        await this.exportLine(`==============================================================================================================`);
+        await this.exportLine("  idx | url                                                    | test | res | SFLPIN | tchck | tprsr |");
+        await this.exportLine(`======================================================================================================`);
     }
 
     protected indexToString(index: number): string {
@@ -94,12 +96,13 @@ export class ReportExportLogger extends ReportExport {
     protected flagsToString(flags: IFlags): string {
         let part: string[] = [];
 
-        part.push(this.flagToString(flags[EReportParsePart.singInButton]));
+        part.push(this.flagToString(flags[EReportParsePart.signInButton]));
         part.push(this.flagToString(flags[EReportParsePart.fullLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.firstStepLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.secondStepLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.loggedIn]));
-        part.push(this.flagToString(flags[EReportParsePart.notParsed]));
+        part.push(this.flagToString(flags[EReportParsePart.noLoggedIn]));
+        //part.push(this.flagToString(flags[EReportParsePart.notParsed]));
 
         return ` ${part.join("")} `;
     }

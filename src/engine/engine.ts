@@ -1,29 +1,49 @@
-import {Builder, error, WebDriver} from "selenium-webdriver";
+import 'chromedriver';
+import {Builder, By, error, WebDriver} from "selenium-webdriver";
 import * as chrome from "selenium-webdriver/chrome";
 import UnsupportedOperationError = error.UnsupportedOperationError;
-import {engineLogger as L} from "../common/log.config";
+import {engineLogger as L, extLogFolder} from "../common/log.config";
 import {WebDriverExt} from "../common/webDriverExt";
 import {ICredential} from "../credentials/credentials";
+import fs from "fs";
+import {EReportTest, ReportExport} from "../report/report";
 
 
 export interface IEngine {
+    getDomainLogPath(): string;
+
     getEngineName(): Promise<string>;
+
     getOptions(): Promise<chrome.Options>;
+
     getDriver(): Promise<WebDriver>;
+
     getExtDriver(): Promise<WebDriverExt>;
+
     startup(maximize: Boolean): Promise<void>;
+
     shutdown(): Promise<void>;
+
     start(credential: ICredential, forRead: boolean): Promise<void>;
-    processBeforeLogin(): Promise<void>;
-    processAfterLogin(): Promise<void>;
+
+    processLoginFinishing(): Promise<void>;
+
+    processAfterPressLoginButton(cancel: boolean): Promise<boolean>;
+
     checkSaved(url: string, credential: ICredential): Promise<void>;
+
     finish(): Promise<void>;
+
     dropAllCredentials(): Promise<void>;
+
+    writeScreenshot(test: EReportTest, remark: string): Promise<void>;
 }
 
 export interface IEngineFactory {
     start(): Promise<void>;
+
     createEngine(): Promise<IEngine>;
+
     finish(): Promise<void>;
 }
 
@@ -31,18 +51,17 @@ export class Engine implements IEngine {
 
     static WaitInitExtension = 2000;
 
-
     protected options: chrome.Options | undefined;
     protected driver: WebDriver | undefined;
     protected extDriver: WebDriverExt | undefined;
-
+    protected domainLogPath: string = "";
     protected withoutProfile = false;
 
 
     public constructor(
         options:
-           { withoutProfile: boolean } |
-           undefined = undefined) {
+            { withoutProfile: boolean } |
+            undefined = undefined) {
 
         if (options !== undefined) {
             if (options as { withoutProfile: boolean }) {
@@ -51,6 +70,9 @@ export class Engine implements IEngine {
         }
     }
 
+    public getDomainLogPath(): string {
+        return this.domainLogPath;
+    }
 
     public async getEngineName(): Promise<string> {
         return Promise.resolve("default");
@@ -80,7 +102,11 @@ export class Engine implements IEngine {
     public async startup(maximize: Boolean = true): Promise<void> {
         L.debug("startup");
 
-        this.options = new chrome.Options();
+        const screen = {
+            width: 1280,
+            height: 1024
+        }
+        this.options = new chrome.Options().windowSize(screen);
 
         if (!this.withoutProfile) {
             let profileName = await this.profileName();
@@ -120,14 +146,14 @@ export class Engine implements IEngine {
         return Promise.resolve();
     }
 
-    public async processBeforeLogin(): Promise<void> {
-        L.debug("unsupported processBeforeLogin");
-        return Promise.reject(new UnsupportedOperationError("processBeforeLogin"));
+    public async processLoginFinishing(): Promise<void> {
+        L.debug("unsupported processLoginFinishing");
+        return Promise.reject(new UnsupportedOperationError("processLoginFinishing"));
     }
 
-    public async processAfterLogin(): Promise<void> {
-        L.debug("unsupported processAfterLogin");
-        return Promise.reject(new UnsupportedOperationError("processAfterLogin"));
+    public async processAfterPressLoginButton(cancel: boolean): Promise<boolean> {
+        L.debug("unsupported processAfterPressLoginButton");
+        return Promise.reject(new UnsupportedOperationError("processAfterPressLoginButton"));
     }
 
     public async checkSaved(url: string, credential: ICredential): Promise<void> {
@@ -159,5 +185,30 @@ export class Engine implements IEngine {
 
     protected async shutdownDriver(): Promise<void> {
         return Promise.resolve();
+    }
+
+    public async writeScreenshot(test: EReportTest, remark: string): Promise<void> {
+        let driver = await this.getDriver();
+        let testName = ReportExport.testName(test).trim();
+
+        await driver.executeScript(`
+           document.documentElement.style.display = "table";
+           document.documentElement.style.width = "100%";
+           document.body.style.display = "table-row";
+        `);
+
+        return await driver
+            .findElement(By.css('body'))
+            .takeScreenshot()
+            .then((data: string) => {
+                let name = `${testName}-${Date.now()}-${remark || "ss"}.png`;
+                fs.writeFileSync(
+                    this.getDomainLogPath() + name,
+                    data,
+                    'base64'
+                );
+            }).catch( (reason) => {
+               L.error("write screenshot error", reason);
+            });
     }
 }

@@ -4,12 +4,13 @@ import {Credentials, ICredential, ICredentialsFactory} from "../credentials/cred
 
 import {testapiLogger as L} from "../common/log.config"
 import {EReportParsePart, EReportResult, EReportTest, ETimer, Report} from "../report/report"
-import {LoginForm, Parser} from "./parser"
+import {Parser} from "./parser"
 import {Input} from "../common/input"
 import ElementNotInteractableError = error.ElementNotInteractableError;
 import {Timeouts} from "../common/timeouts";
 import TimeoutError = error.TimeoutError;
 import UnsupportedOperationError = error.UnsupportedOperationError;
+import {PageInfo} from "./PageInfo";
 
 
 enum EState {

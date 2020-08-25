@@ -22,10 +22,7 @@ export class CredentialsFactorDomains implements ICredentialsFactory {
         let items = this.items
         let domainsFile = './resources/domains.json'
 
-        domainsFile = './resources/domains.json';
-        console.warn(`Load ${domainsFile}`);
-
-        let all_domains = JSON.parse(
+        let domains = JSON.parse(
             fs.readFileSync(domainsFile, {encoding: 'utf8'})
         )
 

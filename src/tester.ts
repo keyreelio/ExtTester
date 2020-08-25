@@ -125,10 +125,11 @@ class Tester {
 
             let reportExport: ReportExport
             if (debug) {
-                let testsCount = fillDisable ? 0 : 1
-                testsCount += saveDisable ? 0 : 1
-                testsCount += failSaveDisable ? 0 : 1
-                reportExport = new ReportExportLogger(dumpFilePath, testsCount == 1)
+                let tCount = fillDisable ? 0 : 1
+                tCount += saveDisable ? 0 : 1
+                tCount += failSaveDisable ? 0 : 1
+                console.log(`tCount: ${tCount}`)
+                reportExport = new ReportExportLogger(dumpFilePath, tCount == 1)
             } else {
                 let reportTxtFilePath = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.${engineName}.txt`
                 reportExport = new ReportExportTxt(dumpFilePath, reportTxtFilePath)

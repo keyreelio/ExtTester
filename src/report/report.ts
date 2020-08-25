@@ -48,7 +48,6 @@ export class ReportItem {
     }
 }
 
-
 export enum EReportResult {
     unknown,
     skip,
@@ -61,6 +60,7 @@ export enum EReportResult {
 }
 
 export enum EReportTest {
+    unknown = -1,
     saveUsingButtons,
     saveWithoutButtons,
     load,
@@ -326,7 +326,7 @@ export class ReportExport extends Report {
             case EReportTest.falseSaveUsingButtons: return " FSUB ";
             case EReportTest.falseSaveWithoutButtons: return " FSWB ";
         }
-        return "      ";
+        return " NULL ";
     }
 
     protected separator(): string {

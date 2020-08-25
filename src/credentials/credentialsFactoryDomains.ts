@@ -20,16 +20,26 @@ export class CredentialsFactorDomains implements ICredentialsFactory {
         if (debug) {
           domainsFile = './resources/test-domains.json';
         } else {
-          domainsFile = './resources/good.json';
-          //domainsFile = './resources/domains.json';
+          //domainsFile = './resources/good.json';
+          domainsFile = './resources/domains.json';
         }
 
-        let domains = JSON.parse(
+        domainsFile = './resources/domains.json';
+        console.warn(`Load ${domainsFile}`);
+
+        let all_domains = JSON.parse(
             fs.readFileSync(domainsFile, {encoding: 'utf8'})
         ).map( (str: string) => {
             // use '#' as a comment (e.g. '#apple.com': skip apple.com)
-            return str.split('#')[0].trim()
+            return str.split(/[^\S]#/)[0].trim()
         }).filter( (str: string) => str.length > 0 );
+
+        let domains;
+        if (debug) {
+            domains = all_domains.slice(0, 1);
+        } else {
+            domains = all_domains;
+        }
 
         if (domains !== undefined) {
             for (let domain of domains) {

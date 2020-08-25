@@ -48,15 +48,15 @@ class Tester {
         let failWriteDisable = Args.parseArg(args, "--withoutFailWrite")    //|| true
         let readDisable = Args.parseArg(args, "--withoutRead")              //|| true
         let threadCount = Args.parseNumValueArg(args, "--count", 1)
-        let engineName = Args.parseStrValueArg(args, "--engine", "dashlane") //"keyreel")
+        let engineName = Args.parseStrValueArg(args, "--engine", "keyreel") //dashlane") //"keyreel")
 
-        if (engineName === undefined) engineName = "dashlane"; //"keyreel";
+        if (engineName === undefined) engineName = "keyreel"; //"dashlane"; //"keyreel";
 
         failWriteDisable = true;
         if (domainDB) {
             writeDisable = true;
             failWriteDisable = false;
-            readDisable = debug;
+            readDisable = true; debug;
         }
 
         if (debug) {
@@ -97,8 +97,8 @@ class Tester {
             if (engineName === "keyreel") {
                 engineFactory = new KeyReelEngineFactory({withoutProfile: true});
             } else if (engineName === "dashlane") {
-                engineFactory = new DashlaneEngineFactory({ withoutProfile: true });
-            } else /* by default use KeyReel engine*/ {
+                engineFactory = new DashlaneEngineFactory({ withoutProfile: false });
+            } else /* by default use KeyReel setAxtAttribs*/ {
                 engineFactory = new KeyReelEngineFactory({ withoutProfile: true });
             }
 

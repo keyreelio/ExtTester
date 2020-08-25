@@ -52,6 +52,10 @@ module.exports = function(grunt) {
                 args: ['./build/tester.js', 'debug', '--engine', 'dashlane']
             },
 
+            build_stop_page_ext: {
+               cmd: './node_modules/.bin/web-ext', 
+               args: ['build', "--ignore-files='*~'", '--source-dir=./src/extensions/stop-load-ext', '--artifacts-dir=./resources/crxs', '--overwrite-dest']
+            },
 
             report: {
                 cmd: 'node',

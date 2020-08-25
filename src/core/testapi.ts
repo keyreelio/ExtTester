@@ -1,21 +1,15 @@
-import {IEngine, IEngineFactory} from "../engine/engine";
-import {error} from "selenium-webdriver";
-import {Credentials, ICredential, ICredentialsFactory} from "../credentials/credentials";
+import {IEngine, IEngineFactory} from "../engine/engine"
+import {error} from "selenium-webdriver"
+import {Credentials, ICredential, ICredentialsFactory} from "../credentials/credentials"
 
-import {testapiLogger as L} from "../common/log.config";
-import {
-    EReportParsePart,
-    EReportResult,
-    EReportTest,
-    ETimer,
-    Report
-} from "../report/report";
-import {LoginForm, Parser} from "./parser";
-import {Input} from "../common/input";
-import {Timeouts} from "../common/timeouts";
-import UnsupportedOperationError = error.UnsupportedOperationError;
-import TimeoutError = error.TimeoutError;
+import {testapiLogger as L} from "../common/log.config"
+import {EReportParsePart, EReportResult, EReportTest, ETimer, Report} from "../report/report"
+import {LoginForm, Parser} from "./parser"
+import {Input} from "../common/input"
 import ElementNotInteractableError = error.ElementNotInteractableError;
+import {Timeouts} from "../common/timeouts";
+import TimeoutError = error.TimeoutError;
+import UnsupportedOperationError = error.UnsupportedOperationError;
 
 
 enum EState {
@@ -35,32 +29,38 @@ enum ECheck {
 //     Parser.SearchFlagLoginOnForm | Parser.SearchFlagPasswordOnForm,                                 // State.waitLoginForm
 //     Parser.SearchFlagPasswordOnForm,                                                                // State.waitSecondLoginForm
 //     Parser.SearchFlagLoggedIn,                                                                      // State.waitFinishing
-// ];
+// ]
 
 let failMessage = function (error: any) {
-    if (error === undefined) return "undefined";
-    if (error.message === undefined) return `${error}`;
-    return error.message;
+    if (error === undefined) return "undefined"
+    if (error.message === undefined) return `${error}`
+    return error.message
 }
 
 export class TestAPI {
 
-    report: Report;
-    engineFactory: IEngineFactory;
-    credentialsFactory: ICredentialsFactory;
-    threadCount: number;
+    report: Report
+    engineFactory: IEngineFactory
+    credentialsFactory: ICredentialsFactory
+    threadsCount: number
+    testsCount: number
+    useVpn: boolean
 
 
     public constructor(
         report: Report,
         engineFactory: IEngineFactory,
         credentialsFactory: ICredentialsFactory,
-        threadCount: number) {
+        threadsCount: number,
+        testsCount: number,
+        useVpn: boolean) {
 
-        this.report = report;
-        this.engineFactory = engineFactory;
-        this.credentialsFactory = credentialsFactory;
-        this.threadCount = threadCount;
+        this.report = report
+        this.engineFactory = engineFactory
+        this.credentialsFactory = credentialsFactory
+        this.threadsCount = threadsCount
+        this.testsCount = testsCount
+        this.useVpn = useVpn
     }
 
     private async goToNext(
@@ -74,18 +74,18 @@ export class TestAPI {
         try {
             if (loginForm.loginButton !== undefined && !useOnlyEnterButton) {
                 await loginForm.loginButton.press(engine, test,
-                    `${remark}-click-login-button`);
+                    `${remark}-click-login-button`)
             } else if (loginForm.nextButton !== undefined && !useOnlyEnterButton) {
                 await loginForm.nextButton.press(engine, test,
-                    `${remark}-click-next-button`);
+                    `${remark}-click-next-button`)
             } else if (input !== undefined) {
                 await input.pressEnter(engine, test,
-                    `${remark}-press-enter`);
+                    `${remark}-press-enter`)
             }
         } catch (e) {
-            let reason = `fail press login or next button or send enter to input with: ${e}`;
-            L.trace(reason);
-            await Promise.reject(reason);
+            let reason = `fail press login or next button or send enter to input with: ${e}`
+            L.trace(reason)
+            await Promise.reject(reason)
         }
     }
 
@@ -95,8 +95,8 @@ export class TestAPI {
         await this.checkTests(
             `write: useOnlyEnterButton = ${useOnlyEnterButton}`,
             (engine, credentials) => {
-                return this.checkWrite(engine, credentials, useOnlyEnterButton);
-            });
+                return this.checkWrite(engine, credentials, useOnlyEnterButton)
+            })
     }
 
     public async checkFailWrites(useOnlyEnterButton: boolean): Promise<void> {
@@ -104,37 +104,37 @@ export class TestAPI {
         await this.checkTests(
             `write: useOnlyEnterButton = ${useOnlyEnterButton}`,
             (engine, credentials) => {
-                return this.checkFailWrite(engine, credentials, useOnlyEnterButton);
-            });
+                return this.checkFailWrite(engine, credentials, useOnlyEnterButton)
+            })
     }
 
-    public async checkReads(): Promise<void> {
+    public async checkFills(): Promise<void> {
 
         await this.checkTests(
             `read`,
             (engine, credentials) => {
-                return this.checkRead(engine, credentials);
-            });
+                return this.checkRead(engine, credentials)
+            })
     }
 
     protected async checkTests(
         testName: string,
         getTest: ((engine: IEngine, credentials: Credentials) => Promise<void>)) {
 
-        L.debug("start engine factory");
-        await this.engineFactory.start();
+        L.debug("start engine factory")
+        await this.engineFactory.start()
 
-        L.debug(`testing ${testName}`);
-        let credentials = this.credentialsFactory.credentials();
-        let tests: any[] = [];
-        for (let i = 0; i < this.threadCount; i++) {
-            let engine = await this.engineFactory.createEngine();
-            tests.push(await getTest(engine, credentials));
+        L.debug(`testing ${testName}`)
+        let credentials = this.credentialsFactory.credentials(this.testsCount)
+        let tests: any[] = []
+        for (let i = 0; i < this.threadsCount; i++) {
+            let engine = await this.engineFactory.createEngine()
+            tests.push(await getTest(engine, credentials))
         }
-        await Promise.all(tests);
+        await Promise.all(tests)
 
-        L.debug("finish engine factory");
-        await this.engineFactory.finish();
+        L.debug("finish engine factory")
+        await this.engineFactory.finish()
     }
 
     protected async checkWrite(engine: IEngine, credentials: Credentials, useOnlyEnterButton: boolean): Promise<void> {
@@ -147,8 +147,8 @@ export class TestAPI {
                 return this.checkWriteCredential(
                     engine,
                     credential,
-                    {useOnlyEnterButton: useOnlyEnterButton});
-            });
+                    {useOnlyEnterButton: useOnlyEnterButton})
+            })
     }
 
     protected async checkFailWrite(
@@ -167,19 +167,19 @@ export class TestAPI {
                 return this.checkFailWriteCredential(
                     engine,
                     credential,
-                    {useOnlyEnterButton: useOnlyEnterButton});
-            });
+                    {useOnlyEnterButton: useOnlyEnterButton})
+            })
     }
 
     protected async checkRead(engine: IEngine, credentials: Credentials): Promise<void> {
 
         return await this.checkTest(
-            EReportTest.load,
+            EReportTest.fill,
             engine,
             credentials,
             (credential: ICredential) => {
-                return this.checkReadCredential(engine, credential);
-            });
+                return this.checkReadCredential(engine, credential)
+            })
     }
 
     protected async checkTest(
@@ -188,62 +188,82 @@ export class TestAPI {
         credentials: Credentials,
         getCheckCredential: ((credential: ICredential) => Promise<void>)): Promise<void> {
 
-        L.debug("startup engine");
-        await engine.startup(false); //true);
+        L.debug("startup engine")
+        await engine.startup(false)
 
-        let driver = await engine.getDriver();
-        let extDriver = await engine.getExtDriver();
+        let driver = await engine.getDriver()
+        let extDriver = await engine.getExtDriver()
 
-        let credential = await credentials.shift();
+        let credential = await credentials.shift()
 
         while (credential !== undefined) {
-            let url = credential.url;
-            let result = await this.report.getResult(url, test);
+            let url = credential.url
+            L.debug(`test start: ${url}`)
+
+            let result = await this.report.getResult(url, test)
             if (result !== undefined && result !== EReportResult.unknown) {
-                L.debug(`skip credential (already checked - ${result})`);
-                credential = await credentials.shift();
-                continue;
+                L.debug(`skip credential (already checked - ${result})`)
+                credential = await credentials.shift()
+                continue
             }
 
-            L.debug(`report start: ${url}`);
-            await this.report.start(url, test);
+            L.debug(`report start`)
+            await this.report.start(url, test)
 
-            L.debug(`engine start`);
-            await engine.start(credential, test == EReportTest.load);
+            if (credential.skip) {
+                L.debug(`skip credential: credentials.skip = ${credential.skip}`)
+
+                await this.report.finish(url, test)
+                credential = await credentials.shift()
+                continue
+            }
+
+            if (this.useVpn != credential.vpn) {
+                L.debug(`skip credential: useVpn = ${this.useVpn}, crd.vpn = ${credential.vpn}`)
+
+                await this.report.finish(url, test)
+                credential = await credentials.shift()
+                continue
+            }
+
+            L.debug(`engine start`)
+            await engine.start(credential, test == EReportTest.fill)
 
             try {
-                L.debug("check credential");
+                L.debug("check credential")
                 await Promise.race([
                     getCheckCredential(credential),
                     Timeouts.createPromiseTimer(Timeouts.WaitCheckCredential, new TimeoutError())
-                ]);
+                ])
             } catch (e) {
                 if (e as TimeoutError) {
-                    L.debug("check credential timeout");
+                    L.debug("check credential timeout")
 
-                    await this.report.setFail(url, test, "check credential timeout");
+                    await this.report.setFail(url, test, "check credential timeout")
 
-                    L.debug("close current tab");
-                    await extDriver.closeCurrentTab();
+                    L.debug("close current tab")
+                    await extDriver.closeCurrentTab()
                 } else {
-                    L.warn(`write credential filed with: '${e}'`);
+                    L.warn(`write credential filed with: '${e}'`)
                 }
             }
 
-            L.debug("engine finish");
-            await engine.finish();
+            L.debug("engine finish")
+            await engine.finish()
 
-            L.debug("report finish");
-            await this.report.finish(url, test);
+            L.debug("report finish")
+            await this.report.finish(url, test)
 
-            credential = await credentials.shift();
+            L.debug("test finish")
+
+            credential = await credentials.shift()
         }
 
-        L.debug("shutdown engine");
-        await engine.shutdown();
+        L.debug("shutdown engine")
+        await engine.shutdown()
 
-        L.debug("driver quit");
-        await driver.quit();
+        L.debug("driver quit")
+        await driver.quit()
     }
 
     protected async checkWriteCredential(
@@ -251,22 +271,22 @@ export class TestAPI {
         credential: ICredential,
         options: { useOnlyEnterButton: boolean } | undefined = undefined
     ): Promise<void> {
-        L.info("checkWriteCredential");
+        L.info("checkWriteCredential")
 
-        let url = credential.url;
-        let useOnlyEnterButton = false;
+        let url = credential.url
+        let useOnlyEnterButton = false
         if (options !== undefined) {
             if (options as { useOnlyEnterButton: boolean }) {
-                useOnlyEnterButton = (<{ useOnlyEnterButton: boolean }>options).useOnlyEnterButton;
+                useOnlyEnterButton = (<{ useOnlyEnterButton: boolean }>options).useOnlyEnterButton
             }
         }
 
-        let api = this;
-        let report = this.report;
+        let api = this
+        let report = this.report
 
         let tDef = useOnlyEnterButton
             ? EReportTest.saveWithoutButtons
-            : EReportTest.saveUsingButtons;
+            : EReportTest.saveUsingButtons
 
         try {
             await this.checkCredentialFor(
@@ -280,12 +300,12 @@ export class TestAPI {
                     test: EReportTest
                 ): Promise<ECheck> {
                     // if (loginForm.loginInput === undefined || loginForm.passwordInput === undefined) {
-                    //     return Promise.reject();
+                    //     return Promise.reject()
                     // }
 
-                    await loginForm!.loginInput!.enterValue(credential.login);
-                    await loginForm!.passwordInput!.enterValue(credential.password);
-                    return Promise.resolve(ECheck.nextStep);
+                    await loginForm!.loginInput!.enterValue(credential.login)
+                    await loginForm!.passwordInput!.enterValue(credential.password)
+                    return Promise.resolve(ECheck.nextStep)
                 },
 
                 /************************************************************************/
@@ -293,8 +313,8 @@ export class TestAPI {
                     loginForm: LoginForm,
                     test: EReportTest
                 ): Promise<ECheck> {
-                    //if (loginForm.loginInput === undefined) return Promise.reject();
-                    await loginForm!.loginInput!.enterValue(credential.login);
+                    //if (loginForm.loginInput === undefined) return Promise.reject()
+                    await loginForm!.loginInput!.enterValue(credential.login)
                     await api.goToNext(
                         engine,
                         test,
@@ -302,8 +322,8 @@ export class TestAPI {
                         loginForm,
                         loginForm.loginInput,
                         useOnlyEnterButton
-                    );
-                    return Promise.resolve(ECheck.nextStep);
+                    )
+                    return Promise.resolve(ECheck.nextStep)
                 },
 
                 /************************************************************************/
@@ -311,9 +331,9 @@ export class TestAPI {
                     loginForm: LoginForm,
                     test: EReportTest
                 ): Promise<ECheck> {
-                    //if (loginForm.passwordInput === undefined) return Promise.reject();
-                    await loginForm!.passwordInput!.enterValue(credential.password);
-                    return Promise.resolve(ECheck.nextStep);
+                    //if (loginForm.passwordInput === undefined) return Promise.reject()
+                    await loginForm!.passwordInput!.enterValue(credential.password)
+                    return Promise.resolve(ECheck.nextStep)
                 },
 
                 /************************************************************************/
@@ -322,16 +342,16 @@ export class TestAPI {
                     test: EReportTest
                 ): Promise<ECheck> {
                     try {
-                        L.debug("try engine process before login");
+                        L.debug("try engine process before login")
 
-                        await engine.processLoginFinishing();
+                        await engine.processLoginFinishing()
 
-                        L.info("!!!!  credential SAVED as MANUAL before logged in");
-                        await report.setResult(url, EReportTest.load, EReportResult.waitApprove);
-                        await report.setResult(url, test, EReportResult.manualBeforeLoggedIn);
+                        L.info("!!!!  credential SAVED as MANUAL before logged in")
+                        await report.setResult(url, EReportTest.fill, EReportResult.waitApprove)
+                        await report.setResult(url, test, EReportResult.manualBeforeLoggedIn)
                     } catch (e) {
                         if (e as UnsupportedOperationError) {
-                            L.debug("engine process before login not supported");
+                            L.debug("engine process before login not supported")
                             await api.goToNext(
                                 engine,
                                 test,
@@ -339,16 +359,16 @@ export class TestAPI {
                                 loginForm,
                                 loginForm.passwordInput,
                                 useOnlyEnterButton
-                            );
-                            return Promise.resolve(ECheck.nextStep);
+                            )
+                            return Promise.resolve(ECheck.nextStep)
                         }
 
-                        L.debug("engine process before login is failed");
-                        L.info("!!!!  credential FAILED SAVE as MANUAL before logged in");
+                        L.debug("engine process before login is failed")
+                        L.info("!!!!  credential FAILED SAVE as MANUAL before logged in")
                         await report.setFail(url, test,
-                            `credential fail save before logged in with: ${failMessage(e)}`);
+                            `credential fail save before logged in with: ${failMessage(e)}`)
                     }
-                    return Promise.resolve(ECheck.break);
+                    return Promise.resolve(ECheck.break)
                 },
 
                 /************************************************************************/
@@ -357,56 +377,56 @@ export class TestAPI {
                     test: EReportTest
                 ): Promise<void> {
                     try {
-                        L.debug("try engine process after login");
+                        L.debug("try engine process after login")
 
-                        await engine.processAfterPressLoginButton(false);
+                        await engine.processAfterPressLoginButton(false)
 
-                        L.info("!!!!  credential SAVED as MANUAL after logged in");
-                        await report.setResult(url, EReportTest.load, EReportResult.waitApprove);
-                        await report.setResult(url, test, EReportResult.manualAfterLoggedIn);
+                        L.info("!!!!  credential SAVED as MANUAL after logged in")
+                        await report.setResult(url, EReportTest.fill, EReportResult.waitApprove)
+                        await report.setResult(url, test, EReportResult.manualAfterLoggedIn)
 
-                        return Promise.resolve();
+                        return Promise.resolve()
                     } catch (e) {
                         if (!(e instanceof UnsupportedOperationError)) {
 
-                            L.debug("engine process after login is failed");
-                            L.info("!!!!  credential FAILED SAVE as MANUAL after logged in");
+                            L.debug("engine process after login is failed")
+                            L.info("!!!!  credential FAILED SAVE as MANUAL after logged in")
                             await report.setFail(
                                 url, test,
-                                `credential fail save after logged in with: ${failMessage(e)}`);
-                            return Promise.resolve();
+                                `credential fail save after logged in with: ${failMessage(e)}`)
+                            return Promise.resolve()
                         }
                     }
 
                     try {
-                        L.debug("try engine check saved");
+                        L.debug("try engine check saved")
 
-                        await engine.checkSaved(url, credential);
+                        await engine.checkSaved(url, credential)
 
-                        L.info("!!!!  credential SAVED as AUTO after logged in");
-                        await report.setResult(url, test, EReportResult.auto);
+                        L.info("!!!!  credential SAVED as AUTO after logged in")
+                        await report.setResult(url, test, EReportResult.auto)
                     } catch (e) {
                         if (e instanceof UnsupportedOperationError) {
-                            L.debug("engine check saved not supported");
+                            L.debug("engine check saved not supported")
 
-                            L.info("!!!! credential MAYBE SAVED as auto after logged in");
-                            await report.setResult(url, test, EReportResult.waitApprove);
+                            L.info("!!!! credential MAYBE SAVED as auto after logged in")
+                            await report.setResult(url, test, EReportResult.waitApprove)
                         } else {
-                            L.debug("engine process after login is failed");
-                            L.info("!!!!  credential FAILED SAVE as AUTO after logged in");
+                            L.debug("engine process after login is failed")
+                            L.info("!!!!  credential FAILED SAVE as AUTO after logged in")
                             await report.setFail(
                                 url,
                                 test,
-                                `credential fail autosave: ${failMessage(e)}`);
+                                `credential fail autosave: ${failMessage(e)}`)
                         }
                     }
 
-                    return Promise.resolve();
-                });
+                    return Promise.resolve()
+                })
         } catch (e) {
-            L.error("ERROR", e);
+            L.error("ERROR", e)
         }
-        return Promise.resolve();
+        return Promise.resolve()
     }
 
     protected async checkFailWriteCredential(
@@ -414,26 +434,26 @@ export class TestAPI {
         credential: ICredential,
         options: { useOnlyEnterButton: boolean } | undefined = undefined
     ): Promise<void> {
-        L.info("checkFailWriteCredential");
+        L.info("checkFailWriteCredential")
 
-        let url = credential.url;
-        let useOnlyEnterButton = false;
+        let url = credential.url
+        let useOnlyEnterButton = false
         if (options !== undefined) {
             if (options as { useOnlyEnterButton: boolean }) {
                 useOnlyEnterButton =
-                    (<{ useOnlyEnterButton: boolean }>options).useOnlyEnterButton;
+                    (<{ useOnlyEnterButton: boolean }>options).useOnlyEnterButton
             }
         }
 
-        let report = this.report;
-        let isFormFilled = false;
+        let report = this.report
+        let isFormFilled = false
 
         let tDef = useOnlyEnterButton
             ? EReportTest.falseSaveWithoutButtons
-            : EReportTest.falseSaveUsingButtons;
+            : EReportTest.falseSaveUsingButtons
 
         try {
-            let api = this;
+            let api = this
             await this.checkCredentialFor(
                 tDef,
                 engine,
@@ -445,12 +465,12 @@ export class TestAPI {
                     test: EReportTest
                 ): Promise<ECheck> {
                     // if (loginForm.loginInput == null || loginForm.passwordInput == null) {
-                    //     return Promise.reject();
+                    //     return Promise.reject()
                     // }
 
-                    await loginForm!.loginInput!.enterValue(credential.login);
-                    await loginForm!.passwordInput!.enterValue(credential.password);
-                    return Promise.resolve(ECheck.nextStep);
+                    await loginForm!.loginInput!.enterValue(credential.login)
+                    await loginForm!.passwordInput!.enterValue(credential.password)
+                    return Promise.resolve(ECheck.nextStep)
                 },
 
                 /************************************************************************/
@@ -458,8 +478,8 @@ export class TestAPI {
                     loginForm: LoginForm,
                     test: EReportTest
                 ): Promise<ECheck> {
-                    //if (loginForm.loginInput === undefined) return Promise.reject();
-                    await loginForm!.loginInput!.enterValue(credential.login);
+                    //if (loginForm.loginInput === undefined) return Promise.reject()
+                    await loginForm!.loginInput!.enterValue(credential.login)
                     await api.goToNext(
                         engine,
                         test,
@@ -467,8 +487,8 @@ export class TestAPI {
                         loginForm,
                         loginForm.loginInput,
                         useOnlyEnterButton
-                    );
-                    return Promise.resolve(ECheck.nextStep);
+                    )
+                    return Promise.resolve(ECheck.nextStep)
                 },
 
                 /************************************************************************/
@@ -476,9 +496,9 @@ export class TestAPI {
                     loginForm: LoginForm,
                     test: EReportTest
                 ): Promise<ECheck> {
-                    // if (loginForm.passwordInput === undefined) return Promise.reject();
-                    await loginForm!.passwordInput!.enterValue(credential.password);
-                    return Promise.resolve(ECheck.nextStep);
+                    // if (loginForm.passwordInput === undefined) return Promise.reject()
+                    await loginForm!.passwordInput!.enterValue(credential.password)
+                    return Promise.resolve(ECheck.nextStep)
                 },
 
                 /************************************************************************/
@@ -487,16 +507,16 @@ export class TestAPI {
                     test: EReportTest
                 ): Promise<ECheck> {
                     try {
-                        L.debug("try engine process before login");
+                        L.debug("try engine process before login")
 
-                        await engine.processLoginFinishing();
+                        await engine.processLoginFinishing()
 
-                        L.info("!!!!  credential SAVED as MANUAL before logged in");
-                        await report.setResult(url, EReportTest.load, EReportResult.waitApprove);
-                        await report.setResult(url, test, EReportResult.manualBeforeLoggedIn);
+                        L.info("!!!!  credential SAVED as MANUAL before logged in")
+                        await report.setResult(url, EReportTest.fill, EReportResult.waitApprove)
+                        await report.setResult(url, test, EReportResult.manualBeforeLoggedIn)
                     } catch (e) {
                         if (e as UnsupportedOperationError) {
-                            L.debug("engine process before login not supported");
+                            L.debug("engine process before login not supported")
                             await api.goToNext(
                                 engine,
                                 test,
@@ -504,17 +524,17 @@ export class TestAPI {
                                 loginForm,
                                 loginForm.passwordInput,
                                 useOnlyEnterButton
-                            );
-                            return Promise.resolve(ECheck.nextStep);
+                            )
+                            return Promise.resolve(ECheck.nextStep)
                         }
 
-                        L.debug("engine process before login is failed");
-                        L.info("!!!!  credential FAILED SAVE as MANUAL before logged in");
+                        L.debug("engine process before login is failed")
+                        L.info("!!!!  credential FAILED SAVE as MANUAL before logged in")
                         await report.setFail(url, test,
-                            `credential fail save before logged in with: ${failMessage(e)}`);
+                            `credential fail save before logged in with: ${failMessage(e)}`)
                     }
 
-                    return Promise.resolve(ECheck.break);
+                    return Promise.resolve(ECheck.break)
                 },
 
                 /************************************************************************/
@@ -522,14 +542,14 @@ export class TestAPI {
                     isLoggedIn: boolean | undefined,
                     test: EReportTest
                 ): Promise<void> {
-                    L.debug(`finish with isLoggedIn: ${isLoggedIn}`);
+                    L.debug(`finish with isLoggedIn: ${isLoggedIn}`)
                     try {
-                        L.debug("try engine process after login");
-                        let reason: string = "";
+                        L.debug("try engine process after login")
+                        let reason: string = ""
 
                         if (await engine.processAfterPressLoginButton(true)) {
                            reason = "!!!! ERROR: Wrong credentials were queried to" +
-                               " SAVED as MANUAL just after login button pressing";
+                               " SAVED as MANUAL just after login button pressing"
 
                             await report.setFail(
                                 url,
@@ -537,37 +557,37 @@ export class TestAPI {
                                 reason,
                                 EReportResult.auto // wrong credentials were saved
                                                    // automatically
-                            );
-                            return Promise.resolve();
+                            )
+                            return Promise.resolve()
                         }
 
                         if (isLoggedIn) {
-                            L.warn("Unexpected 'logged in' (or undetected 'logged out') state was detected!");
+                            L.warn("Unexpected 'logged in' (or undetected 'logged out') state was detected!")
                         }
 
-                        await report.setResult(url, EReportTest.load, EReportResult.waitApprove);
-                        await report.setResult(url, test, EReportResult.manualAfterLoggedIn);
+                        await report.setResult(url, EReportTest.fill, EReportResult.waitApprove)
+                        await report.setResult(url, test, EReportResult.manualAfterLoggedIn)
 
-                        return Promise.resolve();
+                        return Promise.resolve()
                     } catch (e) {
                         if (e !instanceof UnsupportedOperationError) {
-                            L.debug("engine process after login is failed");
-                            L.info("!!!!  credential FAILED SAVE as MANUAL after logged in");
+                            L.debug("engine process after login is failed")
+                            L.info("!!!!  credential FAILED SAVE as MANUAL after logged in")
                             await report.setFail(url, test,
-                                `Wrong credential fail save after logged in with: ${failMessage(e)}`);
-                            return Promise.resolve();
+                                `Wrong credential fail save after logged in with: ${failMessage(e)}`)
+                            return Promise.resolve()
                         }
                     }
 
                     try {
-                        L.debug("Try engine check saved");
+                        L.debug("Try engine check saved")
 
-                        await engine.checkSaved(credential.url, credential);
+                        await engine.checkSaved(credential.url, credential)
 
-                        L.debug("Engine process after login (wrong saved login) is failed");
+                        L.debug("Engine process after login (wrong saved login) is failed")
 
-                        let reason = "Wrong credentials were AUTO SAVED after logged in";
-                        L.warn(reason);
+                        let reason = "Wrong credentials were AUTO SAVED after logged in"
+                        L.warn(reason)
 
                         await report.setFail(
                             url,
@@ -575,35 +595,35 @@ export class TestAPI {
                             reason,
                             EReportResult.auto // wrong credentials were saved
                             // automatically
-                        );
+                        )
                     } catch (e) {
                         if (e instanceof UnsupportedOperationError) {
-                            L.debug("engine engine check saved not supported");
+                            L.debug("engine engine check saved not supported")
 
-                            L.info("!!!! Wrong credentials MAYBE were AUTO SAVED after logged in");
-                            //await report.setResult(credential.url, test, EReportResult.waitApprove);
+                            L.info("!!!! Wrong credentials MAYBE were AUTO SAVED after logged in")
+                            //await report.setResult(credential.url, test, EReportResult.waitApprove)
                             await report.setFail(url, test,
-                                `Login form was hidden after wrong credentials typing`);
+                                `Login form was hidden after wrong credentials typing`)
                         } else {
-                            L.debug("Engine process after login is failed");
-                            L.info("SUCCESS!  AUTO SAVING of wrong credentials was failed");
-                            await report.setResult(url, test, EReportResult.fail);
+                            L.debug("Engine process after login is failed")
+                            L.info("SUCCESS!  AUTO SAVING of wrong credentials was failed")
+                            await report.setResult(url, test, EReportResult.fail)
                         }
                     }
-                    return Promise.resolve();
-                });
+                    return Promise.resolve()
+                })
         } catch (e) {
             if (isFormFilled) {
-                await report.setResult(url, tDef, EReportResult.auto);
+                await report.setResult(url, tDef, EReportResult.auto)
             } else {
                 await report.setFail(url, tDef,
                     `false positive logged in state is detected with ${failMessage(e)}`
-                );
+                )
                 throw e
             }
         }
 
-        return Promise.resolve();
+        return Promise.resolve()
     }
 
 
@@ -611,14 +631,14 @@ export class TestAPI {
         engine: IEngine,
         credential: ICredential): Promise<void> {
 
-        L.info("checkReadCredential");
+        L.info("checkReadCredential")
 
-        let report = this.report;
-        let url = credential.url;
-        let api = this;
+        let report = this.report
+        let url = credential.url
+        let api = this
 
         await this.checkCredentialFor(
-            EReportTest.load,
+            EReportTest.fill,
             engine,
             credential,
 
@@ -628,23 +648,23 @@ export class TestAPI {
                 test: EReportTest
             ): Promise<ECheck> {
                 // if (loginForm.loginInput === undefined || loginForm.passwordInput === undefined) {
-                //     return Promise.reject();
+                //     return Promise.reject()
                 // }
 
                 //TODO: add check manual fill
                 L.debug("check auto fill login and password inputs")
-                let login = await loginForm!.loginInput!.getInputValue();
-                let password = await loginForm!.passwordInput!.getInputValue();
+                let login = await loginForm!.loginInput!.getInputValue()
+                let password = await loginForm!.passwordInput!.getInputValue()
                 if (login === credential.login && password === credential.password) {
-                    L.debug("!!!!  credential AUTO LOAD");
-                    await report.setResult(url, test, EReportResult.auto);
+                    L.debug("!!!!  credential AUTO LOAD")
+                    await report.setResult(url, test, EReportResult.auto)
                 } else {
-                    L.debug("credential AUTO LOAD failed");
-                    L.trace(`  real login: '${credential.login}'  stored: '${login}'`);
-                    L.trace(`  real password: '${credential.password}'  stored: '${password}'`);
-                    await report.setFail(url, test, "login and/or password is not equal with ");
+                    L.debug("credential AUTO LOAD failed")
+                    L.trace(`  real login: '${credential.login}'  stored: '${login}'`)
+                    L.trace(`  real password: '${credential.password}'  stored: '${password}'`)
+                    await report.setFail(url, test, "login and/or password is not equal with ")
                 }
-                return Promise.resolve(ECheck.break);
+                return Promise.resolve(ECheck.break)
             },
 
             /****************************************************************************/
@@ -653,17 +673,17 @@ export class TestAPI {
                 test: EReportTest
             ): Promise<ECheck> {
 
-                //if (loginForm.loginInput === undefined) return Promise.reject();
+                //if (loginForm.loginInput === undefined) return Promise.reject()
 
                 //TODO: add check manual fill
                 L.debug("check auto fill login input")
-                let login = await loginForm!.loginInput!.getInputValue();
+                let login = await loginForm!.loginInput!.getInputValue()
                 if (login !== credential.login) {
 
-                    L.debug("credential AUTO LOAD failed");
-                    L.trace(`  real login: '${credential.login}'  stored: '${login}'`);
-                    await report.setFail(url, test, "login is not equal with ");
-                    return Promise.resolve(ECheck.break);
+                    L.debug("credential AUTO LOAD failed")
+                    L.trace(`  real login: '${credential.login}'  stored: '${login}'`)
+                    await report.setFail(url, test, "login is not equal with ")
+                    return Promise.resolve(ECheck.break)
                 }
 
                 await api.goToNext(
@@ -673,9 +693,9 @@ export class TestAPI {
                     loginForm,
                     loginForm.loginInput,
                     false
-                );
+                )
 
-                return Promise.resolve(ECheck.nextStep);
+                return Promise.resolve(ECheck.nextStep)
             },
 
             /****************************************************************************/
@@ -683,20 +703,20 @@ export class TestAPI {
                 loginForm: LoginForm,
                 test: EReportTest
             ): Promise<ECheck> {
-                //if (loginForm.passwordInput === undefined) return Promise.reject();
+                //if (loginForm.passwordInput === undefined) return Promise.reject()
 
                 //TODO: add check manual fill
                 L.debug("check auto fill password input")
-                let password = await loginForm!.passwordInput!.getInputValue();
+                let password = await loginForm!.passwordInput!.getInputValue()
                 if (password === credential.password) {
-                    L.debug("!!!!  credential AUTO LOAD");
-                    await report.setResult(url, test, EReportResult.auto);
+                    L.debug("!!!!  credential AUTO LOAD")
+                    await report.setResult(url, test, EReportResult.auto)
                 } else {
-                    L.debug("credential AUTO LOAD failed");
-                    L.trace(`  real password: '${credential.password}'  stored: '${password}'`);
-                    await report.setFail(url, test, "password is not equal with ");
+                    L.debug("credential AUTO LOAD failed")
+                    L.trace(`  real password: '${credential.password}'  stored: '${password}'`)
+                    await report.setFail(url, test, "password is not equal with ")
                 }
-                return Promise.resolve(ECheck.break);
+                return Promise.resolve(ECheck.break)
             },
 
             /****************************************************************************/
@@ -704,7 +724,7 @@ export class TestAPI {
                 loginForm: LoginForm,
                 test: EReportTest
             ): Promise<ECheck> {
-                return Promise.resolve(ECheck.break);
+                return Promise.resolve(ECheck.break)
             },
 
             /****************************************************************************/
@@ -712,10 +732,10 @@ export class TestAPI {
                 isLoggedIn: boolean | undefined,
                 test: EReportTest
             ): Promise<void> {
-                return Promise.resolve();
-            });
+                return Promise.resolve()
+            })
 
-        return Promise.resolve();
+        return Promise.resolve()
     }
 
     protected async checkCredentialFor(
@@ -728,72 +748,72 @@ export class TestAPI {
         afterLoginFormFilling: ((loginForm: LoginForm, test: EReportTest) => Promise<ECheck>),
         done: ((isLoggedIn: boolean | undefined, test: EReportTest) => Promise<void>)
     ): Promise<void> {
-        L.info("checkCredentialFor");
+        L.info("checkCredentialFor")
 
-        let url = credential.url;
-        let driver = await engine.getDriver();
-        let extDriver = await engine.getExtDriver();
-        let parser = new Parser(engine);
-        var reason: string = "";
+        let url = credential.url
+        let driver = await engine.getDriver()
+        let extDriver = await engine.getExtDriver()
+        let parser = new Parser(engine)
+        var reason: string = ""
 
-        L.debug(`open new tab with: ${url}`);
-        await extDriver.openUrlOnNewTab(url);
+        L.debug(`open new tab with: ${url}`)
+        await extDriver.openUrlOnNewTab(url)
 
         try {
-            if (test === EReportTest.load) {
-                L.trace('wait 500ms');
-                await driver.sleep(500);
+            if (test === EReportTest.fill) {
+                L.trace('wait 500ms')
+                await driver.sleep(500)
             }
 
-            var state = EState.init;
-            var startTime = Date.now();
+            var state = EState.init
+            var startTime = Date.now()
 
             while (true) {
                 try {
-                    L.debug("parse page");
+                    L.debug("parse page")
                     let page = await parser.parsePage(
                         credential.timeout,
                         state === EState.done
-                    );
+                    )
 
-                    await this.report.setTimer(url, test, ETimer.parser, page.duration);
+                    await this.report.setTimer(url, test, ETimer.parser, page.duration)
                     if (page.error != null) {
-                        L.warn(`parsing error: ${page.error}`);
+                        L.warn(`parsing error: ${page.error}`)
                         await this.report.setFail(
                             url,
                             test,
                             failMessage(page.error),
                             EReportResult.skip
-                        );
-                        return Promise.reject(page.error);
+                        )
+                        return Promise.reject(page.error)
                     }
 
-                    L.debug("Check page structure");
+                    L.debug("Check page structure")
 
-                    let hasLoginForm = (page.loginForm != null);
-                    let hasLoginInput = (hasLoginForm && page.loginForm!.loginInput != null);
-                    let hasPassInput = (hasLoginForm && page.loginForm!.passwordInput != null);
+                    let hasLoginForm = (page.loginForm != null)
+                    let hasLoginInput = (hasLoginForm && page.loginForm!.loginInput != null)
+                    let hasPassInput = (hasLoginForm && page.loginForm!.passwordInput != null)
 
                     /** init state **********************************************************/
                     if (state === EState.init) {
-                        L.debug("* INIT state *");
+                        L.debug("* INIT state *")
                         if (hasLoginForm) {
                             if (hasLoginInput) {
-                                state = EState.waitLoginForm;
+                                state = EState.waitLoginForm
                             } else if (hasPassInput) {
                                 reason = "Found login form only with a password input " +
-                                    "at the first step (init state)";
-                                await this.report.setFail(url, test, reason);
-                                return Promise.reject(reason);
+                                    "at the first step (init state)"
+                                await this.report.setFail(url, test, reason)
+                                return Promise.reject(reason)
                             }
                         } else if (page.signinButton != null) {
-                            L.debug("Page has a signin button and doesn't have a login form");
+                            L.debug("Page has a signin button and doesn't have a login form")
 
                             await this.report.setParsePart(
                                 url,
                                 test,
                                 EReportParsePart.signInButton
-                            );
+                            )
 
                             L.info("Click Signin/Menu button")
                             await page.signinButton.press(
@@ -801,34 +821,34 @@ export class TestAPI {
                                 test,
                                 "click-menu_signin-button",
                                 true
-                            );
-                            await driver.sleep(500);
+                            )
+                            await driver.sleep(500)
 
                             // Re-parse the page
-                            startTime = Date.now();
-                            continue;
+                            startTime = Date.now()
+                            continue
                         } else {
                             if (Date.now() - startTime < 15000) {
-                                continue;
+                                continue
                             } else {
-                                reason = '"Menu"/"Sign in" button was not found';
-                                await this.report.setFail(url, test, reason);
-                                return Promise.reject(reason);
+                                reason = '"Menu"/"Sign in" button was not found'
+                                await this.report.setFail(url, test, reason)
+                                return Promise.reject(reason)
                             }
                         }
                     }
 
                     /** waitLoginForm state *************************************************/
                     if (state === EState.waitLoginForm) {
-                        L.debug("* WAIT-LOGIN-FORM state *");
+                        L.debug("* WAIT-LOGIN-FORM state *")
                         if (hasLoginForm) {
                             if (hasLoginInput && hasPassInput) {
-                                L.debug("Login form has login and password inputs");
+                                L.debug("Login form has login and password inputs")
                                 await this.report.setParsePart(
                                     url,
                                     test,
                                     EReportParsePart.fullLoginForm
-                                );
+                                )
 
                                 if (
                                     await hasFullLoginForm(
@@ -836,7 +856,7 @@ export class TestAPI {
                                         test
                                     ) == ECheck.break
                                 ) {
-                                    break;
+                                    break
                                 }
 
                                 if (
@@ -845,20 +865,20 @@ export class TestAPI {
                                         test
                                     ) == ECheck.break
                                 ) {
-                                    break;
+                                    break
                                 }
 
-                                state = EState.done;
-                                await driver.sleep(1000);
-                                continue;
+                                state = EState.done
+                                await driver.sleep(1000)
+                                continue
 
                             } else if (hasLoginInput) {
-                                L.debug("Login form has only login input (step 1)");
+                                L.debug("Login form has only login input (step 1)")
                                 await this.report.setParsePart(
                                     url,
                                     test,
                                     EReportParsePart.firstStepLoginForm
-                                );
+                                )
 
                                 if (
                                     await hasFirstStepLoginForm(
@@ -866,42 +886,42 @@ export class TestAPI {
                                         test
                                     ) == ECheck.break
                                 ) {
-                                    break;
+                                    break
                                 }
 
-                                state = EState.waitSecondLoginForm;
-                                await driver.sleep(500);
-                                startTime = Date.now();
-                                continue;
+                                state = EState.waitSecondLoginForm
+                                await driver.sleep(500)
+                                startTime = Date.now()
+                                continue
                             } else if (hasPassInput) {
                                 reason = "Found login form only with a password input " +
-                                    "at the first step (waitLoginForm state)";
-                                await this.report.setFail(url, test, reason);
-                                return Promise.reject(reason);
+                                    "at the first step (waitLoginForm state)"
+                                await this.report.setFail(url, test, reason)
+                                return Promise.reject(reason)
                             }
                         } else {
                             if (Date.now() - startTime < 15000) {
-                                continue;
+                                continue
                             } else {
-                                reason = "Login form was hidden";
-                                await this.report.setFail(url, test, reason);
-                                return Promise.reject(reason);
+                                reason = "Login form was hidden"
+                                await this.report.setFail(url, test, reason)
+                                return Promise.reject(reason)
                             }
                         }
                     }
 
                     /** waitSecondLoginForm state *******************************************/
                     if (state === EState.waitSecondLoginForm) {
-                        L.debug("* WAIT-SECOND-STEP-LOGIN-FORM state *");
+                        L.debug("* WAIT-SECOND-STEP-LOGIN-FORM state *")
                         if (hasLoginForm) {
                             if (hasLoginInput && hasPassInput) {
-                                L.debug("Login form has login and password inputs (step 2)");
+                                L.debug("Login form has login and password inputs (step 2)")
 
                                 await this.report.setParsePart(
                                     url,
                                     test,
                                     EReportParsePart.fullLoginForm
-                                );
+                                )
 
                                 if (
                                     await hasFullLoginForm(
@@ -909,7 +929,7 @@ export class TestAPI {
                                         test
                                     ) == ECheck.break
                                 ) {
-                                    break;
+                                    break
                                 }
 
                                 if (
@@ -918,7 +938,7 @@ export class TestAPI {
                                         test
                                     ) == ECheck.break
                                 ) {
-                                    break;
+                                    break
                                 }
                             }
                             if (hasLoginInput) {
@@ -928,21 +948,21 @@ export class TestAPI {
                                 ) {
                                     L.debug("login form with one login input was found." +
                                         " It's Ok for falseSave tests")
-                                    state = EState.done;
+                                    state = EState.done
                                 } else {
                                     reason = "Login form with a login input at " +
-                                        "the second step has been found (waitSecondLoginForm state)";
-                                    await this.report.setFail(url, test, reason);
-                                    return Promise.reject(reason);
+                                        "the second step has been found (waitSecondLoginForm state)"
+                                    await this.report.setFail(url, test, reason)
+                                    return Promise.reject(reason)
                                 }
                             } else if (hasPassInput) {
-                                L.debug("Login form has only password input (step 2)");
+                                L.debug("Login form has only password input (step 2)")
 
                                 await this.report.setParsePart(
                                     url,
                                     test,
                                     EReportParsePart.secondStepLoginForm
-                                );
+                                )
 
                                 if (
                                     await hasSecondStepLoginForm(
@@ -950,7 +970,7 @@ export class TestAPI {
                                         test
                                     ) == ECheck.break
                                 ) {
-                                    break;
+                                    break
                                 }
 
                                 if (
@@ -959,136 +979,67 @@ export class TestAPI {
                                         test
                                     ) == ECheck.break
                                 ) {
-                                    break;
+                                    break
                                 }
 
-                                state = EState.done;
-                                await driver.sleep(1000);
-                                continue;
+                                state = EState.done
+                                await driver.sleep(1000)
+                                continue
                             }
                         } else {
                             if (Date.now() - startTime < 15000) {
-                                continue;
+                                continue
                             } else {
-                                reason = "Second step Login form was hidden";
-                                await this.report.setFail(url, test, reason);
-                                return Promise.reject(reason);
+                                reason = "Second step Login form was hidden"
+                                await this.report.setFail(url, test, reason)
+                                return Promise.reject(reason)
                             }
                         }
                     }
 
                     /** done state *************************************************/
                     if (state === EState.done) {
-                        L.debug("* DONE State: Finish form parsing *");
+                        L.debug("* DONE State: Finish form parsing *")
 
-                        let repParsePart: EReportParsePart;
+                        let repParsePart: EReportParsePart
 
                         if (page.isLoggedIn != null) {
                             if (page.isLoggedIn) {
-                                repParsePart = EReportParsePart.loggedIn;
+                                repParsePart = EReportParsePart.loggedIn
                             } else {
-                                repParsePart = EReportParsePart.noLoggedIn;
+                                repParsePart = EReportParsePart.noLoggedIn
                             }
-                            await this.report.setParsePart(url, test, repParsePart);
+                            await this.report.setParsePart(url, test, repParsePart)
                         }
 
                         // save screenshot here
-                        await engine.writeScreenshot(test, "done");
+                        await engine.writeScreenshot(test, "done")
 
-                        await done(page.isLoggedIn, test);
+                        await done(page.isLoggedIn, test)
                     }
 
-                    break;
+                    break
                 } catch (e) {
-                    L.error('checkCredentialFor error', e);
+                    L.error('checkCredentialFor error', e)
 
                     await engine.writeScreenshot( test,
                         `error-${("" + (e || "unknown")).split(':')[0]}`
-                    );
+                    )
 
                     if (e instanceof ElementNotInteractableError) {
-                       state = EState.init;
+                       state = EState.init
                        continue
                     }
 
-                    await this.report.setFail(url, test, failMessage(e));
-                    return Promise.reject(e);
+                    await this.report.setFail(url, test, failMessage(e))
+                    return Promise.reject(e)
                 }
             }
         } finally {
-            L.debug("close current tab");
-            await extDriver.closeCurrentTab();
+            L.debug("close current tab")
+            await extDriver.closeCurrentTab()
         }
 
-        return Promise.resolve();
+        return Promise.resolve()
     }
-
-
-    //
-    //
-    //             if (page.signinButton !== undefined && page.loginForm === undefined) {
-    //                 L.debug("page has signin button and hasn't login form");
-    //
-    //                 await this.report.setParsePart(credential.url, testMode, EReportParsePart.signInButton);
-    //                 await page.signinButton.press();
-    //
-    //                 state = EState.waitLoginForm;
-    //                 continue;
-    //             } else if (page.loginForm !== undefined) {
-    //                 if (page.loginForm.loginInput !== undefined && page.loginForm.passwordInput !== undefined) {
-    //                     L.debug("login form has login and password inputs");
-    //
-    //                     await this.report.setParsePart(credential.url, testMode, EReportParsePart.fullLoginForm);
-    //                     if (await hasFullLoginForm(page.loginForm, testMode) == ECheck.break) break;
-    //                 } else if (page.loginForm.loginInput !== undefined) {
-    //                     L.debug("login form has only login input");
-    //
-    //                     await this.report.setParsePart(credential.url, testMode, EReportParsePart.firstStepLoginForm);
-    //                     if (await hasFirstStepLoginForm(page.loginForm, testMode) == ECheck.break) break;
-    //
-    //                     state = EState.waitSecondLoginForm;
-    //                     continue;
-    //                 } else if (page.loginForm.passwordInput !== undefined) {
-    //                     L.debug("login form has only password input");
-    //
-    //                     await this.report.setParsePart(credential.url, testMode, EReportParsePart.secondStepLoginForm);
-    //                     if (await hasSecondStepLoginForm(page.loginForm, testMode) == ECheck.break) break;
-    //                 } else {
-    //                     L.debug("login form did not have login or password inputs");
-    //
-    //                     await this.report.setFail(
-    //                         credential.url,
-    //                         testMode,
-    //                         "login form did not have login or password inputs");
-    //                     break;
-    //                 }
-    //
-    //                 if (await afterLoginFormFilling(page.loginForm, testMode) == ECheck.break) break;
-    //
-    //                 state = EState.waitFinishing;
-    //                 continue;
-    //             } else if (page.isLoggedIn) {
-    //                 L.debug("page is logged in");
-    //
-    //                 await this.report.setParsePart(credential.url, testMode, EReportParsePart.loggedIn);
-    //
-    //                 if (await hasIsLoggedIn(testMode) == ECheck.break) break;
-    //             } else if (page.isNotParsed) {
-    //                 L.debug("page did not parsed");
-    //
-    //                 await this.report.setParsePart(credential.url, testMode, EReportParsePart.notParsed);
-    //             }
-    //
-    //             break;
-    //         }
-    //     } catch (e) {
-    //         L.warn(`fail: ${e}`);
-    //         await this.report.setFail(credential.url, testMode, failMessage(e));
-    //     }
-    //
-    //     L.debug("close current tab");
-    //     await extDriver.closeCurrentTab();
-    //
-    //     return Promise.resolve();
-    // }
 }

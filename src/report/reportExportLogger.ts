@@ -4,9 +4,13 @@ import {EReportParsePart, EReportResult, ReportExport, IFlags, ReportItem, ERepo
 
 export class ReportExportLogger extends ReportExport {
 
-    public constructor(dumpFilePath: string, reportFilePath: string | undefined = undefined) {
+    needSeparator: boolean
+
+    public constructor(dumpFilePath: string, needSeparator: boolean, reportFilePath: string | undefined = undefined) {
 
         super(dumpFilePath, reportFilePath);
+
+        this.needSeparator = needSeparator
     }
 
 
@@ -16,7 +20,7 @@ export class ReportExportLogger extends ReportExport {
         await this.exportLine(`    SWB  - save without login button (press 'Enter')`);
         await this.exportLine(`    FSUB - false save using login button`);
         await this.exportLine(`    FSWB - false save without login button (press 'Enter')`);
-        await this.exportLine(`    LOAD - insert credentials into login form`);
+        await this.exportLine(`    FILL - insert credentials into login form`);
         await this.exportLine(`  save credentials result:`);
         await this.exportLine(`    MBL - manually before logged in`);
         await this.exportLine(`    MAL - manually after logged in`);
@@ -25,17 +29,16 @@ export class ReportExportLogger extends ReportExport {
         await this.exportLine(`     -  - skipped`);
         await this.exportLine(`  flags: SFLPIN`);
         await this.exportLine(`    S - page has a "Sign In" button`);
+        await this.exportLine(`    I - page is logged in`);
         await this.exportLine(`    F - page has a full login form`);
         await this.exportLine(`    L - page has a first step of login form`);
         await this.exportLine(`    P - page has a second step of login form`);
-        await this.exportLine(`    I - page is logged in`);
         await this.exportLine(`    N - page is not logged in`); //page did not parse`);
         await this.exportLine(`  times:`);
         await this.exportLine(`    tchck - duration time of test (sec)`);
-        //await this.exportLine(`    tscnr - duration time of run scanner (sec)`);
         await this.exportLine(`    tprsr - duration time of run parser (sec)`);
         await this.exportLine(`======================================================================================================`);
-        await this.exportLine("  idx | url                                                    | test | res | SFLPIN | tchck | tprsr |");
+        await this.exportLine("  idx | url                                                    | test | res | SIFLPN | tchck | tprsr |");
         await this.exportLine(`------------------------------------------------------------------------------------------------------`);
     }
 
@@ -60,7 +63,9 @@ export class ReportExportLogger extends ReportExport {
             this.exportLine(`${part.join(this.separator())}`);
             firstline = false;
         }
-        await this.exportLine(`------------------------------------------------------------------------------------------------------`);
+        if (this.needSeparator) {
+            await this.exportLine(`------------------------------------------------------------------------------------------------------`);
+        }
     }
 
     protected async exportLine(line: string): Promise<void> {
@@ -68,7 +73,10 @@ export class ReportExportLogger extends ReportExport {
     }
 
     protected async exportFooter(): Promise<void> {
-        await this.exportLine("  idx | url                                                    | test | res | SFLPIN | tchck | tprsr |");
+        if (!this.needSeparator) {
+            await this.exportLine(`------------------------------------------------------------------------------------------------------`);
+        }
+        await this.exportLine("  idx | url                                                    | test | res | SIFLPN | tchck | tprsr |");
         await this.exportLine(`======================================================================================================`);
     }
 
@@ -97,12 +105,11 @@ export class ReportExportLogger extends ReportExport {
         let part: string[] = [];
 
         part.push(this.flagToString(flags[EReportParsePart.signInButton]));
+        part.push(this.flagToString(flags[EReportParsePart.loggedIn]));
         part.push(this.flagToString(flags[EReportParsePart.fullLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.firstStepLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.secondStepLoginForm]));
-        part.push(this.flagToString(flags[EReportParsePart.loggedIn]));
         part.push(this.flagToString(flags[EReportParsePart.noLoggedIn]));
-        //part.push(this.flagToString(flags[EReportParsePart.notParsed]));
 
         return ` ${part.join("")} `;
     }

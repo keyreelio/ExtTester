@@ -217,6 +217,10 @@ body {
   display: none;
 }
 
+.novisible {
+  display: none;
+}
+
 li.gray > a {
   color: lightgray;
   cursor: default;
@@ -225,4 +229,3 @@ li.gray > a > span {
  background-color: #7ae9ff;
  cursor: default;
 }
-

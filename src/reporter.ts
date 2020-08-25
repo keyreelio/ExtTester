@@ -1,17 +1,8 @@
-// import {IReport, ReportCsv, ReportLogger, ReportTxt} from "./report/report";
-// import {ICredentialsFactory} from "./credentials/credentials";
-// import {CredentialsFactoryDebug} from "./credentials/credentialsFactoryDebug";
-// import {CredentialsFactoryPassDB} from "./credentials/credentialsFactoryPassDB";
-// import {CredentialsFactorDomains} from "./credentials/credentialsFactoryDomains";
-// import {IEngineFactory} from "./engine/engine";
-// import {KeyReelEngineFactory} from "./engine/keyreel";
-// import {TestAPI} from "./core/testapi";
-
-
 import {Args} from "./common/args";
 import {ReportExport} from "./report/report";
 import {ReportExportTxt} from "./report/reportExportTxt";
 import {ReportExportLogger} from "./report/reportExportLogger";
+
 
 let timeFormat = function(d: Date): string {
     return `${d.getUTCFullYear()}.${d.getUTCMonth()}.${d.getUTCDate()}.${d.getUTCHours()}.${d.getUTCMinutes()}.${d.getUTCSeconds()}`;
@@ -42,7 +33,7 @@ class Reporter {
         //     reportExport = new ReportExportCsv(reportDumpFilePath, filePath);
         } else {
 
-            reportExport = new ReportExportLogger(dumpFile);
+            reportExport = new ReportExportLogger(dumpFile, true);
         }
         await reportExport.export();
     }

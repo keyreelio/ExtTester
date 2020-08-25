@@ -11,5 +11,6 @@
 *~
 .DS_Store
 /tmp/
+/dumps/
 /logs-debug/
 /logs/

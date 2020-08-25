@@ -6,7 +6,7 @@ export class ReportExportTxt extends ReportExportLogger {
 
     public constructor(dumpFilePath: string, reportFilePath: string) {
 
-        super(dumpFilePath, reportFilePath);
+        super(dumpFilePath, true, reportFilePath);
     }
 
     protected async clearExport(): Promise<void> {

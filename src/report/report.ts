@@ -63,7 +63,7 @@ export enum EReportResult {
 export enum EReportTest {
     saveUsingButtons,
     saveWithoutButtons,
-    load,
+    fill,
     falseSaveUsingButtons,
     falseSaveWithoutButtons
 }
@@ -300,12 +300,11 @@ export class ReportExport extends Report {
         let part: string[] = [];
 
         part.push(this.flagToString(flags[EReportParsePart.signInButton]));
+        part.push(this.flagToString(flags[EReportParsePart.loggedIn]));
         part.push(this.flagToString(flags[EReportParsePart.fullLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.firstStepLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.secondStepLoginForm]));
-        part.push(this.flagToString(flags[EReportParsePart.loggedIn]));
         part.push(this.flagToString(flags[EReportParsePart.noLoggedIn]));
-        //part.push(this.flagToString(flags[EReportParsePart.notParsed]));
 
         return part.join(this.separator());
     }
@@ -322,7 +321,7 @@ export class ReportExport extends Report {
         switch (test) {
             case EReportTest.saveUsingButtons: return " SUB  ";
             case EReportTest.saveWithoutButtons: return " SWB  ";
-            case EReportTest.load: return " LOAD ";
+            case EReportTest.fill: return " FILL ";
             case EReportTest.falseSaveUsingButtons: return " FSUB ";
             case EReportTest.falseSaveWithoutButtons: return " FSWB ";
         }

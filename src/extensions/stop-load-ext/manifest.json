@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": "StopPageLoading",
+  "version": "1.0",
+
+  "description": "Stop page loading after 30 sec.",
+
+  "icons": {
+    "48": "icons/stop-page-48.png"
+  },
+
+  "content_scripts": [{
+    "run_at": "document_start",
+    "js": [
+      "js/content.js"
+    ],
+    "matches": ["*://*/*"]
+  }],
+
+  "permissions": [
+  ]
+}

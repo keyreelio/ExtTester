@@ -16,14 +16,26 @@ module.exports = function(grunt) {
             keyreel: { cmd: 'node', args: ['./build/tester.js'] },
             keyreel_continue: { cmd: 'node', args: ['./build/tester.js', 'continue'] },
             keyreel_debug: {cmd: 'node', args: ['./build/tester.js', 'debug', '--tests', '10'] },
+            build_stop_page_ext: {
+               cmd: './node_modules/.bin/web-ext', 
+               args: ['build', "--ignore-files='*~'", '--source-dir=./src/extensions/stop-load-ext', '--artifacts-dir=./resources/crxs', '--overwrite-dest']
+            },
 
             keyreel_domains: { cmd: 'node', args: ['./build/tester.js', '--domains'] },
             keyreel_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--domains'] },
             keyreel_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--domains', '--tests', '10'] },
+            report: {
+                cmd: 'node',
+                args: ['./build/tester.js', 'report']
+            },
 
             keyreel_fill_domains: { cmd: 'node', args: ['./build/tester.js', '--domains', '--withoutWrite', '--withoutFailWrite'] },
             keyreel_fill_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--domains', '--withoutWrite', '--withoutFailWrite'] },
             keyreel_fill_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--domains', '--withoutWrite', '--withoutFailWrite', '--tests', '30'] },
+            report_txt: {
+                cmd: 'node',
+                args: ['./build/tester.js', 'report', '--txt']
+            },
 
             // tester_dashlane: {
             //     cmd: 'node',
@@ -37,6 +49,10 @@ module.exports = function(grunt) {
             //     cmd: 'node',
             //     args: ['./build/tester.js', 'debug', '--engine', 'dashlane']
             // },
+            report_csv: {
+                cmd: 'node',
+                args: ['./build/tester.js', 'report', '--csv']
+            },
 
 
             scanner: { args: ['./build/scanner.js'] },

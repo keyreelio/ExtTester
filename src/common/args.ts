@@ -16,7 +16,7 @@ export class Args {
 
     public static parseNumValueArg(args: string[], arg: string, defValue: number = 0): number {
         let value = Number(this.parseStrValueArg(args, arg, `${defValue}`));
-        if (value === undefined || !isNaN(value)) return defValue;
+        if (value === undefined || isNaN(value)) return defValue;
         return value;
     }
 }

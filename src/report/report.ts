@@ -48,7 +48,6 @@ export class ReportItem {
     }
 }
 
-
 export enum EReportResult {
     unknown,
     skip,
@@ -61,9 +60,10 @@ export enum EReportResult {
 }
 
 export enum EReportTest {
+    unknown = -1,
     saveUsingButtons,
     saveWithoutButtons,
-    load,
+    fill,
     falseSaveUsingButtons,
     falseSaveWithoutButtons
 }
@@ -80,7 +80,6 @@ export enum EReportParsePart {
 
 export enum ETimer {
     check,
-    //scanner,
     parser
 }
 
@@ -146,10 +145,10 @@ export class Report {
 
     public async start(url: string, test: EReportTest): Promise<void> {
         return await this.mutex.dispatch(async () => {
-            let report = this.reports[this.getHost(url)];
+            let report = this.reports[url];
             if (report === undefined) {
-                report = new ReportItem(this.getHost(url));
-                this.reports[this.getHost(url)] = report;
+                report = new ReportItem(url);
+                this.reports[url] = report;
             }
             let result = report.results[test];
             if (result === undefined) {
@@ -167,12 +166,15 @@ export class Report {
         });
     }
 
-    public async setResult(url: string, test: EReportTest, result: EReportResult): Promise<void> {
+    public async setResult(url: string, test: EReportTest, result: EReportResult, message: string | undefined = undefined): Promise<void> {
         return await this.mutex.dispatch(async () => {
             let res = this.result(url, test);
             if (res === undefined) return Promise.resolve();
             if (res.result != EReportResult.unknown) return Promise.resolve();
             res.result = result;
+            if (message != undefined) {
+                res.failMessage = message
+            }
         });
     }
 
@@ -211,13 +213,8 @@ export class Report {
         });
     }
 
-    protected getHost(url: string): string {
-        let u = new URL(url);
-        return u.host;
-    }
-
     protected result(url: string, test: EReportTest): TestResult | undefined {
-        let report = this.reports[this.getHost(url)];
+        let report = this.reports[url];
         if (report === undefined) return undefined;
         return  report.results[test];
     }
@@ -252,6 +249,11 @@ export class ReportExport extends Report {
         await this.exportHeader();
         await this.exportReports();
         await this.exportFooter();
+    }
+
+    protected getHost(url: string): string {
+        let u = new URL(url);
+        return u.host;
     }
 
     protected async clearExport(): Promise<void> {
@@ -300,12 +302,11 @@ export class ReportExport extends Report {
         let part: string[] = [];
 
         part.push(this.flagToString(flags[EReportParsePart.signInButton]));
+        part.push(this.flagToString(flags[EReportParsePart.loggedIn]));
         part.push(this.flagToString(flags[EReportParsePart.fullLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.firstStepLoginForm]));
         part.push(this.flagToString(flags[EReportParsePart.secondStepLoginForm]));
-        part.push(this.flagToString(flags[EReportParsePart.loggedIn]));
         part.push(this.flagToString(flags[EReportParsePart.noLoggedIn]));
-        //part.push(this.flagToString(flags[EReportParsePart.notParsed]));
 
         return part.join(this.separator());
     }
@@ -322,11 +323,11 @@ export class ReportExport extends Report {
         switch (test) {
             case EReportTest.saveUsingButtons: return " SUB  ";
             case EReportTest.saveWithoutButtons: return " SWB  ";
-            case EReportTest.load: return " LOAD ";
+            case EReportTest.fill: return " FILL ";
             case EReportTest.falseSaveUsingButtons: return " FSUB ";
             case EReportTest.falseSaveWithoutButtons: return " FSWB ";
         }
-        return "      ";
+        return " NULL ";
     }
 
     protected separator(): string {

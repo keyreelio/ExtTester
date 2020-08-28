@@ -2,42 +2,34 @@ import {reportLogger as L} from "../common/log.config";
 import * as fs from "fs";
 import {WriteStream} from "fs";
 import {EResultType} from "../core/EResultType";
+import {PageInfo} from "../core/PageInfo";
 
 export interface IScanReport {
     start(): void;
-    setResult(url: string, resultType: EResultType, resultValue: boolean): void;
+    setResult(url: string, result: PageInfo): void;
     finish(): void;
 }
 
 export class ScanReportLogger implements IScanReport {
 
-    protected reports: Map<string, Map<EResultType, boolean>> | undefined;
+    protected reports: Array<{url: string, page: PageInfo}> | undefined;
     protected fLog: WriteStream | undefined;
     protected date: Date = new Date()
 
     public start(): void {
         if (this.reports !== undefined) return;
-        this.reports = new Map<string, Map<EResultType, boolean>>();
+        this.reports = [];
         this.date = new Date();
         let fName = `reports/report-${this.date.toISOString()}.txt`;
         this.fLog = fs.createWriteStream(fName, { flags: 'a' });
-        return
     }
 
     public setResult(
         domain: string,
-        resultType: EResultType,
-        resultValue: boolean
+        result: PageInfo
     ) {
         if (this.reports === undefined) return;
-
-        var result = this.reports.get(domain);
-        if (result == null) {
-            result = new Map()
-        }
-        result.set(resultType, resultValue);
-        this.reports.set(domain, result);
-        return;
+        this.reports.push({ url: domain, page: result});
     }
 
 
@@ -49,30 +41,32 @@ export class ScanReportLogger implements IScanReport {
     }
 
     public finish() {
+        let sep = `----+----------------------------------------------------------+-------+-------+-------+-------+-------+----------------------`;
         if (this.reports === undefined) return;
         this.line(this.date.toString());
-        this.line(`--------------------------------------------------------------------------------------------------------------`);
-        this.line(` No : domain                                                  : login :registr:account: error` );
-        this.line(`--------------------------------------------------------------------------------------------------------------`);
+        this.line(sep);
+        this.line(`    |                                                          |        Buttons        |     Forms     |`);
+        this.line(` No | Domain                                                   +-------+-------+-------+-------+-------+        Error`);
+        this.line(`    |                                                          | login |registr|account| login |registr|`);
+        this.line(sep);
         var idx = 0;
-        for (let line of this.reports) {
+        for (let info of this.reports) {
             idx += 1;
-            let url = " ".concat(line[0]).padEnd(56, ' ');
+            let url = " ".concat(info.url.padEnd(56, ' '));
             let no = idx.toString().padStart(4, ' ');
-            let l: Map<EResultType, boolean> = line[1];
-            let errors = Array.from(l.keys())
-                .map( (k) => EResultType[k] || `unknownError(${k})` )
-                .filter( (k) => k.endsWith('Error') );
-
+            let l: PageInfo = info.page;
+            let error = l.error || ''
             this.line(
               `${no}:${url} :` +
-              `${l.get(EResultType.loginButton)    ? "   X   " : "       "}:`+
-              `${l.get(EResultType.registerButton) ? "   X   " : "       "}:`+
-              `${l.get(EResultType.accountButton)  ? "   X   " : "       "}:`+
-              `${errors.length>0 ? ' ' + errors.join(', ') : ""}`
+              `${l.buttons['login'] != null  ? "   X   " : "       "}:`+
+              `${l.buttons['registration'] != null ? "   X   " : "       "}:`+
+              `${l.buttons['account'] != null  ? "   X   " : "       "}:`+
+              `${l.forms['login'] != null  ? "   X   " : "       "}:`+
+              `${l.forms['registration'] != null ? "   X   " : "       "}:`+
+              `${error}`
             );
-        }
-        this.line(`--------------------------------------------------------------------------------------------------------------`);
+        };
+        this.line(sep);
         if (this.fLog != null) {
             this.fLog.close();
             this.fLog = undefined

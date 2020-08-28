@@ -8,7 +8,10 @@ export class CredentialsFactoryDebug implements ICredentialsFactory {
             url: "https://paypal.com/",
             login: "donna.simple.oluso@gmail.com",
             password: "g8MYA5wnLx8AfBKz3F5v",
-            timeout: 2000
+            timeout: 2000,
+            comment: undefined,
+            skip: false,
+            vpn: false
         },
 //        {
 //            url: "https://www.dropbox.com/",
@@ -75,9 +78,13 @@ export class CredentialsFactoryDebug implements ICredentialsFactory {
 
         //https://www.rakuten.com/
         // висить
-);
+    );
 
-    public credentials(): Credentials {
-        return new Credentials(Array.from(this.items));
+    public credentials(testsCount: number): Credentials {
+        let credentials = Array.from(this.items)
+        if (testsCount > 0) {
+            credentials = credentials.slice(0, testsCount)
+        }
+        return new Credentials(credentials)
     }
 }

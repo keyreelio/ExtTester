@@ -1,5 +1,7 @@
-import {Key, WebDriver, WebElement} from "selenium-webdriver";
+import {By, Key, WebDriver, WebElement} from "selenium-webdriver";
 import {Timeouts} from "./timeouts";
+import {IEngine} from "../engine/engine";
+import {EReportTest} from "../report/report";
 
 
 export class WebElementExt {
@@ -8,6 +10,52 @@ export class WebElementExt {
 
     public constructor(wedElement: WebElement) {
         this.webElement = wedElement;
+    }
+
+    public static async from(
+        frameSelector: string | undefined,
+        buttonSelector: string,
+        engine: IEngine
+    ): Promise<WebElementExt> {
+        let driver = await engine.getDriver();
+        let extDriver = await engine.getExtDriver();
+        let extElement: WebElementExt | undefined = undefined;
+
+        await extDriver.switchInRootToFrame(frameSelector);
+        let element = await driver.findElement(By.css(buttonSelector));
+        if (element != null) {
+            extElement = new WebElementExt(element);
+        } else {
+            return Promise.reject(`Element '${buttonSelector}' in the ${ 
+                frameSelector ? 'page' : `iframe '${frameSelector}'`
+            } do not exist`);
+        }
+        return extElement;
+    }
+
+    public static async isVisibleAndEnabledFrom(
+        frameSelector: string | undefined,
+        buttonSelector: string,
+        engine: IEngine
+    ): Promise<boolean> {
+        try {
+            let element: WebElementExt = await WebElementExt
+                .from(frameSelector, buttonSelector, engine);
+            return await this.isVisibleAndEnabled(element);
+        } catch (ignore) {
+            // If element is null, stale or if it cannot be located
+            return false;
+        }
+    }
+
+    public static async isVisibleAndEnabled(elementExt: WebElementExt): Promise<boolean> {
+        try {
+            let element: WebElement = elementExt.webElement;
+            return await (element.isDisplayed() && element.isEnabled());
+        } catch (Exception) {
+            // If element is null, stale or if it cannot be located
+            return false;
+        }
     }
 
     public async setAttribute(

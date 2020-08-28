@@ -1411,7 +1411,7 @@ try {
         console.info(`body[axt-parser-timing] found in ${tEnd(waitAttribStartTime)}`);
 
         let startTime = performance.now();
-        while (performance.now() - startTime < 3000) {
+        while (performance.now() - startTime < 9000) {
           forms = await parseForms();
           if (Object.keys(forms).length !== 0) break;
           await sleep(500);

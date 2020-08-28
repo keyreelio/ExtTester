@@ -4,13 +4,9 @@ import {EReportParsePart, EReportResult, ReportExport, IFlags, ReportItem, ERepo
 
 export class ReportExportLogger extends ReportExport {
 
-    needSeparator: boolean
-
-    public constructor(dumpFilePath: string, needSeparator: boolean, reportFilePath: string | undefined = undefined) {
+    public constructor(dumpFilePath: string, reportFilePath: string | undefined = undefined) {
 
         super(dumpFilePath, reportFilePath);
-
-        this.needSeparator = needSeparator
     }
 
 
@@ -44,26 +40,28 @@ export class ReportExportLogger extends ReportExport {
 
     protected async exportReport(index: number, report: ReportItem): Promise<void> {
         let firstline = true;
+        var testCount = 0;
         for (let test in report.results) {
             let result = report.results[test];
             if (result === undefined) continue;
+            testCount++;
 
             let part: string[] = [];
 
             part.push(firstline ? this.indexToString(index) : "".padEnd(6));
-            part.push(firstline ? this.urlToString(report.url) : "".padEnd(56));
+            part.push(firstline ? this.urlToString(this.getHost(report.url)) : "".padEnd(56));
             part.push(ReportExport.testName(Number(test)));
             part.push(this.resultToString(result.result));
-            part.push(this.flagsToString(result.flags));
+            part.push(` ${this.flagsToString(result.flags)} `);
             part.push(this.timeToString(result.timers[ETimer.check]));
             //part.push(this.timeToString(result.timers[ETimer.scanner]));
             part.push(this.timeToString(result.timers[ETimer.parser]));
-            part.push(` ${result.failMessage || "+"}`);
+            part.push(` ${result.failMessage.length > 0 ? result.failMessage.replace(/\\s+/g, ' ').trim() : "+"}`);
 
-            this.exportLine(`${part.join(this.separator())}`);
+            await this.exportLine(`${part.join(this.separator())}`);
             firstline = false;
         }
-        if (this.needSeparator) {
+        if (testCount > 1) {
             await this.exportLine(`------------------------------------------------------------------------------------------------------`);
         }
     }
@@ -73,9 +71,7 @@ export class ReportExportLogger extends ReportExport {
     }
 
     protected async exportFooter(): Promise<void> {
-        if (!this.needSeparator) {
-            await this.exportLine(`------------------------------------------------------------------------------------------------------`);
-        }
+        await this.exportLine(`------------------------------------------------------------------------------------------------------`);
         await this.exportLine("  idx | url                                                    | test | res | SIFLPN | tchck | tprsr |");
         await this.exportLine(`======================================================================================================`);
     }
@@ -104,14 +100,14 @@ export class ReportExportLogger extends ReportExport {
     protected flagsToString(flags: IFlags): string {
         let part: string[] = [];
 
-        part.push(this.flagToString(flags[EReportParsePart.signInButton]));
-        part.push(this.flagToString(flags[EReportParsePart.loggedIn]));
-        part.push(this.flagToString(flags[EReportParsePart.fullLoginForm]));
-        part.push(this.flagToString(flags[EReportParsePart.firstStepLoginForm]));
-        part.push(this.flagToString(flags[EReportParsePart.secondStepLoginForm]));
-        part.push(this.flagToString(flags[EReportParsePart.noLoggedIn]));
+        part.push(flags[EReportParsePart.signInButton] ? "S" : "-");
+        part.push(flags[EReportParsePart.loggedIn] ? "I" : "-");
+        part.push(flags[EReportParsePart.fullLoginForm] ? "F" : "-");
+        part.push(flags[EReportParsePart.firstStepLoginForm] ? "L" : "-");
+        part.push(flags[EReportParsePart.secondStepLoginForm] ? "P" : "-");
+        part.push(flags[EReportParsePart.noLoggedIn] ? "N" : "-");
 
-        return ` ${part.join("")} `;
+        return part.join("");
     }
 
     protected timeToString(time: number): string {

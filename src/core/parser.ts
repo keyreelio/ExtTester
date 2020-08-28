@@ -259,7 +259,7 @@ export class Parser {
         L.trace(
             `- Form [${formTag.toUpperCase()}] '${form.selector}' in ${
                 form.frame == null ? 'root page' : `frame: '${form.frame}'`
-            }`
+            }${form.unsecured ? ', !! UNSECURED !!' : '' }`
         );
         this.logInputs(form.frame, form.inputs);
         this.logButtons(form.frame, form.buttons);

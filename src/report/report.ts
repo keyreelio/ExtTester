@@ -80,7 +80,6 @@ export enum EReportParsePart {
 
 export enum ETimer {
     check,
-    //scanner,
     parser
 }
 
@@ -146,10 +145,10 @@ export class Report {
 
     public async start(url: string, test: EReportTest): Promise<void> {
         return await this.mutex.dispatch(async () => {
-            let report = this.reports[this.getHost(url)];
+            let report = this.reports[url];
             if (report === undefined) {
-                report = new ReportItem(this.getHost(url));
-                this.reports[this.getHost(url)] = report;
+                report = new ReportItem(url);
+                this.reports[url] = report;
             }
             let result = report.results[test];
             if (result === undefined) {
@@ -167,12 +166,15 @@ export class Report {
         });
     }
 
-    public async setResult(url: string, test: EReportTest, result: EReportResult): Promise<void> {
+    public async setResult(url: string, test: EReportTest, result: EReportResult, message: string | undefined = undefined): Promise<void> {
         return await this.mutex.dispatch(async () => {
             let res = this.result(url, test);
             if (res === undefined) return Promise.resolve();
             if (res.result != EReportResult.unknown) return Promise.resolve();
             res.result = result;
+            if (message != undefined) {
+                res.failMessage = message
+            }
         });
     }
 
@@ -211,13 +213,8 @@ export class Report {
         });
     }
 
-    protected getHost(url: string): string {
-        let u = new URL(url);
-        return u.host;
-    }
-
     protected result(url: string, test: EReportTest): TestResult | undefined {
-        let report = this.reports[this.getHost(url)];
+        let report = this.reports[url];
         if (report === undefined) return undefined;
         return  report.results[test];
     }
@@ -252,6 +249,11 @@ export class ReportExport extends Report {
         await this.exportHeader();
         await this.exportReports();
         await this.exportFooter();
+    }
+
+    protected getHost(url: string): string {
+        let u = new URL(url);
+        return u.host;
     }
 
     protected async clearExport(): Promise<void> {

@@ -6,8 +6,8 @@ export class CredentialsFactorDomains implements ICredentialsFactory {
     items: Array<ICredential> = new Array<ICredential>()
 
 
-    public constructor() {
-        this.loadFromDomains()
+    public constructor(debug: boolean) {
+        this.loadFromDomains(debug)
     }
 
     public credentials(testsCount: number): Credentials {
@@ -18,9 +18,12 @@ export class CredentialsFactorDomains implements ICredentialsFactory {
         return new Credentials(credentials)
     }
 
-    protected loadFromDomains() {
+    protected loadFromDomains(debug: boolean) {
         let items = this.items
         let domainsFile = './resources/domains.json'
+        if (debug) {
+            domainsFile = './resources/domains-debug.json'
+        }
 
         let domains = JSON.parse(
             fs.readFileSync(domainsFile, {encoding: 'utf8'})

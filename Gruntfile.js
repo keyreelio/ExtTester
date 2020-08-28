@@ -25,9 +25,9 @@ module.exports = function(grunt) {
             keyreel_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--domains'] },
             keyreel_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--domains', '--tests', '10'] },
 
-            keyreel_fill_domains: { cmd: 'node', args: ['./build/tester.js', '--domains', '--withoutSave', '--withoutFailSave'] },
-            keyreel_fill_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--domains', '--withoutSave', '--withoutFailSave'] },
-            keyreel_fill_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--domains', '--withoutSave', '--withoutFailSave', '--tests', '30'] },
+            keyreel_fill_domains: { cmd: 'node', args: ['./build/tester.js', '--domains', '--withoutSave', '--withoutFailSave', '--tests', '500'] },
+            keyreel_fill_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--domains', '--withoutSave', '--withoutFailSave', '--tests', '500'] },
+            keyreel_fill_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--domains', '--withoutSave', '--withoutFailSave'] },
 
             // tester_dashlane: {
             //     cmd: 'node',

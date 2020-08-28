@@ -133,7 +133,8 @@ export class KeyReelEngine extends Engine {
 
         L.debug("add 'keyreel' extension");
         options.addArguments(
-            "load-extension=./resources/raws/KeyReel"
+            "load-extension=./resources/raws/KeyReelWithCustom"
+            // "load-extension=./resources/raws/KeyReel"
         );
 
         L.debug("add 'stop-page-loading' extension");

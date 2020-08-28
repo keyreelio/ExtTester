@@ -84,6 +84,10 @@ export class PageInfo {
         );
     }
 
+    public loginFormIsUnsecured(): boolean {
+        return this.hasLoginForm() && this.forms['login'].unsecured;
+    }
+
     public hasRegistrationButton(): boolean {
         return ((this.buttons['registration'] || []).length != 0);
     }

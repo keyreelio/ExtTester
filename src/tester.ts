@@ -70,7 +70,7 @@ class Tester {
         try {
             let credentialsFactory: ICredentialsFactory
             if (domainDB) {
-                credentialsFactory = new CredentialsFactorDomains()
+                credentialsFactory = new CredentialsFactorDomains(debug)
             } else if (debug) {
                 credentialsFactory = new CredentialsFactoryDebug()
             } else {
@@ -125,11 +125,7 @@ class Tester {
 
             let reportExport: ReportExport
             if (debug) {
-                let tCount = fillDisable ? 0 : 1
-                tCount += saveDisable ? 0 : 1
-                tCount += failSaveDisable ? 0 : 1
-                console.log(`tCount: ${tCount}`)
-                reportExport = new ReportExportLogger(dumpFilePath, tCount == 1)
+                reportExport = new ReportExportLogger(dumpFilePath)
             } else {
                 let reportTxtFilePath = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.${engineName}.txt`
                 reportExport = new ReportExportTxt(dumpFilePath, reportTxtFilePath)

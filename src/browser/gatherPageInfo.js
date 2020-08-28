@@ -1342,11 +1342,13 @@ try {
       "[axt-form-type=login],[axt-form-type=registration]"
     ).forEach((form) => {
       let form_tag  = form.getAttribute('axt-form-type');
+      let form_warn = form.getAttribute('axt-warn');
       let form_info = {
         frame:    frameSelector,
         selector: select(form),
         inputs:   {},
-        buttons:  {}
+        buttons:  {},
+        unsecured: form_warn !== undefined && (form_warn === "http" || form_warn === "diff-frame")
       }
 
       form.querySelectorAll("[axt-input-type]").forEach((input) => {

@@ -16,7 +16,7 @@ export class Timeouts {
     static WaitPageLoading = 30000;
     static WaitLocatedElement = 200;
     static WaitLocatedAnimatedElement = 2000;
-    static WaitCaptchaFilling = 2*60*1000; // 2 mins
+    static WaitCaptchaFilling = 10000;//2*60*1000; // 2 mins
 
     // tester
     static WaitParsedPage = 500;

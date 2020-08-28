@@ -6,11 +6,11 @@ import {testapiLogger as L} from "../common/log.config"
 import {EReportParsePart, EReportResult, EReportTest, ETimer, Report} from "../report/report"
 import {Parser} from "./parser"
 import {Input} from "../common/input"
-import ElementNotInteractableError = error.ElementNotInteractableError;
 import {Timeouts} from "../common/timeouts";
+import {PageInfo} from "./PageInfo";
+import ElementNotInteractableError = error.ElementNotInteractableError;
 import TimeoutError = error.TimeoutError;
 import UnsupportedOperationError = error.UnsupportedOperationError;
-import {PageInfo} from "./PageInfo";
 
 
 enum EState {
@@ -667,7 +667,12 @@ export class TestAPI {
                     L.debug("credential AUTO LOAD failed")
                     L.trace(`  real login: '${credential.login}'  stored: '${login}'`)
                     L.trace(`  real password: '${credential.password}'  stored: '${password}'`)
-                    await report.setFail(url, test, "login and/or password is not equal with ")
+                    if (pageInfo.loginFormIsUnsecured()) {
+                        L.debug("login form is unsecured")
+                        await report.setResult(url, test, EReportResult.manual)
+                    } else {
+                        await report.setFail(url, test, "login and/or password is not equal with ")
+                    }
                 }
                 return Promise.resolve(ECheck.break)
             },
@@ -680,8 +685,10 @@ export class TestAPI {
                 //TODO: add check manual fill
                 L.debug("check auto fill login input")
                 let login = await pageInfo.getLoginInputValue(engine);
-                if (login !== credential.login) {
-
+                if (login === credential.login) {
+                    L.debug("!!!!  credential AUTO LOAD")
+                    await report.setResult(url, test, EReportResult.auto)
+                } else {
                     L.debug("credential AUTO LOAD failed")
                     L.trace(`  real login: '${credential.login}'  stored: '${login}'`)
                     await report.setFail(url, test, "login is not equal with ")
@@ -697,7 +704,7 @@ export class TestAPI {
                     false
                 )
 
-                return Promise.resolve(ECheck.nextStep)
+                return Promise.resolve(ECheck.break)
             },
 
             /****************************************************************************/
@@ -718,6 +725,7 @@ export class TestAPI {
                     L.trace(`  real password: '${credential.password}'  stored: '${password}'`)
                     await report.setFail(url, test, "password is not equal with ")
                 }
+
                 return Promise.resolve(ECheck.break)
             },
 
@@ -779,8 +787,8 @@ export class TestAPI {
 
         try {
             if (test === EReportTest.fill) {
-                L.trace('wait 500ms')
-                await driver.sleep(500)
+                // L.trace('wait 500ms')
+                // await driver.sleep(1500)
             }
 
             let state = EState.init;
@@ -866,7 +874,8 @@ export class TestAPI {
                             if (page.hasRegistrationButton()) {
                                 reason = 'Page has only a "registration" button';
                                 L.warn(reason);
-                                await this.report.setFail(url, test, reason);
+                                // await this.report.setFail(url, test, reason);
+                                await this.report.setResult(url, test, EReportResult.skip, reason)
                                 return Promise.reject(reason);
                             } else {
                                 if (Date.now() - startTime < 2000) {
@@ -875,7 +884,8 @@ export class TestAPI {
                                 } else {
                                     reason = '"Sign in" button was not found';
                                     L.warn(reason);
-                                    await this.report.setFail(url, test, reason);
+                                    // await this.report.setFail(url, test, reason);
+                                    await this.report.setResult(url, test, EReportResult.skip, reason)
                                     return Promise.reject(reason);
                                 }
                             }

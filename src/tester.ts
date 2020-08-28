@@ -1,5 +1,5 @@
 import {IEngineFactory} from './engine/engine'
-import {ConfigureLoggerForDebug, ConfigureLoggerForRelease, testerLogger as L} from "./common/log.config"
+import {ConfigureLoggerForDebug, ConfigureLoggerForRelease, extLogFolder, testerLogger as L} from "./common/log.config"
 import {ICredentialsFactory} from "./credentials/credentials"
 import {Report, ReportExport} from "./report/report"
 import {KeyReelEngineFactory} from './engine/keyreel'
@@ -12,6 +12,8 @@ import {ReportExportLogger} from "./report/reportExportLogger"
 import {ReportExportTxt} from "./report/reportExportTxt"
 //import {DashlaneEngine} from "./engine/dashlane"
 import {DashlaneEngineFactory} from "./engine/dashlane"
+import fs from "fs";
+import dateFormat from "dateformat";
 
 
 //TODO: add export report from .json file to .txt/.csv/ etc files with format
@@ -66,6 +68,14 @@ class Tester {
         L.debug(`  testsCount: ${testsCount}`)
         L.debug(`  threadsCount: ${threadsCount}`)
         L.debug(`  engine: ${engineName}`)
+
+        if (!fs.existsSync(Tester.DumpFolderPath)) {
+            fs.mkdirSync(Tester.DumpFolderPath)
+        }
+
+        if (!fs.existsSync(Tester.ReportsFolderPath)) {
+            fs.mkdirSync(Tester.ReportsFolderPath)
+        }
 
         try {
             let credentialsFactory: ICredentialsFactory

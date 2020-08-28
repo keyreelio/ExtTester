@@ -170,7 +170,6 @@ export class Report {
         return await this.mutex.dispatch(async () => {
             let res = this.result(url, test);
             if (res === undefined) return Promise.resolve();
-            if (res.result != EReportResult.unknown) return Promise.resolve();
             res.result = result;
             if (message != undefined) {
                 res.failMessage = message
@@ -195,7 +194,6 @@ export class Report {
         return await this.mutex.dispatch(async () => {
             let res = this.result(url, test);
             if (res === undefined) return Promise.resolve();
-            if (res.result != EReportResult.unknown) return Promise.resolve();
             res.result = reportResult;
             res.failMessage = failMessage;
         });

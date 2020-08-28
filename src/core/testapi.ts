@@ -208,7 +208,7 @@ export class TestAPI {
             L.debug(`test start: ${url}`)
 
             let result = await this.report.getResult(url, test)
-            if (result !== undefined && result !== EReportResult.unknown) {
+            if (result !== undefined && result !== EReportResult.unknown && result !== EReportResult.skip) {
                 L.debug(`skip credential (already checked - ${result})`)
                 credential = await credentials.shift()
                 continue
@@ -220,6 +220,7 @@ export class TestAPI {
             if (credential.skip) {
                 L.debug(`skip credential: credentials.skip = ${credential.skip}`)
 
+                await this.report.setResult(url, test, EReportResult.skip, "[SKIP]")
                 await this.report.finish(url, test)
                 credential = await credentials.shift()
                 continue
@@ -228,9 +229,12 @@ export class TestAPI {
             if (this.useVpn != credential.vpn) {
                 L.debug(`skip credential: useVpn = ${this.useVpn}, crd.vpn = ${credential.vpn}`)
 
+                await this.report.setResult(url, test, EReportResult.skip, credential.vpn ? "[VPN]" : "[noVPN]")
                 await this.report.finish(url, test)
                 credential = await credentials.shift()
                 continue
+            } else {
+                L.info(credential.vpn ? "[VPN]" : "[noVPN]")
             }
 
             L.debug(`engine start`)

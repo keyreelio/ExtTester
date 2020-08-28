@@ -64,7 +64,6 @@ export class ReportExportCsv extends ReportExport {
         let fails_with_warnings = '' + Math.round((errors + warnings) / passed * 100) + '%';
         let fails_without_warnings = Math.round((errors) / passed * 100) + '%';
 
-
         await this.exportLine(`"","","","","","",""`);
         await this.exportLine(`"","date:","","","","",""`);
         await this.exportLine(`"","version:","","","","",""`);
@@ -74,7 +73,7 @@ export class ReportExportCsv extends ReportExport {
         await this.exportLine(`"","passed:","${passed}","","","",""`);
         await this.exportLine(`"","errors:","${errors}","","","",""`);
         await this.exportLine(`"","warnings:","${warnings}","","","",""`);
-        await this.exportLine(`"","success:","","${success}","","",""`);
+        await this.exportLine(`"","success:","${success}","","","",""`);
         await this.exportLine(`"","fails with warnings:","${fails_with_warnings}","","","",""`);
         await this.exportLine(`"","fails without warnings:","${fails_without_warnings}","","","",""`);
         await this.exportLine(`"","","","","","",""`);

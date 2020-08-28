@@ -27,6 +27,7 @@ module.exports = function(grunt) {
 
             keyreel_fill_domains: { cmd: 'node', args: ['./build/tester.js', '--domains', '--withoutSave', '--withoutFailSave', '--tests', '500'] },
             keyreel_fill_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--domains', '--withoutSave', '--withoutFailSave', '--tests', '500'] },
+            keyreel_fill_domains_vpn_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--domains', '--withoutSave', '--withoutFailSave', '--vpn', '--tests', '500'] },
             keyreel_fill_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--domains', '--withoutSave', '--withoutFailSave'] },
 
             // tester_dashlane: {
@@ -87,6 +88,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("keyreel_fill_domains", ["build", "run:keyreel_fill_domains"]);
     grunt.registerTask("keyreel_fill_domains_continue", ["build", "run:keyreel_fill_domains_continue"]);
+    grunt.registerTask("keyreel_fill_domains_vpn_continue", ["build", "run:keyreel_fill_domains_vpn_continue"]);
     grunt.registerTask("keyreel_fill_domains_debug", ["build", "run:keyreel_fill_domains_debug"]);
 
 

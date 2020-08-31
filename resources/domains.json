@@ -327,7 +327,7 @@
 "www.dominos.com",
 "#www.domo.com/login/help #set 'soho' domain",
 "soho.domo.com/auth/index?redirectUrl=%2F",
-"www.doordash.com/en-US #should work; has 3sec starting timeout",
+"www.doordash.com/en-US #should work; has 3sec starting timeout [SKIP]",
 "##--- DOUBAN SITES: ---##",
 "#douban.com #China multi-login site",
 "book.douban.com",

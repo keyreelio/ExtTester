@@ -47,6 +47,8 @@ class Tester {
         let failSaveDisable = Args.parseArg(args, "--withoutFailSave")      // || true
         let fillDisable = Args.parseArg(args, "--withoutFill")              // || true
         let useVpn = Args.parseArg(args, "--vpn")                           // || true
+        let recheckErrors = Args.parseArg(args, "--errors")                 || true
+        let recheckWarnings = Args.parseArg(args, "--warnings")             || true
 
         let testsCount = Args.parseNumValueArg(args, "--tests", 0)
         let threadsCount = Args.parseNumValueArg(args, "--threads", 1)
@@ -65,6 +67,9 @@ class Tester {
         L.debug(`  writeDisable: ${saveDisable}`)
         L.debug(`  failWriteDisable: ${failSaveDisable}`)
         L.debug(`  fillDisable: ${fillDisable}`)
+        L.debug(`  useVpn: ${useVpn}`)
+        L.debug(`  recheckErrors: ${recheckErrors}`)
+        L.debug(`  recheckWarnings: ${recheckWarnings}`)
         L.debug(`  testsCount: ${testsCount}`)
         L.debug(`  threadsCount: ${threadsCount}`)
         L.debug(`  engine: ${engineName}`)
@@ -107,7 +112,15 @@ class Tester {
             L.debug("startup report")
             await report.startup(toContinue)
 
-            let test = new TestAPI(report, engineFactory, credentialsFactory, threadsCount, testsCount, useVpn)
+            let test = new TestAPI(
+                report,
+                engineFactory,
+                credentialsFactory,
+                threadsCount,
+                testsCount,
+                useVpn,
+                recheckErrors,
+                recheckWarnings)
 
             if (!saveDisable) {
                 L.debug("testing save")
@@ -146,6 +159,8 @@ class Tester {
             L.warn(`testing fail with: ${e}`)
             return Promise.reject(e)
         }
+
+        return Promise.resolve()
     }
 }
 

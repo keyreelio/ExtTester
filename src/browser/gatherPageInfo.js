@@ -1048,6 +1048,9 @@ try {
       case "code.org":
         addCustomButton("account", "#selectLanguage button.btn-primary");
         break;
+      case "www.airfrance.co.uk":
+        addCustomButton("account", "button", "text:Agree");
+        break;
 
     }
 
@@ -1546,4 +1549,5 @@ try {
   document.addEventListener("load", contentLoadedHandler);
   document.addEventListener("readystatechange", contentLoadedHandler);
   contentLoadedHandler();
+  console.error("restart");
 }(arguments);

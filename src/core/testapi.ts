@@ -39,6 +39,8 @@ export class TestAPI {
     threadsCount: number
     testsCount: number
     useVpn: boolean
+    recheckErrors: boolean
+    recheckWarnings: boolean
 
 
     public constructor(
@@ -47,7 +49,9 @@ export class TestAPI {
         credentialsFactory: ICredentialsFactory,
         threadsCount: number,
         testsCount: number,
-        useVpn: boolean) {
+        useVpn: boolean,
+        recheckErrors: boolean,
+        recheckWarnings: boolean) {
 
         this.report = report
         this.engineFactory = engineFactory
@@ -55,6 +59,8 @@ export class TestAPI {
         this.threadsCount = threadsCount
         this.testsCount = testsCount
         this.useVpn = useVpn
+        this.recheckErrors = recheckErrors
+        this.recheckWarnings = recheckWarnings
     }
 
     private async goToNextLoginStep(
@@ -208,8 +214,23 @@ export class TestAPI {
             L.debug(`test start: ${url}`)
 
             let result = await this.report.getResult(url, test)
-            if (result !== undefined && result !== EReportResult.unknown && result !== EReportResult.skip) {
-                L.debug(`skip credential (already checked - ${result})`)
+            if (result === EReportResult.auto) {
+                L.debug(`skip credential (already checked - previous result is auto)`)
+                credential = await credentials.shift()
+                continue
+            }
+
+            if (result === EReportResult.fail && !this.recheckErrors) {
+                L.debug(`skip credential (already checked - previous result is fail)`)
+                credential = await credentials.shift()
+                continue
+            }
+
+            if ((result === EReportResult.manual ||
+                result === EReportResult.manualBeforeLoggedIn ||
+                result === EReportResult.manualAfterLoggedIn) && !this.recheckWarnings) {
+
+                L.debug(`skip credential (already checked - previous result is manual)`)
                 credential = await credentials.shift()
                 continue
             }
@@ -270,10 +291,10 @@ export class TestAPI {
         }
 
         L.debug("shutdown engine");
-        //await engine.shutdown();
+        await engine.shutdown();
 
         L.debug("driver quit");
-        //await driver.quit();
+        await driver.quit();
     }
 
     protected async checkWriteCredential(
@@ -799,7 +820,9 @@ export class TestAPI {
             let startTime = Date.now();
             let signinButtonsHistory: Array<string> = [];
 
-            while (true) {
+            let loopCount = 10
+            while (loopCount > 0) {
+                loopCount --
                 try {
 
                     let parsePageStartTime = Timeouts.begin();
@@ -811,6 +834,9 @@ export class TestAPI {
 
                     if (page.error != null) {
                         if (page.error === 'pageError') {
+                            L.info("Wait 500ms");
+                            await driver.sleep(500);
+
                             L.warn('Reload page');
                             continue;
                         }

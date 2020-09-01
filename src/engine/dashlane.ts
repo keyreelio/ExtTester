@@ -52,7 +52,7 @@ export class DashlaneEngine extends Engine {
 
 
     startupUrl = DASHLANE_EXT_URL + "signup";
-    currentAccountIndex = 0;
+    currentAccountIndex = 2;
     accounts = [
         {
             login: "hdayfg6wq5sq@gmail.com",
@@ -61,6 +61,10 @@ export class DashlaneEngine extends Engine {
         {
             login: "t3mxdwk2zrhz@gmail.com",
             password: "qCywf6K5CWczGSt"
+        },
+        {
+            login: "hexLaHCVCg@gmail.com",
+            password: "9eAjzhMaVU"
         }
     ];
 
@@ -168,11 +172,9 @@ export class DashlaneEngine extends Engine {
         let options = await this.getOptions();
 
         L.debug("add 'keyreel' extension");
-        let krcrx = fs.readFileSync(
-            './resources/crxs/keyreel.crx',
-            {encoding: "base64"}
+        options.addArguments(
+            "load-extension=./resources/raws/KeyReelWithCustom"
         );
-        options.addExtensions(krcrx);
 
         L.debug("add 'stop-page-loading' extension");
         let srcrx = fs.readFileSync(

@@ -3,6 +3,7 @@ import {ReportExport} from "./report/report";
 import {ReportExportTxt} from "./report/reportExportTxt";
 import {ReportExportLogger} from "./report/reportExportLogger";
 import {ReportExportCsv} from "./report/reportExportCsv";
+import {ReportExportSuccessDomains} from "./report/reportExportSuccessDomains";
 
 
 let timeFormat = function(d: Date): string {
@@ -13,6 +14,7 @@ let timeFormat = function(d: Date): string {
 class Reporter {
 
     static ReportsFolderPath = "./reports/";
+    static ResourcesFolderPath = "./resources/";
 
 
     public static async run(args: string[]) {
@@ -24,7 +26,11 @@ class Reporter {
         }
 
         let reportExport: ReportExport;
-        if (Args.parseArg(args, "--txt")) {
+        if (Args.parseArg(args, "--domains")) {
+
+            let filePath = `${Reporter.ResourcesFolderPath}domains-success.json`;
+            reportExport = new ReportExportSuccessDomains(dumpFile, filePath);
+        } else if (Args.parseArg(args, "--txt")) {
 
             let filePath = `${Reporter.ReportsFolderPath}tester-${timeFormat(new Date())}.txt`;
             reportExport = new ReportExportTxt(dumpFile, filePath);

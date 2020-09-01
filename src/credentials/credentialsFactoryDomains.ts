@@ -6,8 +6,8 @@ export class CredentialsFactorDomains implements ICredentialsFactory {
     items: Array<ICredential> = new Array<ICredential>()
 
 
-    public constructor(debug: boolean) {
-        this.loadFromDomains(debug)
+    public constructor(debug: boolean, onlySuccess: boolean) {
+        this.loadFromDomains(debug, onlySuccess)
     }
 
     public credentials(testsCount: number): Credentials {
@@ -18,11 +18,13 @@ export class CredentialsFactorDomains implements ICredentialsFactory {
         return new Credentials(credentials)
     }
 
-    protected loadFromDomains(debug: boolean) {
+    protected loadFromDomains(debug: boolean, onlySuccess: boolean) {
         let items = this.items
         let domainsFile = './resources/domains.json'
         if (debug) {
             domainsFile = './resources/domains-debug.json'
+        } else if (onlySuccess) {
+            domainsFile = './resources/domains-success.json'
         }
 
         let domains = JSON.parse(
@@ -63,8 +65,8 @@ export class CredentialsFactorDomains implements ICredentialsFactory {
             if (url !== undefined && url.length > 0) {
                 items.push({
                     url: url.startsWith("http") ? url : `https://${url}`,
-                    login: "d@gamil.ua",
-                    password: "P1a2S3s5",
+                    login: "d@gmail.ua",
+                    password: "6f5tAgzFTv",
                     timeout: 2000,
                     comment: comment,
                     vpn: comment !== undefined && comment.includes("[VPN]"),

@@ -30,18 +30,17 @@ module.exports = function(grunt) {
             keyreel_fill_domains_vpn_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--domains', '--withoutSave', '--withoutFailSave', '--vpn', '--tests', '500'] },
             keyreel_fill_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--domains', '--withoutSave', '--withoutFailSave'] },
 
-            // tester_dashlane: {
-            //     cmd: 'node',
-            //     args: ['./build/tester.js', '--engine', 'dashlane']
-            // },
-            // tester_dashlane_continue: {
-            //     cmd: 'node',
-            //     args: ['./build/tester.js', 'continue', '--engine', 'dashlane']
-            // },
-            // tester_dashlane_debug: {
-            //     cmd: 'node',
-            //     args: ['./build/tester.js', 'debug', '--engine', 'dashlane']
-            // },
+            dashlane: { cmd: 'node', args: ['./build/tester.js', '--engine', 'dashlane'] },
+            dashlane_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--engine', 'dashlane'] },
+            dashlane_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--engine', 'dashlane'] },
+
+            dashlane_domains: { cmd: 'node', args: ['./build/tester.js', '--engine', 'dashlane', '--domains'] },
+            dashlane_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--engine', 'dashlane', '--domains'] },
+            dashlane_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--engine', 'dashlane', '--domains'] },
+
+            dashlane_fill_domains: { cmd: 'node', args: ['./build/tester.js', '--engine', 'dashlane', '--domains', '--withoutSave', '--withoutFailSave'] },
+            dashlane_fill_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--engine', 'dashlane', '--domains', '--withoutSave', '--withoutFailSave'] },
+            dashlane_fill_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--engine', 'dashlane', '--domains', '--withoutSave', '--withoutFailSave'] },
 
             report: { cmd: 'node', args: ['./build/tester.js', 'report'] },
             report_txt: { cmd: 'node', args: ['./build/tester.js', 'report', '--txt'] },
@@ -91,10 +90,17 @@ module.exports = function(grunt) {
     grunt.registerTask("keyreel_fill_domains_vpn_continue", ["build", "run:keyreel_fill_domains_vpn_continue"]);
     grunt.registerTask("keyreel_fill_domains_debug", ["build", "run:keyreel_fill_domains_debug"]);
 
+    grunt.registerTask("dashlane", ["build", "run:dashlane"]);
+    grunt.registerTask("dashlane_continue", ["build", "run:dashlane_continue"]);
+    grunt.registerTask("dashlane_debug", ["build", "run:dashlane_debug"]);
 
-    // grunt.registerTask("dashlane", ["build", "run:tester_dashlane"]);
-    // grunt.registerTask("dashlane_continue", ["build", "run:tester_dashlane_continue"]);
-    // grunt.registerTask("dashlane_debug", ["build", "run:tester_dashlane_debug"]);
+    grunt.registerTask("dashlane_domains", ["build", "run:dashlane_domains"]);
+    grunt.registerTask("dashlane_domains_continue", ["build", "run:dashlane_domains_continue"]);
+    grunt.registerTask("dashlane_domains_debug", ["build", "run:dashlane_domains_debug"]);
+
+    grunt.registerTask("dashlane_fill_domains", ["build", "run:dashlane_fill_domains"]);
+    grunt.registerTask("dashlane_fill_domains_continue", ["build", "run:dashlane_fill_domains_continue"]);
+    grunt.registerTask("dashlane_fill_domains_debug", ["build", "run:dashlane_fill_domains_debug"]);
 
     grunt.registerTask("scanner", ["build", "run:scanner"]);
 };

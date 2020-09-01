@@ -47,8 +47,8 @@ class Tester {
         let failSaveDisable = Args.parseArg(args, "--withoutFailSave")      // || true
         let fillDisable = Args.parseArg(args, "--withoutFill")              // || true
         let useVpn = Args.parseArg(args, "--vpn")                           // || true
-        let recheckErrors = Args.parseArg(args, "--errors")                 || true
-        let recheckWarnings = Args.parseArg(args, "--warnings")             || true
+        let recheckErrors = Args.parseArg(args, "--errors")                 // || true
+        let recheckWarnings = Args.parseArg(args, "--warnings")             // || true
 
         let testsCount = Args.parseNumValueArg(args, "--tests", 0)
         let threadsCount = Args.parseNumValueArg(args, "--threads", 1)
@@ -85,7 +85,7 @@ class Tester {
         try {
             let credentialsFactory: ICredentialsFactory
             if (domainDB) {
-                credentialsFactory = new CredentialsFactorDomains(debug)
+                credentialsFactory = new CredentialsFactorDomains(debug, engineName !== "keyreel")
             } else if (debug) {
                 credentialsFactory = new CredentialsFactoryDebug()
             } else {
@@ -104,7 +104,7 @@ class Tester {
             if (engineName === "keyreel") {
                 engineFactory = new KeyReelEngineFactory({withoutProfile: true})
             } else if (engineName === "dashlane") {
-                engineFactory = new DashlaneEngineFactory({ withoutProfile: true })
+                engineFactory = new DashlaneEngineFactory({ withoutProfile: false })
             } else /* by default use KeyReel engine*/ {
                 engineFactory = new KeyReelEngineFactory({ withoutProfile: true })
             }

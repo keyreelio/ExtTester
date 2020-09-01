@@ -288,6 +288,8 @@ export class TestAPI {
             L.debug("test finish")
 
             credential = await credentials.shift()
+
+            // await driver.sleep(100000)
         }
 
         L.debug("shutdown engine");

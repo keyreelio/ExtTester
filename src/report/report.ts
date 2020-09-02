@@ -166,14 +166,12 @@ export class Report {
         });
     }
 
-    public async setResult(url: string, test: EReportTest, result: EReportResult, message: string | undefined = undefined): Promise<void> {
+    public async setResult(url: string, test: EReportTest, result: EReportResult, message: string = ""): Promise<void> {
         return await this.mutex.dispatch(async () => {
             let res = this.result(url, test);
             if (res === undefined) return Promise.resolve();
             res.result = result;
-            if (message != undefined) {
-                res.failMessage = message
-            }
+            res.failMessage = message
         });
     }
 

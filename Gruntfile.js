@@ -39,7 +39,7 @@ module.exports = function(grunt) {
             dashlane_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--engine', 'dashlane', '--domains'] },
 
             dashlane_fill_domains: { cmd: 'node', args: ['./build/tester.js', '--engine', 'dashlane', '--domains', '--withoutSave', '--withoutFailSave'] },
-            dashlane_fill_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--engine', 'dashlane', '--domains', '--withoutSave', '--withoutFailSave'] },
+            dashlane_fill_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--engine', 'dashlane', '--domains', '--withoutSave', '--withoutFailSave', '--tests', '500'] },
             dashlane_fill_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--engine', 'dashlane', '--domains', '--withoutSave', '--withoutFailSave'] },
 
             report: { cmd: 'node', args: ['./build/tester.js', 'report'] },

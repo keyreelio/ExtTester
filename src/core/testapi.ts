@@ -216,6 +216,7 @@ export class TestAPI {
             let result = await this.report.getResult(url, test)
             if (result === EReportResult.auto) {
                 L.debug(`skip credential (already checked - previous result is auto)`)
+                await this.report.setResult(url, test, EReportResult.auto, credential.vpn ? "[VPN]" : "")
                 credential = await credentials.shift()
                 continue
             }
@@ -436,7 +437,7 @@ export class TestAPI {
                         await engine.checkSaved(url, credential)
 
                         L.info("!!!!  credential SAVED as AUTO after logged in")
-                        await report.setResult(url, test, EReportResult.auto)
+                        await report.setResult(url, test, EReportResult.auto, credential.vpn ? "[VPN]" : "")
                     } catch (e) {
                         if (e instanceof UnsupportedOperationError) {
                             L.debug("engine check saved not supported")
@@ -650,7 +651,7 @@ export class TestAPI {
                 })
         } catch (e) {
             if (isFormFilled) {
-                await report.setResult(url, tDef, EReportResult.auto)
+                await report.setResult(url, tDef, EReportResult.auto, credential.vpn ? "[VPN]" : "")
             } else {
                 await report.setFail(url, tDef,
                     `false positive logged in state is detected with ${failMessage(e)}`
@@ -689,7 +690,7 @@ export class TestAPI {
                 let password = await pageInfo.getPasswordInputValue(engine);
                 if (login === credential.login && password === credential.password) {
                     L.debug("!!!!  credential AUTO LOAD")
-                    await report.setResult(url, test, EReportResult.auto)
+                    await report.setResult(url, test, EReportResult.auto, credential.vpn ? "[VPN]" : "")
                 } else {
                     L.debug("credential AUTO LOAD failed")
                     L.trace(`  real login: '${credential.login}'  stored: '${login}'`)
@@ -714,7 +715,7 @@ export class TestAPI {
                 let login = await pageInfo.getLoginInputValue(engine);
                 if (login === credential.login) {
                     L.debug("!!!!  credential AUTO LOAD")
-                    await report.setResult(url, test, EReportResult.auto)
+                    await report.setResult(url, test, EReportResult.auto, credential.vpn ? "[VPN]" : "")
                 } else {
                     L.debug("credential AUTO LOAD failed")
                     L.trace(`  real login: '${credential.login}'  stored: '${login}'`)
@@ -746,7 +747,7 @@ export class TestAPI {
                 let password = await pageInfo.getPasswordInputValue(engine);
                 if (password === credential.password) {
                     L.debug("!!!!  credential AUTO LOAD")
-                    await report.setResult(url, test, EReportResult.auto)
+                    await report.setResult(url, test, EReportResult.auto, credential.vpn ? "[VPN]" : "")
                 } else {
                     L.debug("credential AUTO LOAD failed")
                     L.trace(`  real password: '${credential.password}'  stored: '${password}'`)

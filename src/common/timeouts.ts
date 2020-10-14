@@ -1,5 +1,4 @@
-
-
+import {parserLogger as L} from "../common/log.config";
 
 // times in milliseconds
 export class Timeouts {
@@ -14,13 +13,15 @@ export class Timeouts {
     // WebDriverExt
     static AfterOpenUrl = 200;
     static WaitOpenedUrl = 5000;
+    static WaitPageLoading = 30000;
     static WaitLocatedElement = 200;
-    static waitLocatedAnimatedElement = 2000;
+    static WaitLocatedAnimatedElement = 2000;
+    static WaitCaptchaFilling = 10000;//2*60*1000; // 2 mins
 
     // tester
     static WaitParsedPage = 500;
     static WaitParsedPageMin = 50;
-    static WaitCheckCredential = 60000;
+    static WaitCheckCredential = 3*60*1000; // 3mins
 
     //
     static WaitToAutosaveAccount = 10000;
@@ -42,9 +43,11 @@ export class Timeouts {
       return Math.round(endTime[0] * 1000 + endTime[1] / 1000000);
     }
 
-    static createPromiseTimer(timeout: number, error: Error): Promise<void> {
+    static startExpirationTimer(timeout: number, error: Error): Promise<void> {
         return new Promise(function(resolve, reject) {
-            setTimeout(function () { reject(error); }, timeout);
+            setTimeout(function () {
+                reject(error);
+            }, timeout);
         });
     }
 }

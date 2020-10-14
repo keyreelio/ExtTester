@@ -8,9 +8,9 @@ export enum EResultType {
     siteNotFoundError,
     suspiciousSiteError,
     gatewayTimeoutError,
-    loginButton,
-    registerButton,
-    accountButton,
+    login,
+    registration,
+    account,
     captchaError
 }
 

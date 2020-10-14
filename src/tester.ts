@@ -1,149 +1,166 @@
 import {IEngineFactory} from './engine/engine'
-import {ConfigureLoggerForDebug, ConfigureLoggerForRelease, testerLogger as L} from "./common/log.config";
-import {ICredentialsFactory} from "./credentials/credentials";
-import {Report, ReportExport} from "./report/report";
-import {KeyReelEngineFactory} from './engine/keyreel';
-import {CredentialsFactoryPassDB} from "./credentials/credentialsFactoryPassDB";
-import {CredentialsFactoryDebug} from "./credentials/credentialsFactoryDebug";
-import {CredentialsFactorDomains} from "./credentials/credentialsFactoryDomains";
-import {TestAPI} from "./core/testapi";
-import {Args} from "./common/args";
-import {ReportExportLogger} from "./report/reportExportLogger";
-import {ReportExportTxt} from "./report/reportExportTxt";
-//import {DashlaneEngine} from "./engine/dashlane";
-import {DashlaneEngineFactory} from "./engine/dashlane";
+import {ConfigureLoggerForDebug, ConfigureLoggerForRelease, extLogFolder, testerLogger as L} from "./common/log.config"
+import {ICredentialsFactory} from "./credentials/credentials"
+import {Report, ReportExport} from "./report/report"
+import {KeyReelEngineFactory} from './engine/keyreel'
+import {CredentialsFactoryPassDB} from "./credentials/credentialsFactoryPassDB"
+import {CredentialsFactoryDebug} from "./credentials/credentialsFactoryDebug"
+import {CredentialsFactorDomains} from "./credentials/credentialsFactoryDomains"
+import {TestAPI} from "./core/testapi"
+import {Args} from "./common/args"
+import {ReportExportLogger} from "./report/reportExportLogger"
+import {ReportExportTxt} from "./report/reportExportTxt"
+//import {DashlaneEngine} from "./engine/dashlane"
+import {DashlaneEngineFactory} from "./engine/dashlane"
+import fs from "fs";
+import dateFormat from "dateformat";
 
 
-//TODO: add duration time to report (write/read, parser, scanner)
-//TODO: separate flags to tests
-//TODO: add store report to ./reports/report-{date}.{engine}.json
 //TODO: add export report from .json file to .txt/.csv/ etc files with format
 //        --txt, --csv  -  formats
 //        --flags print flags
-//        --withoutWrite
-//        --withoutFailWrite
-//        --withoutRead
 //        --withoutTimes
 //TODO: add test for negative save with ded credential
 //TODO: add separates logs for credential
 
 
 let timeFormat = function(d: Date): string {
-    return `${d.getUTCFullYear()}.${d.getUTCMonth()}.${d.getUTCDate()}.${d.getUTCHours()}.${d.getUTCMinutes()}.${d.getUTCSeconds()}`;
+    return `${d.getUTCFullYear()}.${d.getUTCMonth()}.${d.getUTCDate()}.${d.getUTCHours()}.${d.getUTCMinutes()}.${d.getUTCSeconds()}`
 }
 
 
 class Tester {
 
-    static DumpFolderPath = "./tmp/";
-    static ReportsFolderPath = "./reports/";
+    static DumpFolderPath = "./dumps/"
+    static ReportsFolderPath = "./reports/"
 
 
     public static async run(args: string[]) {
 
+        L.debug(`${args}`)
+
         let debug = Args.parseArg(args, "debug")
         let toContinue = Args.parseArg(args, "continue")
-        let domainDB = Args.parseArg(args, "--domains") || true
-        let writeDisable = Args.parseArg(args, "--withoutWrite")            //|| true
-        let failWriteDisable = Args.parseArg(args, "--withoutFailWrite")    //|| true
-        let readDisable = Args.parseArg(args, "--withoutRead")              //|| true
-        let threadCount = Args.parseNumValueArg(args, "--count", 1)
-        let engineName = Args.parseStrValueArg(args, "--engine", "dashlane") //"keyreel")
 
-        if (engineName === undefined) engineName = "dashlane"; //"keyreel";
+        let domainDB = Args.parseArg(args, "--domains")                     // || true
+        let saveDisable = Args.parseArg(args, "--withoutSave")              // || true
+        let failSaveDisable = Args.parseArg(args, "--withoutFailSave")      // || true
+        let fillDisable = Args.parseArg(args, "--withoutFill")              // || true
+        let useVpn = Args.parseArg(args, "--vpn")                           // || true
+        let recheckErrors = Args.parseArg(args, "--errors")                 || true
+        let recheckWarnings = Args.parseArg(args, "--warnings")             || true
 
-        failWriteDisable = true;
-        if (domainDB) {
-            writeDisable = true;
-            failWriteDisable = false;
-            readDisable = debug;
-        }
+        let testsCount = Args.parseNumValueArg(args, "--tests", 0)
+        let threadsCount = Args.parseNumValueArg(args, "--threads", 1)
+        let engineName = Args.parseStrValueArg(args, "--engine", "keyreel") as string
 
         if (debug) {
-            ConfigureLoggerForDebug();
+            ConfigureLoggerForDebug()
         } else {
-            ConfigureLoggerForRelease();
+            ConfigureLoggerForRelease()
         }
 
-        L.debug(`args:`);
-        L.debug(`  debug: ${debug}`);
-        L.debug(`  continue: ${toContinue}`);
-        L.debug(`  domainDB: ${domainDB}`);
-        L.debug(`  writeDisable: ${writeDisable}`);
-        L.debug(`  failWriteDisable: ${failWriteDisable}`);
-        L.debug(`  readDisable: ${readDisable}`);
-        L.debug(`  threadCount: ${threadCount}`);
-        L.debug(`  engine: ${engineName}`);
+        L.debug(`args:`)
+        L.debug(`  debug: ${debug}`)
+        L.debug(`  continue: ${toContinue}`)
+        L.debug(`  domainDB: ${domainDB}`)
+        L.debug(`  writeDisable: ${saveDisable}`)
+        L.debug(`  failWriteDisable: ${failSaveDisable}`)
+        L.debug(`  fillDisable: ${fillDisable}`)
+        L.debug(`  useVpn: ${useVpn}`)
+        L.debug(`  recheckErrors: ${recheckErrors}`)
+        L.debug(`  recheckWarnings: ${recheckWarnings}`)
+        L.debug(`  testsCount: ${testsCount}`)
+        L.debug(`  threadsCount: ${threadsCount}`)
+        L.debug(`  engine: ${engineName}`)
+
+        if (!fs.existsSync(Tester.DumpFolderPath)) {
+            fs.mkdirSync(Tester.DumpFolderPath)
+        }
+
+        if (!fs.existsSync(Tester.ReportsFolderPath)) {
+            fs.mkdirSync(Tester.ReportsFolderPath)
+        }
 
         try {
-            let credentialsFactory: ICredentialsFactory;
-            let dumpFilePath = `${Tester.DumpFolderPath}tester.${engineName}.dump.json`;
-            let reportFilePath: string | undefined = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.${engineName}.json`;
-
-            if (debug) {
-                credentialsFactory = new CredentialsFactoryDebug();
-                dumpFilePath = `${Tester.DumpFolderPath}tester-debug.${engineName}.dump.json`;
-                reportFilePath = undefined;
-            } else {
-                credentialsFactory = new CredentialsFactoryPassDB();
-            }
-            let report = new Report(engineName, dumpFilePath, reportFilePath, toContinue);
-
+            let credentialsFactory: ICredentialsFactory
             if (domainDB) {
-                credentialsFactory = new CredentialsFactorDomains(debug);
+                credentialsFactory = new CredentialsFactorDomains(debug, engineName !== "keyreel")
+            } else if (debug) {
+                credentialsFactory = new CredentialsFactoryDebug()
+            } else {
+                credentialsFactory = new CredentialsFactoryPassDB()
             }
 
-            let engineFactory: IEngineFactory;
+            let dumpFilePath = `${Tester.DumpFolderPath}tester.${engineName}.dump.json`
+            let reportFilePath: string | undefined = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.${engineName}.json`
+            if (debug) {
+                dumpFilePath = `${Tester.DumpFolderPath}tester-debug.${engineName}.dump.json`
+                reportFilePath = undefined
+            }
+            let report = new Report(engineName, dumpFilePath, reportFilePath, toContinue)
+
+            let engineFactory: IEngineFactory
             if (engineName === "keyreel") {
-                engineFactory = new KeyReelEngineFactory({withoutProfile: true});
+                engineFactory = new KeyReelEngineFactory({withoutProfile: true})
             } else if (engineName === "dashlane") {
-                engineFactory = new DashlaneEngineFactory({ withoutProfile: true });
+                engineFactory = new DashlaneEngineFactory({ withoutProfile: false })
             } else /* by default use KeyReel engine*/ {
-                engineFactory = new KeyReelEngineFactory({ withoutProfile: true });
+                engineFactory = new KeyReelEngineFactory({ withoutProfile: true })
             }
 
-            L.debug("startup report");
-            await report.startup(toContinue);
+            L.debug("startup report")
+            await report.startup(toContinue)
 
-            let test = new TestAPI(report, engineFactory, credentialsFactory, threadCount);
+            let test = new TestAPI(
+                report,
+                engineFactory,
+                credentialsFactory,
+                threadsCount,
+                testsCount,
+                useVpn,
+                recheckErrors,
+                recheckWarnings)
 
-            if (!writeDisable) {
-                L.debug("testing write");
-                await test.checkWrites(false);
+            if (!saveDisable) {
+                L.debug("testing save")
+                await test.checkWrites(false)
 
-                L.debug("testing write without click on buttons (only sites which did not save) - withoutProfile: true");
-                await test.checkWrites(true);
+                L.debug("testing save without click on buttons")
+                await test.checkWrites(true)
             }
 
-            if (!failWriteDisable) {
-                L.debug("testing fail write");
-                await test.checkFailWrites(false);
+            if (!failSaveDisable) {
+                L.debug("testing fail save")
+                await test.checkFailWrites(false)
 
-                // L.debug("testing write without click on buttons (only sites which did not save) - withoutProfile: true");
-                // await test.checkFailWrites(true);
+                L.debug("testing fail save without click on buttons")
+                await test.checkFailWrites(true)
             }
 
-            if (!readDisable) {
-                L.debug("testing read (only sites which saved) - withoutProfile: true");
-                await test.checkReads();
+            if (!fillDisable) {
+                L.debug("testing fill")
+                await test.checkFills()
             }
 
             L.debug("shutdown report")
-            await report.shutdown();
+            await report.shutdown()
 
-            let reportExport: ReportExport;
+            let reportExport: ReportExport
             if (debug) {
-                reportExport = new ReportExportLogger(dumpFilePath);
+                reportExport = new ReportExportLogger(dumpFilePath)
             } else {
-                let reportTxtFilePath = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.${engineName}.txt`;
-                reportExport = new ReportExportTxt(dumpFilePath, reportTxtFilePath);
+                let reportTxtFilePath = `${Tester.ReportsFolderPath}tester-${timeFormat(new Date())}.${engineName}.txt`
+                reportExport = new ReportExportTxt(dumpFilePath, reportTxtFilePath)
             }
-            await reportExport.export();
+            await reportExport.export()
         }
         catch (e) {
-            L.warn(`testing fail with: ${e}`);
-            return Promise.reject(e);
+            L.warn(`testing fail with: ${e}`)
+            return Promise.reject(e)
         }
+
+        return Promise.resolve()
     }
 }
 
@@ -152,6 +169,6 @@ Tester.run(process.argv)
     .then(() => {
     })
     .catch(e => {
-        L.warn(`tester error: ${e}`);
-    });
+        L.warn(`tester error: ${e}`)
+    })
 

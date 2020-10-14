@@ -78,7 +78,7 @@ export class KeyReelEngine extends Engine {
         }
 
         let u = new URL(credential.url);
-        this.domainLogPath = `${extLogFolder}/${u.host}/`;
+        this.domainLogPath = `${extLogFolder}${u.host}`;
         if (!fs.existsSync(this.domainLogPath)){
             fs.mkdirSync(this.domainLogPath);
         }
@@ -132,7 +132,14 @@ export class KeyReelEngine extends Engine {
         let options = await this.getOptions();
 
         L.debug("add 'keyreel' extension");
-        options.addArguments("load-extension=./resources/raws/KeyReel");
+        options.addArguments(
+            "load-extension=./resources/raws/KeyReelWithCustom"
+            // "load-extension=./resources/raws/KeyReel"
+        );
+
+        L.debug("add 'stop-page-loading' extension");
+        let srcrx = fs.readFileSync('./resources/crxs/stoppageloading-1.0.zip', {encoding: "base64"});
+        options.addExtensions(srcrx);
     }
 
     protected async save(account: DBAccount): Promise<void> {

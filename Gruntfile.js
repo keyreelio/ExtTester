@@ -12,66 +12,41 @@ module.exports = function(grunt) {
             options: {
             },
 
-            // new
-            tester_keyreel: {
-                cmd: 'node',
-                args: ['./build/tester.js']
-            },
-            tester_keyreel_continue: {
-                cmd: 'node',
-                args: ['./build/tester.js', 'continue']
-            },
-            tester_keyreel_debug: {
-                cmd: 'node',
-                args: ['./build/tester.js', 'debug']
+            build_stop_page_ext: {
+                cmd: './node_modules/.bin/web-ext',
+                args: ['build', "--ignore-files='*~'", '--source-dir=./src/extensions/stop-load-ext', '--artifacts-dir=./resources/crxs', '--overwrite-dest']
             },
 
-            tester_domains: {
-                cmd: 'node',
-                args: ['./build/tester.js', '--domains']
-            },
-            tester_domains_continue: {
-                cmd: 'node',
-                args: ['./build/tester.js', 'continue', '--domains']
-            },
-            tester_domains_debug: {
-                cmd: 'node',
-                args: ['./build/tester.js', 'debug', '--domains']
-            },
+            keyreel: { cmd: 'node', args: ['./build/tester.js'] },
+            keyreel_continue: { cmd: 'node', args: ['./build/tester.js', 'continue'] },
+            keyreel_debug: {cmd: 'node', args: ['./build/tester.js', 'debug', '--tests', '10'] },
 
-            tester_dashlane: {
-                cmd: 'node',
-                args: ['./build/tester.js', '--engine', 'dashlane']
-            },
-            tester_dashlane_continue: {
-                cmd: 'node',
-                args: ['./build/tester.js', 'continue', '--engine', 'dashlane']
-            },
-            tester_dashlane_debug: {
-                cmd: 'node',
-                args: ['./build/tester.js', 'debug', '--engine', 'dashlane']
-            },
+            keyreel_domains: { cmd: 'node', args: ['./build/tester.js', '--domains'] },
+            keyreel_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--domains'] },
+            keyreel_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--domains', '--tests', '10'] },
 
+            keyreel_fill_domains: { cmd: 'node', args: ['./build/tester.js', '--domains', '--withoutSave', '--withoutFailSave', '--tests', '500'] },
+            keyreel_fill_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--domains', '--withoutSave', '--withoutFailSave', '--tests', '500'] },
+            keyreel_fill_domains_vpn_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--domains', '--withoutSave', '--withoutFailSave', '--vpn', '--tests', '500'] },
+            keyreel_fill_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--domains', '--withoutSave', '--withoutFailSave'] },
 
-            report: {
-                cmd: 'node',
-                args: ['./build/tester.js', 'report']
-            },
+            dashlane: { cmd: 'node', args: ['./build/tester.js', '--engine', 'dashlane'] },
+            dashlane_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--engine', 'dashlane'] },
+            dashlane_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--engine', 'dashlane'] },
 
-            report_txt: {
-                cmd: 'node',
-                args: ['./build/tester.js', 'report', '--txt']
-            },
+            dashlane_domains: { cmd: 'node', args: ['./build/tester.js', '--engine', 'dashlane', '--domains'] },
+            dashlane_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--engine', 'dashlane', '--domains'] },
+            dashlane_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--engine', 'dashlane', '--domains'] },
 
-            report_csv: {
-                cmd: 'node',
-                args: ['./build/tester.js', 'report', '--csv']
-            },
+            dashlane_fill_domains: { cmd: 'node', args: ['./build/tester.js', '--engine', 'dashlane', '--domains', '--withoutSave', '--withoutFailSave'] },
+            dashlane_fill_domains_continue: { cmd: 'node', args: ['./build/tester.js', 'continue', '--engine', 'dashlane', '--domains', '--withoutSave', '--withoutFailSave', '--tests', '500'] },
+            dashlane_fill_domains_debug: { cmd: 'node', args: ['./build/tester.js', 'debug', '--engine', 'dashlane', '--domains', '--withoutSave', '--withoutFailSave'] },
 
+            report: { cmd: 'node', args: ['./build/tester.js', 'report'] },
+            report_txt: { cmd: 'node', args: ['./build/tester.js', 'report', '--txt'] },
+            report_csv: { cmd: 'node', args: ['./build/tester.js', 'report', '--csv'] },
 
-            scanner: {
-                args: ['./build/scanner.js']
-            },
+            scanner: { args: ['./build/scanner.js'] },
 
             thrift: {
                 cmd: 'node',
@@ -97,22 +72,35 @@ module.exports = function(grunt) {
     grunt.registerTask("default", ["build"]);
 
     grunt.registerTask("thrift", ["run:thrift"]);
-    grunt.registerTask("build", ["thrift", "ts"]);
+    grunt.registerTask("build_stop_page_ext", ["run:build_stop_page_ext"]);
+
+    grunt.registerTask("build", ["clean", "build_stop_page_ext", "thrift", "ts"]);
 
 
-    // new
-    grunt.registerTask("keyreel", ["clean", "build", "run:tester_keyreel"]);
-    grunt.registerTask("keyreel_continue", ["clean", "build", "run:tester_keyreel_continue"]);
-    grunt.registerTask("keyreel_debug", ["clean", "build", "run:tester_keyreel_debug"]);
+    grunt.registerTask("keyreel", ["build", "run:keyreel"]);
+    grunt.registerTask("keyreel_continue", ["build", "run:keyreel_continue"]);
+    grunt.registerTask("keyreel_debug", ["build", "run:keyreel_debug"]);
 
-    grunt.registerTask("domains", ["clean", "build", "run:tester_domains"]);
-    grunt.registerTask("domains_continue", ["clean", "build", "run:tester_domains_continue"]);
-    grunt.registerTask("domains_debug", ["clean", "build", "run:tester_domains_debug"]);
+    grunt.registerTask("keyreel_domains", ["build", "run:keyreel_domains"]);
+    grunt.registerTask("keyreel_domains_continue", ["build", "run:keyreel_domains_continue"]);
+    grunt.registerTask("keyreel_domains_debug", ["build", "run:keyreel_domains_debug"]);
 
+    grunt.registerTask("keyreel_fill_domains", ["build", "run:keyreel_fill_domains"]);
+    grunt.registerTask("keyreel_fill_domains_continue", ["build", "run:keyreel_fill_domains_continue"]);
+    grunt.registerTask("keyreel_fill_domains_vpn_continue", ["build", "run:keyreel_fill_domains_vpn_continue"]);
+    grunt.registerTask("keyreel_fill_domains_debug", ["build", "run:keyreel_fill_domains_debug"]);
 
-    grunt.registerTask("dashlane", ["clean", "build", "run:tester_dashlane"]);
-    grunt.registerTask("dashlane_continue", ["clean", "build", "run:tester_dashlane_continue"]);
-    grunt.registerTask("dashlane_debug", ["clean", "build", "run:tester_dashlane_debug"]);
+    grunt.registerTask("dashlane", ["build", "run:dashlane"]);
+    grunt.registerTask("dashlane_continue", ["build", "run:dashlane_continue"]);
+    grunt.registerTask("dashlane_debug", ["build", "run:dashlane_debug"]);
 
-    grunt.registerTask("scanner", ["clean", "build", "run:scanner"]);
+    grunt.registerTask("dashlane_domains", ["build", "run:dashlane_domains"]);
+    grunt.registerTask("dashlane_domains_continue", ["build", "run:dashlane_domains_continue"]);
+    grunt.registerTask("dashlane_domains_debug", ["build", "run:dashlane_domains_debug"]);
+
+    grunt.registerTask("dashlane_fill_domains", ["build", "run:dashlane_fill_domains"]);
+    grunt.registerTask("dashlane_fill_domains_continue", ["build", "run:dashlane_fill_domains_continue"]);
+    grunt.registerTask("dashlane_fill_domains_debug", ["build", "run:dashlane_fill_domains_debug"]);
+
+    grunt.registerTask("scanner", ["build", "run:scanner"]);
 };

@@ -39,6 +39,7 @@ export interface IEngine {
     writeScreenshot(test: EReportTest, remark: string): Promise<void>;
 }
 
+
 export interface IEngineFactory {
     start(): Promise<void>;
 
@@ -147,17 +148,17 @@ export class Engine implements IEngine {
     }
 
     public async processLoginFinishing(): Promise<void> {
-        L.debug("unsupported processLoginFinishing");
+        //L.debug("unsupported processLoginFinishing");
         return Promise.reject(new UnsupportedOperationError("processLoginFinishing"));
     }
 
     public async processAfterPressLoginButton(cancel: boolean): Promise<boolean> {
-        L.debug("unsupported processAfterPressLoginButton");
+        //L.debug("unsupported processAfterPressLoginButton");
         return Promise.reject(new UnsupportedOperationError("processAfterPressLoginButton"));
     }
 
     public async checkSaved(url: string, credential: ICredential): Promise<void> {
-        L.debug("unsupported checkSaved");
+        //L.debug("unsupported checkSaved");
         return Promise.reject(new UnsupportedOperationError("checkSaved"));
     }
 
@@ -203,7 +204,7 @@ export class Engine implements IEngine {
             .then((data: string) => {
                 let name = `${testName}-${Date.now()}-${remark || "ss"}.png`;
                 fs.writeFileSync(
-                    this.getDomainLogPath() + name,
+                    `${this.getDomainLogPath()}/${name}`,
                     data,
                     'base64'
                 );

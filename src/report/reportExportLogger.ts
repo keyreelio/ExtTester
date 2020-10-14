@@ -16,7 +16,7 @@ export class ReportExportLogger extends ReportExport {
         await this.exportLine(`    SWB  - save without login button (press 'Enter')`);
         await this.exportLine(`    FSUB - false save using login button`);
         await this.exportLine(`    FSWB - false save without login button (press 'Enter')`);
-        await this.exportLine(`    LOAD - insert credentials into login form`);
+        await this.exportLine(`    FILL - insert credentials into login form`);
         await this.exportLine(`  save credentials result:`);
         await this.exportLine(`    MBL - manually before logged in`);
         await this.exportLine(`    MAL - manually after logged in`);
@@ -25,42 +25,45 @@ export class ReportExportLogger extends ReportExport {
         await this.exportLine(`     -  - skipped`);
         await this.exportLine(`  flags: SFLPIN`);
         await this.exportLine(`    S - page has a "Sign In" button`);
+        await this.exportLine(`    I - page is logged in`);
         await this.exportLine(`    F - page has a full login form`);
         await this.exportLine(`    L - page has a first step of login form`);
         await this.exportLine(`    P - page has a second step of login form`);
-        await this.exportLine(`    I - page is logged in`);
         await this.exportLine(`    N - page is not logged in`); //page did not parse`);
         await this.exportLine(`  times:`);
         await this.exportLine(`    tchck - duration time of test (sec)`);
-        //await this.exportLine(`    tscnr - duration time of run scanner (sec)`);
         await this.exportLine(`    tprsr - duration time of run parser (sec)`);
         await this.exportLine(`======================================================================================================`);
-        await this.exportLine("  idx | url                                                    | test | res | SFLPIN | tchck | tprsr |");
+        await this.exportLine("  idx | url                                                    | test | res | SIFLPN | tchck | tprsr |");
         await this.exportLine(`------------------------------------------------------------------------------------------------------`);
     }
 
     protected async exportReport(index: number, report: ReportItem): Promise<void> {
         let firstline = true;
+        var testCount = 0;
         for (let test in report.results) {
             let result = report.results[test];
             if (result === undefined) continue;
+            testCount++;
 
             let part: string[] = [];
 
             part.push(firstline ? this.indexToString(index) : "".padEnd(6));
-            part.push(firstline ? this.urlToString(report.url) : "".padEnd(56));
+            part.push(firstline ? this.urlToString(this.getHost(report.url)) : "".padEnd(56));
             part.push(ReportExport.testName(Number(test)));
             part.push(this.resultToString(result.result));
-            part.push(this.flagsToString(result.flags));
+            part.push(` ${this.flagsToString(result.flags)} `);
             part.push(this.timeToString(result.timers[ETimer.check]));
             //part.push(this.timeToString(result.timers[ETimer.scanner]));
             part.push(this.timeToString(result.timers[ETimer.parser]));
-            part.push(` ${result.failMessage || "+"}`);
+            part.push(` ${result.failMessage.length > 0 ? result.failMessage.replace(/\\s+/g, ' ').trim() : "+"}`);
 
-            this.exportLine(`${part.join(this.separator())}`);
+            await this.exportLine(`${part.join(this.separator())}`);
             firstline = false;
         }
-        await this.exportLine(`------------------------------------------------------------------------------------------------------`);
+        if (testCount > 1) {
+            await this.exportLine(`------------------------------------------------------------------------------------------------------`);
+        }
     }
 
     protected async exportLine(line: string): Promise<void> {
@@ -68,7 +71,8 @@ export class ReportExportLogger extends ReportExport {
     }
 
     protected async exportFooter(): Promise<void> {
-        await this.exportLine("  idx | url                                                    | test | res | SFLPIN | tchck | tprsr |");
+        await this.exportLine(`------------------------------------------------------------------------------------------------------`);
+        await this.exportLine("  idx | url                                                    | test | res | SIFLPN | tchck | tprsr |");
         await this.exportLine(`======================================================================================================`);
     }
 
@@ -96,15 +100,14 @@ export class ReportExportLogger extends ReportExport {
     protected flagsToString(flags: IFlags): string {
         let part: string[] = [];
 
-        part.push(this.flagToString(flags[EReportParsePart.signInButton]));
-        part.push(this.flagToString(flags[EReportParsePart.fullLoginForm]));
-        part.push(this.flagToString(flags[EReportParsePart.firstStepLoginForm]));
-        part.push(this.flagToString(flags[EReportParsePart.secondStepLoginForm]));
-        part.push(this.flagToString(flags[EReportParsePart.loggedIn]));
-        part.push(this.flagToString(flags[EReportParsePart.noLoggedIn]));
-        //part.push(this.flagToString(flags[EReportParsePart.notParsed]));
+        part.push(flags[EReportParsePart.signInButton] ? "S" : "-");
+        part.push(flags[EReportParsePart.loggedIn] ? "I" : "-");
+        part.push(flags[EReportParsePart.fullLoginForm] ? "F" : "-");
+        part.push(flags[EReportParsePart.firstStepLoginForm] ? "L" : "-");
+        part.push(flags[EReportParsePart.secondStepLoginForm] ? "P" : "-");
+        part.push(flags[EReportParsePart.noLoggedIn] ? "N" : "-");
 
-        return ` ${part.join("")} `;
+        return part.join("");
     }
 
     protected timeToString(time: number): string {

@@ -8,8 +8,8 @@ import {Timeouts} from "../common/timeouts";
 import {Server} from "../service/server";
 import {KeyReelEngine} from "./keyreel";
 
-const DASHLINE_ID = "fdjamakpfbbddfjaooikfcpapjohcfmg";
-const DASHLINE_EXT_URL = `chrome-extension://${DASHLINE_ID}/`;
+const DASHLANE_ID = "fdjamakpfbbddfjaooikfcpapjohcfmg";
+const DASHLANE_EXT_URL = `chrome-extension://${DASHLANE_ID}/`;
 
 interface IDashlaneAccount {
     login: string;
@@ -51,8 +51,8 @@ export class DashlaneEngine extends Engine {
     static WaitLocatedEngineControl = 5000;
 
 
-    startupUrl = DASHLINE_EXT_URL + "signup";
-    currentAccountIndex = 0;
+    startupUrl = DASHLANE_EXT_URL + "signup";
+    currentAccountIndex = 2;
     accounts = [
         {
             login: "hdayfg6wq5sq@gmail.com",
@@ -61,6 +61,10 @@ export class DashlaneEngine extends Engine {
         {
             login: "t3mxdwk2zrhz@gmail.com",
             password: "qCywf6K5CWczGSt"
+        },
+        {
+            login: "hexLaHCVCg@gmail.com",
+            password: "9eAjzhMaVU"
         }
     ];
 
@@ -168,11 +172,22 @@ export class DashlaneEngine extends Engine {
         let options = await this.getOptions();
 
         L.debug("add 'keyreel' extension");
-        let krcrx = fs.readFileSync('./resources/crxs/keyreel.crx', {encoding: "base64"});
-        options.addExtensions(krcrx);
+        options.addArguments(
+            "load-extension=./resources/raws/KeyReelWithCustom"
+        );
+
+        L.debug("add 'stop-page-loading' extension");
+        let srcrx = fs.readFileSync(
+            './resources/crxs/stoppageloading-1.0.zip',
+            {encoding: "base64"}
+        );
+        options.addExtensions(srcrx);
 
         L.debug("add 'dashlane' extension")
-        let crx = fs.readFileSync('./resources/crxs/dashlane.crx', {encoding: "base64"});
+        let crx = fs.readFileSync(
+            './resources/crxs/dashlane.crx',
+            {encoding: "base64"}
+        );
         options.addExtensions(crx);
     }
 
@@ -223,7 +238,7 @@ export class DashlaneEngine extends Engine {
                     L.trace("find 'login' button and click()");
                     let loginButton = await extDriver.waitLocatedExt(
                         "button[type=button]",
-                        Timeouts.waitLocatedAnimatedElement
+                        Timeouts.WaitLocatedAnimatedElement
                     );
                     await loginButton.click();
 
@@ -234,14 +249,14 @@ export class DashlaneEngine extends Engine {
                             L.trace('wait password...');
                             password = await extDriver.waitLocatedExt(
                                 "input[type=password]",
-                                Timeouts.waitLocatedAnimatedElement
+                                Timeouts.WaitLocatedAnimatedElement
                             )
                             break;
                         } catch (e) {
                             try {
                                 await extDriver.waitLocatedExt(
                                     'input[class^=tokenInput]',
-                                    Timeouts.waitLocatedAnimatedElement
+                                    Timeouts.WaitLocatedAnimatedElement
                                 );
                                 L.trace('token was found...');
                             } catch (e2) {
@@ -268,14 +283,14 @@ export class DashlaneEngine extends Engine {
                     L.trace("find 'login' button and click()");
                     let loginButton = await extDriver.waitLocatedExt(
                         "button[type=button]",
-                        Timeouts.waitLocatedAnimatedElement
+                        Timeouts.WaitLocatedAnimatedElement
                     );
                     await loginButton.click();
 
                     L.trace("wait located 'password' input and enter password");
                     let password = await extDriver.waitLocatedExt(
                         "input[type=password]",
-                        Timeouts.waitLocatedAnimatedElement
+                        Timeouts.WaitLocatedAnimatedElement
                     );
                     await password.sendKeys(this.currentAccount().password);
                     await password.pressEnter();
@@ -364,13 +379,13 @@ export class DashlaneEngine extends Engine {
         let find = false;
         for (let tab of tabs) {
             await driver.switchTo().window(tab);
-            if ((await driver.getCurrentUrl()).includes(`${DASHLINE_ID}/credentials`)) {
+            if ((await driver.getCurrentUrl()).includes(`${DASHLANE_ID}/credentials`)) {
                 find = true;
                 break;
             }
         }
         if (!find) {
-            await extDriver.openUrlOnNewTab(DASHLINE_EXT_URL + "credentials");
+            await extDriver.openUrlOnNewTab(DASHLANE_EXT_URL + "credentials");
         }
 
         await extDriver.switchToRootFrame();

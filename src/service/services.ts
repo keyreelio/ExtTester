@@ -40,7 +40,6 @@ export class LoggingServiceImpl implements kr.LoggingService.IHandler<express.Re
     protected log(message: string) {
         if (this.setExtLogFilePath === undefined) return;
         let date = `${(new Date()).toLocaleTimeString()}`;
-        console.log("BUBU", date, message)
         fs.writeFileSync(this.setExtLogFilePath, `${date}${message}\n`, {flag: "a"});
     }
 }

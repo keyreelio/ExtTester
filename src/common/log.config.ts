@@ -1,56 +1,56 @@
-import {Category, CategoryConfiguration, CategoryServiceFactory, LogLevel} from "typescript-logging";
-import dateFormat from "dateformat";
-import fs from "fs";
+import {Category, CategoryConfiguration, CategoryServiceFactory, LogLevel} from "typescript-logging"
+import dateFormat from "dateformat"
+import fs from "fs"
 
 
 
-CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Debug));
+CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Debug))
 
 
-export let extLogFolder = "";
+export let extLogFolder = ""
 
 export let ConfigureLoggerForRelease = function() {
-    CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Debug));
-    createLogFolder("logs");
+    CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Debug))
+    createLogFolder("logs")
 }
 
 export let ConfigureLoggerForDebug = function() {
-    CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Trace));
-    createLogFolder("logs-debug");
+    CategoryServiceFactory.setDefaultConfiguration(new CategoryConfiguration(LogLevel.Trace))
+    createLogFolder("logs-debug")
 }
 
 let createLogFolder = function (rootFolder: string) {
-    if (!fs.existsSync(`./${rootFolder}/`)){
-        fs.mkdirSync(`./${rootFolder}/`);
+    if (!fs.existsSync(`./${rootFolder}/`)) {
+        fs.mkdirSync(`./${rootFolder}/`)
     }
-    let now = new Date();
-    let dirname = dateFormat(now, "yyyy.mm.dd-h.MM.ss")
-    let logFolder = `./${rootFolder}/${dirname}/`;
+    let now = new Date()
+    let dirname = dateFormat(now, "yyyy.mm.dd-HH.MM.ss")
+    let logFolder = `./${rootFolder}/${dirname}/`
     if (!fs.existsSync(logFolder)){
-        fs.mkdirSync(logFolder);
+        fs.mkdirSync(logFolder)
     }
-    extLogFolder = logFolder;
+    extLogFolder = logFolder
 }
 
 
-export let testerLogger = new Category("tester");
-export let testapiLogger = new Category("testAPI");
-export let parserLogger = new Category("parser");
+export let testerLogger = new Category("tester")
+export let testapiLogger = new Category("testAPI")
+export let parserLogger = new Category("parser")
 
-export let engineLogger = new Category("engine");
-export let dashlaneEngineLogger = new Category("dashlane", engineLogger);
-export let lastpassEngineLogger = new Category("lastpass", engineLogger);
-export let onePasswordEngineLogger = new Category("1password", engineLogger);
-export let keyreelEngineLogger = new Category("keyreel", engineLogger);
+export let engineLogger = new Category("engine")
+export let dashlaneEngineLogger = new Category("dashlane", engineLogger)
+export let lastpassEngineLogger = new Category("lastpass", engineLogger)
+export let onePasswordEngineLogger = new Category("1password", engineLogger)
+export let keyreelEngineLogger = new Category("keyreel", engineLogger)
 
-export let reportLogger = new Category("report");
+export let reportLogger = new Category("report")
 
-export let serviceJSLogger = new Category("servicejs");
+export let serviceJSLogger = new Category("servicejs")
 
-export let loggingServiceJSLogger = new Category("ext");
-export let hostServiceJSLogger = new Category("hostservice");
+export let loggingServiceJSLogger = new Category("ext")
+export let hostServiceJSLogger = new Category("hostservice")
 
 
-export let scannerLogger = new Category("scanner");
+export let scannerLogger = new Category("scanner")
 
 

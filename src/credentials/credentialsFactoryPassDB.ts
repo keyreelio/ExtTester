@@ -10,8 +10,12 @@ export class CredentialsFactoryPassDB implements ICredentialsFactory {
         this.loadFromPassDB();
     }
 
-    public credentials(): Credentials {
-        return new Credentials(Array.from(this.items));
+    public credentials(testsCount: number): Credentials {
+        let credentials = Array.from(this.items)
+        if (testsCount > 0) {
+            credentials = credentials.slice(0, testsCount)
+        }
+        return new Credentials(credentials)
     }
 
     protected loadFromPassDB() {
@@ -32,7 +36,10 @@ export class CredentialsFactoryPassDB implements ICredentialsFactory {
                     url: u.toString(),
                     login: login === undefined ? "" : login,
                     password: password === undefined ? "" : password,
-                    timeout: 2000
+                    timeout: 2000,
+                    comment: undefined,
+                    vpn: false,
+                    skip: false
                 });
             });
         }

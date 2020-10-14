@@ -4,6 +4,7 @@
 /chrome_profiles
 /src/thrift/gencode/
 .tmp
+*.tmp.txt
 *.tmp
 *.old
 *.new
